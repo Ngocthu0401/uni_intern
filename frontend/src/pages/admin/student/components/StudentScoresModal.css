@@ -1,0 +1,81 @@
+/* Student Scores Modal Styles */
+.student-scores-modal .ant-modal-content {
+  overflow: hidden;
+}
+
+.student-scores-modal .ant-modal-body {
+  padding: 16px 24px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.student-scores-modal .ant-table-wrapper {
+  margin-top: 16px;
+}
+
+.student-scores-modal .ant-statistic-content-value {
+  font-weight: 600;
+}
+
+.student-scores-modal .ant-progress-line {
+  margin-top: 4px;
+}
+
+.student-scores-modal .score-card {
+  transition: all 0.3s ease;
+  border-radius: 8px;
+}
+
+.student-scores-modal .score-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Score level colors */
+.score-excellent {
+  color: #52c41a;
+}
+
+.score-good {
+  color: #1890ff;
+}
+
+.score-average {
+  color: #faad14;
+}
+
+.score-below-average {
+  color: #fa8c16;
+}
+
+.score-poor {
+  color: #f5222d;
+}
+
+/* Statistics cards animation */
+.statistics-card {
+  transition: all 0.3s ease;
+}
+
+.statistics-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Filter section */
+.filter-section {
+  background: linear-gradient(135deg, #f6f9fc 0%, #e9f3ff 100%);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+/* Table responsive */
+@media (max-width: 768px) {
+  .student-scores-modal .ant-modal-body {
+    padding: 12px 16px;
+  }
+
+  .student-scores-modal .ant-table-wrapper {
+    margin-top: 12px;
+  }
+}

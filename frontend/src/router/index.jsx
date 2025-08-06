@@ -11,7 +11,7 @@ import AdminDashboard from '../pages/admin/AdminDashboard';
 import StudentDashboard from '../pages/student/StudentDashboard';
 import TeacherDashboard from '../pages/teacher/TeacherDashboard';
 import MentorDashboard from '../pages/mentor/MentorDashboard';
-import StudentManagement from '../pages/admin/StudentManagement';
+import StudentManagement from '../pages/admin/student/StudentManagement';
 import CompanyManagement from '../pages/admin/CompanyManagement';
 import TeacherManagement from '../pages/admin/TeacherManagement';
 import MentorManagement from '../pages/admin/MentorManagement';
@@ -45,13 +45,13 @@ const AppRouter = () => {
       <Route path="/" element={<MainLayout><HomePage /></MainLayout>} />
       <Route path="/about" element={<MainLayout><AboutPage /></MainLayout>} />
       <Route path="/contact" element={<MainLayout><ContactPage /></MainLayout>} />
-      
+
       {/* Auth Pages */}
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/forgot-password" element={<ForgotPasswordPage />} />
       <Route path="/reset-password" element={<ResetPasswordPage />} />
-      
+
       {/* Admin Routes */}
       <Route path="/admin" element={<AdminLayout><AdminDashboard /></AdminLayout>} />
       <Route path="/admin/students" element={<AdminLayout><StudentManagement /></AdminLayout>} />
@@ -61,7 +61,7 @@ const AppRouter = () => {
       <Route path="/admin/batches" element={<AdminLayout><BatchManagement /></AdminLayout>} />
       <Route path="/admin/internships" element={<AdminLayout><InternshipManagement /></AdminLayout>} />
       <Route path="/admin/contracts" element={<AdminLayout><ContractManagement /></AdminLayout>} />
-      
+
       {/* Student Routes */}
       <Route path="/student" element={<StudentLayout><StudentDashboard /></StudentLayout>} />
       <Route path="/student/profile" element={<StudentLayout><ProfilePage /></StudentLayout>} />
@@ -69,14 +69,14 @@ const AppRouter = () => {
       <Route path="/student/reports" element={<StudentLayout><ReportsPage /></StudentLayout>} />
       <Route path="/student/contracts" element={<StudentLayout><ContractsPage /></StudentLayout>} />
       <Route path="/student/evaluations" element={<StudentLayout><EvaluationsPage /></StudentLayout>} />
-      
+
       {/* Teacher Routes */}
       <Route path="/teacher" element={<TeacherLayout><TeacherDashboard /></TeacherLayout>} />
       <Route path="/teacher/student-management" element={<TeacherLayout><StudentManagementPage /></TeacherLayout>} />
       <Route path="/teacher/report-review" element={<TeacherLayout><ReportReviewPage /></TeacherLayout>} />
       <Route path="/teacher/evaluation-management" element={<TeacherLayout><EvaluationManagement /></TeacherLayout>} />
       <Route path="/teacher/statistics" element={<TeacherLayout><StatisticsPage /></TeacherLayout>} />
-      
+
       {/* Mentor Routes */}
       <Route path="/mentor" element={<MentorLayout><MentorDashboard /></MentorLayout>} />
       <Route path="/mentor/dashboard" element={<MentorLayout><MentorDashboardPage /></MentorLayout>} />
@@ -84,7 +84,7 @@ const AppRouter = () => {
       <Route path="/mentor/student/:studentId" element={<MentorLayout><StudentDetailPage /></MentorLayout>} />
       <Route path="/mentor/reports" element={<MentorLayout><MentorReportsPage /></MentorLayout>} />
       <Route path="/mentor/internship-tracking" element={<MentorLayout><InternshipTracking /></MentorLayout>} />
-      
+
       {/* 404 Page */}
       <Route path="*" element={<NotFoundPage />} />
     </Routes>

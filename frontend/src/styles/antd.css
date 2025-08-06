@@ -1,0 +1,138 @@
+/* Ant Design CSS */
+@import "antd/dist/reset.css";
+
+/* Tailwind compatibility */
+.ant-table-wrapper {
+  font-family: inherit;
+}
+
+/* Custom Ant Design theme overrides */
+:root {
+  --ant-primary-color: #1890ff;
+  --ant-primary-color-hover: #40a9ff;
+  --ant-primary-color-active: #096dd9;
+  --ant-primary-1: #e6f7ff;
+  --ant-primary-2: #bae7ff;
+  --ant-primary-3: #91d5ff;
+  --ant-primary-4: #69c0ff;
+  --ant-primary-5: #40a9ff;
+  --ant-primary-6: #1890ff;
+  --ant-primary-7: #096dd9;
+  --ant-primary-8: #0050b3;
+  --ant-primary-9: #003a8c;
+  --ant-primary-10: #002766;
+}
+
+/* Custom styles for Ant Design components */
+.ant-table-thead > tr > th {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  font-weight: 600;
+}
+
+.ant-table-thead > tr > th::before {
+  display: none;
+}
+
+.ant-table-tbody > tr:hover > td {
+  background: #f0f9ff !important;
+}
+
+.ant-card {
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.ant-modal {
+  border-radius: 16px;
+}
+
+.ant-modal-content {
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.ant-form-item-label > label {
+  font-weight: 500;
+}
+
+.ant-btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+.ant-btn-primary:hover {
+  background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.ant-tag {
+  border-radius: 12px;
+  font-weight: 500;
+}
+
+.ant-badge {
+  font-weight: 500;
+}
+
+/* Loading animation */
+.ant-spin-dot-item {
+  background-color: #667eea;
+}
+
+/* Custom gradient headers */
+.gradient-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 20px;
+  border-radius: 12px 12px 0 0;
+}
+
+.gradient-header .ant-typography {
+  color: white !important;
+  margin: 0;
+}
+
+/* Status indicators */
+.status-active {
+  color: #52c41a;
+}
+
+.status-inactive {
+  color: #ff4d4f;
+}
+
+/* Animation classes */
+.fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.slide-up {
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
