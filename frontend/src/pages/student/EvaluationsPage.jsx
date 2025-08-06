@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  StarIcon, 
-  EyeIcon, 
+import {
+  StarIcon,
+  EyeIcon,
   ChatBubbleLeftRightIcon,
   UserIcon,
   AcademicCapIcon,
@@ -14,6 +14,7 @@ import {
 import { StarIcon as StarIconSolid } from '@heroicons/react/24/solid';
 import { evaluationService, internshipService, studentService, apiHelpers } from '../../services';
 import { useAuth } from '../../context/AuthContext';
+import { BASE_URL } from '../../constants';
 
 const EvaluationsPage = () => {
   const [loading, setLoading] = useState(true);
@@ -23,7 +24,7 @@ const EvaluationsPage = () => {
   const [selectedEvaluation, setSelectedEvaluation] = useState(null);
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [filter, setFilter] = useState('all'); // all, teacher, mentor
-  
+
   const { user, loading: authLoading } = useAuth();
 
   useEffect(() => {
@@ -45,50 +46,50 @@ const EvaluationsPage = () => {
 
       // First get student record from user ID
       const studentData = await studentService.getStudentByUserId(user.id);
-      
+
       // Get current internship using student ID
       const internshipsResponse = await internshipService.getInternshipsByStudent(studentData.id);
-      const activeInternship = internshipsResponse.find(i => 
+      const activeInternship = internshipsResponse.find(i =>
         i.status === 'ACTIVE' || i.status === 'IN_PROGRESS' || i.status === 'COMPLETED'
       );
-      
+
       if (activeInternship) {
         setCurrentInternship(activeInternship);
       }
-      
+
       // Load all evaluations for this student
       try {
         const evaluationsResponse = await evaluationService.getEvaluationsByStudent(studentData.id);
-          console.log('Evaluations Response:', evaluationsResponse);
-          
-          const processedEvaluations = evaluationsResponse.map(evaluation => {
-            // Calculate overall score from individual scores
-            const totalScore = (evaluation.technicalScore || 0) + 
-                             (evaluation.softSkillScore || 0) + 
-                             (evaluation.attitudeScore || 0) + 
-                             (evaluation.communicationScore || 0);
-            const avgScore = totalScore / 4;
-            
-            return {
-              id: evaluation.id,
-              evaluatorType: evaluation.evaluatorType,
-              evaluatorName: evaluation.evaluator?.fullName || evaluation.evaluator?.username || 'N/A',
-              score: evaluation.overallScore || avgScore,
-              maxScore: 10,
-              feedback: evaluation.comments || '',
-              technicalScore: evaluation.technicalScore || 0,
-              softSkillScore: evaluation.softSkillScore || 0,
-              attitudeScore: evaluation.attitudeScore || 0,
-              communicationScore: evaluation.communicationScore || 0,
-              evaluationDate: evaluation.evaluationDate ? new Date(evaluation.evaluationDate).toLocaleDateString('vi-VN') : 'N/A',
-              period: evaluation.isFinalEvaluation ? 'Đánh giá cuối kỳ' : 'Đánh giá giữa kỳ',
-              strengths: evaluation.strengths || '',
-              weaknesses: evaluation.weaknesses || '',
-              recommendations: evaluation.recommendations || '',
-              isFinalEvaluation: evaluation.isFinalEvaluation || false
-            };
-          });
-          
+        console.log('Evaluations Response:', evaluationsResponse);
+
+        const processedEvaluations = evaluationsResponse.map(evaluation => {
+          // Calculate overall score from individual scores
+          const totalScore = (evaluation.technicalScore || 0) +
+            (evaluation.softSkillScore || 0) +
+            (evaluation.attitudeScore || 0) +
+            (evaluation.communicationScore || 0);
+          const avgScore = totalScore / 4;
+
+          return {
+            id: evaluation.id,
+            evaluatorType: evaluation.evaluatorType,
+            evaluatorName: evaluation.evaluator?.fullName || evaluation.evaluator?.username || 'N/A',
+            score: evaluation.overallScore || avgScore,
+            maxScore: 10,
+            feedback: evaluation.comments || '',
+            technicalScore: evaluation.technicalScore || 0,
+            softSkillScore: evaluation.softSkillScore || 0,
+            attitudeScore: evaluation.attitudeScore || 0,
+            communicationScore: evaluation.communicationScore || 0,
+            evaluationDate: evaluation.evaluationDate ? new Date(evaluation.evaluationDate).toLocaleDateString('vi-VN') : 'N/A',
+            period: evaluation.isFinalEvaluation ? 'Đánh giá cuối kỳ' : 'Đánh giá giữa kỳ',
+            strengths: evaluation.strengths || '',
+            weaknesses: evaluation.weaknesses || '',
+            recommendations: evaluation.recommendations || '',
+            isFinalEvaluation: evaluation.isFinalEvaluation || false
+          };
+        });
+
         setEvaluations(processedEvaluations);
       } catch (evaluationError) {
         console.log('No evaluations found:', evaluationError);
@@ -183,9 +184,9 @@ const EvaluationsPage = () => {
 
       // Get student data first
       const studentData = await studentService.getStudentByUserId(user.id);
-      
+
       // Call API to create sample evaluations
-      const response = await fetch(`http://localhost:8080/api/evaluations/test/create-sample/${studentData.id}`, {
+      const response = await fetch(`${BASE_URL}/evaluations/test/create-sample/${studentData.id}`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -331,31 +332,28 @@ const EvaluationsPage = () => {
             <nav className="-mb-px flex space-x-8 px-6">
               <button
                 onClick={() => setFilter('all')}
-                className={`py-4 px-1 border-b-2 font-medium text-sm ${
-                  filter === 'all'
+                className={`py-4 px-1 border-b-2 font-medium text-sm ${filter === 'all'
                     ? 'border-blue-500 text-blue-600'
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                }`}
+                  }`}
               >
                 Tất cả đánh giá
               </button>
               <button
                 onClick={() => setFilter('teacher')}
-                className={`py-4 px-1 border-b-2 font-medium text-sm ${
-                  filter === 'teacher'
+                className={`py-4 px-1 border-b-2 font-medium text-sm ${filter === 'teacher'
                     ? 'border-blue-500 text-blue-600'
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                }`}
+                  }`}
               >
                 Từ giảng viên
               </button>
               <button
                 onClick={() => setFilter('mentor')}
-                className={`py-4 px-1 border-b-2 font-medium text-sm ${
-                  filter === 'mentor'
+                className={`py-4 px-1 border-b-2 font-medium text-sm ${filter === 'mentor'
                     ? 'border-blue-500 text-blue-600'
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                }`}
+                  }`}
               >
                 Từ mentor
               </button>
@@ -424,9 +422,9 @@ const EvaluationsPage = () => {
                       <div className="flex items-center space-x-2">
                         <span className="text-sm font-semibold text-gray-900">{evaluation.technicalScore}/10</span>
                         <div className="w-16 bg-gray-200 rounded-full h-2">
-                          <div 
-                            className="bg-blue-600 h-2 rounded-full" 
-                            style={{width: `${(evaluation.technicalScore / 10) * 100}%`}}
+                          <div
+                            className="bg-blue-600 h-2 rounded-full"
+                            style={{ width: `${(evaluation.technicalScore / 10) * 100}%` }}
                           ></div>
                         </div>
                       </div>
@@ -438,9 +436,9 @@ const EvaluationsPage = () => {
                       <div className="flex items-center space-x-2">
                         <span className="text-sm font-semibold text-gray-900">{evaluation.softSkillScore}/10</span>
                         <div className="w-16 bg-gray-200 rounded-full h-2">
-                          <div 
-                            className="bg-green-600 h-2 rounded-full" 
-                            style={{width: `${(evaluation.softSkillScore / 10) * 100}%`}}
+                          <div
+                            className="bg-green-600 h-2 rounded-full"
+                            style={{ width: `${(evaluation.softSkillScore / 10) * 100}%` }}
                           ></div>
                         </div>
                       </div>
@@ -452,9 +450,9 @@ const EvaluationsPage = () => {
                       <div className="flex items-center space-x-2">
                         <span className="text-sm font-semibold text-gray-900">{evaluation.attitudeScore}/10</span>
                         <div className="w-16 bg-gray-200 rounded-full h-2">
-                          <div 
-                            className="bg-purple-600 h-2 rounded-full" 
-                            style={{width: `${(evaluation.attitudeScore / 10) * 100}%`}}
+                          <div
+                            className="bg-purple-600 h-2 rounded-full"
+                            style={{ width: `${(evaluation.attitudeScore / 10) * 100}%` }}
                           ></div>
                         </div>
                       </div>
@@ -466,9 +464,9 @@ const EvaluationsPage = () => {
                       <div className="flex items-center space-x-2">
                         <span className="text-sm font-semibold text-gray-900">{evaluation.communicationScore}/10</span>
                         <div className="w-16 bg-gray-200 rounded-full h-2">
-                          <div 
-                            className="bg-orange-600 h-2 rounded-full" 
-                            style={{width: `${(evaluation.communicationScore / 10) * 100}%`}}
+                          <div
+                            className="bg-orange-600 h-2 rounded-full"
+                            style={{ width: `${(evaluation.communicationScore / 10) * 100}%` }}
                           ></div>
                         </div>
                       </div>
@@ -537,9 +535,9 @@ const EvaluationsPage = () => {
                             <span className="text-lg font-semibold text-gray-900">{selectedEvaluation.technicalScore}/10</span>
                           </div>
                           <div className="w-24 bg-gray-200 rounded-full h-3">
-                            <div 
-                              className="bg-blue-600 h-3 rounded-full" 
-                              style={{width: `${(selectedEvaluation.technicalScore / 10) * 100}%`}}
+                            <div
+                              className="bg-blue-600 h-3 rounded-full"
+                              style={{ width: `${(selectedEvaluation.technicalScore / 10) * 100}%` }}
                             ></div>
                           </div>
                         </div>
@@ -556,9 +554,9 @@ const EvaluationsPage = () => {
                             <span className="text-lg font-semibold text-gray-900">{selectedEvaluation.softSkillScore}/10</span>
                           </div>
                           <div className="w-24 bg-gray-200 rounded-full h-3">
-                            <div 
-                              className="bg-green-600 h-3 rounded-full" 
-                              style={{width: `${(selectedEvaluation.softSkillScore / 10) * 100}%`}}
+                            <div
+                              className="bg-green-600 h-3 rounded-full"
+                              style={{ width: `${(selectedEvaluation.softSkillScore / 10) * 100}%` }}
                             ></div>
                           </div>
                         </div>
@@ -575,9 +573,9 @@ const EvaluationsPage = () => {
                             <span className="text-lg font-semibold text-gray-900">{selectedEvaluation.attitudeScore}/10</span>
                           </div>
                           <div className="w-24 bg-gray-200 rounded-full h-3">
-                            <div 
-                              className="bg-purple-600 h-3 rounded-full" 
-                              style={{width: `${(selectedEvaluation.attitudeScore / 10) * 100}%`}}
+                            <div
+                              className="bg-purple-600 h-3 rounded-full"
+                              style={{ width: `${(selectedEvaluation.attitudeScore / 10) * 100}%` }}
                             ></div>
                           </div>
                         </div>
@@ -594,9 +592,9 @@ const EvaluationsPage = () => {
                             <span className="text-lg font-semibold text-gray-900">{selectedEvaluation.communicationScore}/10</span>
                           </div>
                           <div className="w-24 bg-gray-200 rounded-full h-3">
-                            <div 
-                              className="bg-orange-600 h-3 rounded-full" 
-                              style={{width: `${(selectedEvaluation.communicationScore / 10) * 100}%`}}
+                            <div
+                              className="bg-orange-600 h-3 rounded-full"
+                              style={{ width: `${(selectedEvaluation.communicationScore / 10) * 100}%` }}
                             ></div>
                           </div>
                         </div>

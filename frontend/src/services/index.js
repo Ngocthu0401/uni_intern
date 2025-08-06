@@ -12,8 +12,6 @@ export { default as reportService } from './reportService';
 export { default as evaluationService } from './evaluationService';
 export { default as contractService } from './contractService';
 
-// Export utilities
-export const API_BASE_URL = 'http://localhost:8080/api';
 
 // Export commonly used API functions
 export const apiHelpers = {

@@ -6,13 +6,13 @@ server:
 spring:
   application:
     name: internship-management
-  
+
   datasource:
     url: jdbc:mysql://localhost:3306/internship_management?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
     username: root
     password:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    
+
   jpa:
     hibernate:
       ddl-auto: update
@@ -21,13 +21,13 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
         format_sql: true
-        
+
   servlet:
     multipart:
       enabled: true
       max-file-size: 10MB
       max-request-size: 10MB
-      
+
   mail:
     host: smtp.gmail.com
     port: 587
@@ -62,4 +62,4 @@ logging:
 
 # File storage
 file:
-  upload-dir: ./uploads 
+  upload-dir: ./uploads
