@@ -2,6 +2,10 @@
 -- SCRIPT TẠO DỮ LIỆU DEMO CHO HỆ THỐNG QUẢN LÝ THỰC TẬP
 -- ========================================
 
+-- Đặt charset UTF-8 cho session để hiển thị tiếng Việt đúng
+SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci;
+SET CHARACTER SET utf8mb4;
+
 -- Xóa dữ liệu cũ (theo thứ tự để tránh lỗi khóa ngoại)
 SET FOREIGN_KEY_CHECKS = 0;
 

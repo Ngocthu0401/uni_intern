@@ -5,6 +5,10 @@
 -- và đặt lại auto_increment counters về 1
 -- CHỈ SỬ DỤNG TRONG MÔI TRƯỜNG DEVELOPMENT!
 
+-- Đặt charset UTF-8 cho session
+SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci;
+SET CHARACTER SET utf8mb4;
+
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- Xóa tất cả dữ liệu theo thứ tự để tránh lỗi khóa ngoại
