@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Card, Row, Col, Statistic, Button, Space, Typography } from 'antd';
 import { PlusOutlined, ReloadOutlined, TeamOutlined, CheckCircleOutlined, ClockCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import InternshipTable from './components/InternshipTable';
@@ -36,13 +36,15 @@ const InternshipManagement = () => {
     });
 
     // Load internships
-    const loadInternships = async (page = 1, pageSize = 10) => {
+    const loadInternships = useCallback(async (page = 1, pageSize = 10, currentFilters = null) => {
         try {
             setLoading(true);
+            const filtersToUse = currentFilters || filters;
+
             const params = {
                 page: page - 1, // Backend uses 0-based pagination
                 size: pageSize,
-                ...filters
+                ...filtersToUse
             };
 
             const response = await internshipService.searchInternships(params, { page, size: pageSize });
@@ -60,7 +62,7 @@ const InternshipManagement = () => {
         } finally {
             setLoading(false);
         }
-    };
+    }, []);
 
     // Load statistics
     const loadStatistics = async () => {
@@ -73,16 +75,17 @@ const InternshipManagement = () => {
     };
 
     // Handle table change (pagination, filters, sorter)
-    const handleTableChange = (paginationInfo, filters, sorter) => {
+    const handleTableChange = (paginationInfo) => {
         loadInternships(paginationInfo.current, paginationInfo.pageSize);
     };
 
     // Handle filter change
-    const handleFilterChange = (newFilters) => {
+    const handleFilterChange = useCallback((newFilters) => {
         setFilters(newFilters);
         setPagination(prev => ({ ...prev, current: 1 }));
-        loadInternships(1, pagination.pageSize);
-    };
+        // Call API immediately with new filters
+        loadInternships(1, pagination.pageSize, newFilters);
+    }, [loadInternships, pagination.pageSize]);
 
     // Handle reload
     const handleReload = () => {
@@ -116,20 +119,25 @@ const InternshipManagement = () => {
         loadStatistics();
     }, []);
 
+    // Debug: log when filters change
+    useEffect(() => {
+        console.log('Filters changed:', filters);
+    }, [filters]);
+
     return (
-        <div className="p-6">
-            <div className="mb-6">
-                <Title level={2} className="mb-2">
+        <div className="!p-6">
+            <div className="!mb-6">
+                <Title level={2} className="!mb-2">
                     Quản lý Thực tập
                 </Title>
-                <p className="text-gray-600">
+                <p className="!text-gray-600">
                     Quản lý tất cả các vị trí thực tập và ứng tuyển
                 </p>
             </div>
 
             {/* Statistics Cards */}
-            <Row gutter={16} className="mb-6">
-                <Col xs={24} sm={12} lg={4}>
+            <Row gutter={16} className="!mb-6 space-y-4 !justify-start" >
+                <Col xs={24} sm={12} lg={6}>
                     <Card>
                         <Statistic
                             title="Tổng số"
@@ -139,7 +147,7 @@ const InternshipManagement = () => {
                         />
                     </Card>
                 </Col>
-                <Col xs={24} sm={12} lg={4}>
+                <Col xs={24} sm={12} lg={6}>
                     <Card>
                         <Statistic
                             title="Chờ phê duyệt"
@@ -149,7 +157,7 @@ const InternshipManagement = () => {
                         />
                     </Card>
                 </Col>
-                <Col xs={24} sm={12} lg={4}>
+                <Col xs={24} sm={12} lg={6}>
                     <Card>
                         <Statistic
                             title="Đã phê duyệt"
@@ -159,17 +167,29 @@ const InternshipManagement = () => {
                         />
                     </Card>
                 </Col>
-                <Col xs={24} sm={12} lg={4}>
+
+                <Col xs={24} sm={12} lg={6}>
+                    <Card>
+                        <Statistic
+                            title="Đã phân công"
+                            value={statistics.assigned}
+                            prefix={<CheckCircleOutlined />}
+                            valueStyle={{ color: 'purple' }}
+                        />
+                    </Card>
+                </Col>
+
+                <Col xs={24} sm={12} lg={6}>
                     <Card>
                         <Statistic
                             title="Đang thực tập"
-                            value={statistics.inProgress}
+                            value={statistics.in_progress}
                             prefix={<TeamOutlined />}
                             valueStyle={{ color: '#722ed1' }}
                         />
                     </Card>
                 </Col>
-                <Col xs={24} sm={12} lg={4}>
+                <Col xs={24} sm={12} lg={6}>
                     <Card>
                         <Statistic
                             title="Hoàn thành"
@@ -179,7 +199,7 @@ const InternshipManagement = () => {
                         />
                     </Card>
                 </Col>
-                <Col xs={24} sm={12} lg={4}>
+                <Col xs={24} sm={12} lg={6}>
                     <Card>
                         <Statistic
                             title="Bị từ chối"
@@ -189,11 +209,22 @@ const InternshipManagement = () => {
                         />
                     </Card>
                 </Col>
+
+                <Col xs={24} sm={12} lg={6}>
+                    <Card>
+                        <Statistic
+                            title="Hủy bỏ"
+                            value={statistics.cancelled || 0}
+                            prefix={<CloseCircleOutlined />}
+                            valueStyle={{ color: 'red' }}
+                        />
+                    </Card>
+                </Col>
             </Row>
 
             {/* Action Bar */}
-            <Card className="mb-6">
-                <Row justify="space-between" align="middle">
+            <Card className="!mb-6">
+                <Row justify="!space-between" align="middle">
                     <Col>
                         <Space>
                             <Button
@@ -216,7 +247,7 @@ const InternshipManagement = () => {
             </Card>
 
             {/* Filters */}
-            <Card className="mb-6">
+            <Card className="!mb-6">
                 <InternshipFilters
                     filters={filters}
                     onFilterChange={handleFilterChange}

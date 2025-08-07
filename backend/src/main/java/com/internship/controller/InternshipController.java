@@ -1,5 +1,6 @@
 package com.internship.controller;
 
+import com.internship.dto.request.CreateInternshipRequest;
 import com.internship.entity.Internship;
 import com.internship.enums.InternshipStatus;
 import com.internship.service.InternshipService;
@@ -117,7 +118,7 @@ public class InternshipController {
         size = Math.max(1, Math.min(100, size));
 
         Sort sort = sortDir.equalsIgnoreCase("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
-        Pageable pageable = PageRequest.of(page, size, sort);
+        Pageable pageable = PageRequest.of(page - 1, size, sort);
 
         Page<Internship> internships;
 
@@ -150,14 +151,21 @@ public class InternshipController {
 
     @PostMapping
     @PreAuthorize("hasRole('DEPARTMENT') or hasRole('TEACHER')")
-    public ResponseEntity<?> createInternship(@Valid @RequestBody Internship internship) {
+    public ResponseEntity<?> createInternship(@RequestBody CreateInternshipRequest request) {
         try {
-            Internship createdInternship = internshipService.createInternship(internship);
+            System.out.println("Received request: " + request);
+            System.out.println("Job title: " + request.getJobTitle());
+            System.out.println("Batch ID: " + request.getInternshipBatchId());
+            Internship createdInternship = internshipService.createInternshipFromRequest(request);
             return ResponseEntity.status(201).body(createdInternship); // HTTP 201 Created
         } catch (RuntimeException e) {
             System.err.println("Error creating internship: " + e.getMessage());
             e.printStackTrace();
             return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
+        } catch (Exception e) {
+            System.err.println("Unexpected error creating internship: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(Map.of("message", "Unexpected error: " + e.getMessage()));
         }
     }
 

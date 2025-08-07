@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, Button, Space, Tag, Avatar, Tooltip, Dropdown } from 'antd';
+import { Table, Button, Space, Tag, Avatar, Tooltip, Dropdown, Divider } from 'antd';
 import { EyeOutlined, EditOutlined, DeleteOutlined, CheckCircleOutlined, CloseCircleOutlined, UserAddOutlined, MoreOutlined, UserOutlined, BookOutlined, DollarOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 
@@ -72,23 +72,23 @@ const InternshipTable = ({ dataSource, loading, pagination, onChange, onAction }
             }
         ];
 
-        // Add status-specific actions
-        if (record.status === 'PENDING') {
-            items.push(
-                {
-                    key: 'approve',
-                    label: 'Phê duyệt',
-                    icon: <CheckCircleOutlined />,
-                    onClick: () => onAction('approve', record)
-                },
-                {
-                    key: 'reject',
-                    label: 'Từ chối',
-                    icon: <CloseCircleOutlined />,
-                    onClick: () => onAction('reject', record)
-                }
-            );
-        }
+        // // Add status-specific actions
+        // if (record.status === 'PENDING') {
+        //     items.push(
+        //         {
+        //             key: 'approve',
+        //             label: 'Phê duyệt',
+        //             icon: <CheckCircleOutlined />,
+        //             onClick: () => onAction('approve', record)
+        //         },
+        //         {
+        //             key: 'reject',
+        //             label: 'Từ chối',
+        //             icon: <CloseCircleOutlined />,
+        //             onClick: () => onAction('reject', record)
+        //         }
+        //     );
+        // }
 
         if (record.status === 'APPROVED' || !record.student) {
             items.push({
@@ -117,17 +117,17 @@ const InternshipTable = ({ dataSource, loading, pagination, onChange, onAction }
             key: 'jobTitle',
             width: 200,
             render: (text, record) => (
-                <div className="flex items-center">
+                <div className="!flex !items-center">
                     <Avatar
                         size="small"
                         icon={<BookOutlined />}
-                        className="mr-2 bg-blue-500"
+                        className="!mr-2 !bg-blue-500"
                     />
                     <div>
-                        <div className="font-medium text-gray-900">
+                        <div className="!font-medium !text-gray-900">
                             {text || 'Chưa có tiêu đề'}
                         </div>
-                        <div className="text-xs text-gray-500 font-mono">
+                        <div className="!text-xs !text-gray-500 !font-mono">
                             {record.internshipCode || 'Chưa có mã'}
                         </div>
                     </div>
@@ -140,13 +140,13 @@ const InternshipTable = ({ dataSource, loading, pagination, onChange, onAction }
             key: 'company',
             width: 180,
             render: (company) => (
-                <div className="flex items-center">
-                    <EyeOutlined className="mr-2 text-gray-400" />
+                <div className="!flex !items-center">
+                    <EyeOutlined className="!mr-2 !text-gray-400" />
                     <div>
-                        <div className="text-sm text-gray-900">
+                        <div className="!text-sm !text-gray-900">
                             {company?.companyName || 'Chưa có công ty'}
                         </div>
-                        <div className="text-xs text-gray-500">
+                        <div className="!text-xs !text-gray-500">
                             {company?.address || 'Chưa có địa chỉ'}
                         </div>
                     </div>
@@ -159,13 +159,13 @@ const InternshipTable = ({ dataSource, loading, pagination, onChange, onAction }
             key: 'student',
             width: 180,
             render: (student) => (
-                <div className="flex items-center">
-                    <UserOutlined className="mr-2 text-gray-400" />
+                <div className="!flex !items-center">
+                    <UserOutlined className="!mr-2 !text-gray-400" />
                     <div>
-                        <div className="text-sm text-gray-900">
+                        <div className="!text-sm !text-gray-900">
                             {student?.user?.fullName || 'Chưa phân công'}
                         </div>
-                        <div className="text-xs text-gray-500">
+                        <div className="!text-xs !text-gray-500">
                             Mã SV: {student?.studentCode || 'N/A'}
                         </div>
                     </div>
@@ -178,13 +178,13 @@ const InternshipTable = ({ dataSource, loading, pagination, onChange, onAction }
             key: 'teacher',
             width: 150,
             render: (teacher) => (
-                <div className="flex items-center">
-                    <BookOutlined className="mr-2 text-gray-400" />
+                <div className="!flex !items-center">
+                    <BookOutlined className="!mr-2 !text-gray-400" />
                     <div>
-                        <div className="text-sm text-gray-900">
+                        <div className="!text-sm !text-gray-900">
                             {teacher?.user?.fullName || 'Chưa phân công'}
                         </div>
-                        <div className="text-xs text-gray-500">
+                        <div className="!text-xs !text-gray-500">
                             {teacher?.department || 'N/A'}
                         </div>
                     </div>
@@ -198,10 +198,10 @@ const InternshipTable = ({ dataSource, loading, pagination, onChange, onAction }
             width: 150,
             render: (startDate, record) => (
                 <div>
-                    <div className="text-sm text-gray-900">
+                    <div className="!text-sm !text-gray-900">
                         {startDate ? dayjs(startDate).format('DD/MM/YYYY') : 'Chưa xác định'}
                     </div>
-                    <div className="text-xs text-gray-500">
+                    <div className="!text-xs !text-gray-500">
                         đến {record.endDate ? dayjs(record.endDate).format('DD/MM/YYYY') : 'Chưa xác định'}
                     </div>
                 </div>
@@ -214,11 +214,11 @@ const InternshipTable = ({ dataSource, loading, pagination, onChange, onAction }
             width: 140,
             render: (salary, record) => (
                 <div>
-                    <div className="text-sm text-gray-900 flex items-center">
-                        <DollarOutlined className="mr-1 text-green-500" />
+                    <div className="!text-sm !text-gray-900 !flex !items-center">
+                        <DollarOutlined className="!mr-1 !text-green-500" />
                         {formatSalary(salary)}
                     </div>
-                    <div className="text-xs text-gray-500">
+                    <div className="!text-xs !text-gray-500">
                         {record.workingHoursPerWeek || 40}h/tuần
                     </div>
                 </div>
@@ -248,8 +248,8 @@ const InternshipTable = ({ dataSource, loading, pagination, onChange, onAction }
                 >
                     <Button
                         type="text"
-                        icon={<MoreOutlined />}
-                        size="small"
+                        icon={<MoreOutlined className="!text-lg" />}
+                        size="middle"
                     />
                 </Dropdown>
             )

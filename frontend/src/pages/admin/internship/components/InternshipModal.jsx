@@ -81,7 +81,7 @@ const InternshipModal = ({ visible, mode, internship, onClose, onSuccess }) => {
         }
 
         try {
-            const mentorsForCompany = mentors.filter(mentor => mentor.company?.id === companyId);
+            const mentorsForCompany = mentors?.content?.filter(mentor => mentor?.company?.id === companyId);
             setAvailableMentors(mentorsForCompany);
         } catch (error) {
             console.error('Error loading mentors for company:', error);
@@ -264,12 +264,12 @@ const InternshipModal = ({ visible, mode, internship, onClose, onSuccess }) => {
 
             case 'delete':
                 return (
-                    <div className="text-center">
-                        <p className="mb-4">
+                    <div className="!text-center">
+                        <p className="!mb-4">
                             Bạn có chắc chắn muốn xóa thực tập{' '}
-                            <span className="font-semibold">{internship?.jobTitle}</span>?
+                            <span className="!font-semibold">{internship?.jobTitle}</span>?
                         </p>
-                        <p className="text-red-500 text-sm">
+                        <p className="!text-red-500 !text-sm">
                             Hành động này không thể hoàn tác.
                         </p>
                     </div>
@@ -290,10 +290,10 @@ const InternshipModal = ({ visible, mode, internship, onClose, onSuccess }) => {
                 return <AssignmentForm
                     assignmentData={assignmentData}
                     setAssignmentData={setAssignmentData}
-                    companies={companies}
+                    companies={companies?.content}
                     students={students}
                     availableMentors={availableMentors}
-                    teachers={teachers}
+                    teachers={teachers?.content}
                     onCompanyChange={handleCompanyChange}
                     internship={internship}
                 />;
@@ -510,16 +510,7 @@ const InternshipForm = ({ form, onSubmit, activeBatches = [] }) => {
 };
 
 // Assignment Form Component
-const AssignmentForm = ({
-    assignmentData,
-    setAssignmentData,
-    companies,
-    students,
-    availableMentors,
-    teachers,
-    onCompanyChange,
-    internship
-}) => {
+const AssignmentForm = ({ assignmentData, setAssignmentData, companies, students, availableMentors, teachers, onCompanyChange, internship }) => {
     return (
         <div className="space-y-6">
             {/* Current internship info */}
@@ -554,7 +545,7 @@ const AssignmentForm = ({
                         Chọn Công ty <span className="required">*</span>
                     </label>
                     <Select
-                        value={assignmentData.companyId}
+                        value={assignmentData?.companyId}
                         onChange={(value) => {
                             setAssignmentData(prev => ({ ...prev, companyId: value }));
                             onCompanyChange(value);
@@ -562,9 +553,9 @@ const AssignmentForm = ({
                         placeholder="-- Chọn công ty --"
                         style={{ width: '100%' }}
                     >
-                        {companies.map(company => (
-                            <Select.Option key={company.id} value={company.id}>
-                                {company.companyName} ({company.companyCode})
+                        {companies && companies?.length > 0 && companies?.map(company => (
+                            <Select.Option key={company?.id} value={company?.id}>
+                                {company?.companyName} ({company?.companyCode})
                             </Select.Option>
                         ))}
                     </Select>
@@ -575,14 +566,14 @@ const AssignmentForm = ({
                         Chọn Sinh viên <span className="required">*</span>
                     </label>
                     <Select
-                        value={assignmentData.studentId}
+                        value={assignmentData?.studentId}
                         onChange={(value) => setAssignmentData(prev => ({ ...prev, studentId: value }))}
                         placeholder="-- Chọn sinh viên --"
                         style={{ width: '100%' }}
                     >
-                        {students.map(student => (
-                            <Select.Option key={student.id} value={student.id}>
-                                {student.user?.fullName} - {student.studentCode}
+                        {students && students?.length > 0 && students?.map(student => (
+                            <Select.Option key={student?.id} value={student?.id}>
+                                {student?.user?.fullName} - {student?.studentCode}
                             </Select.Option>
                         ))}
                     </Select>
@@ -593,14 +584,14 @@ const AssignmentForm = ({
                         Chọn Giảng viên phụ trách
                     </label>
                     <Select
-                        value={assignmentData.teacherId}
+                        value={assignmentData?.teacherId}
                         onChange={(value) => setAssignmentData(prev => ({ ...prev, teacherId: value }))}
                         placeholder="-- Chọn giảng viên --"
                         style={{ width: '100%' }}
                     >
-                        {teachers.map(teacher => (
-                            <Select.Option key={teacher.id} value={teacher.id}>
-                                {teacher.user?.fullName} - {teacher.department}
+                        {teachers && teachers?.length > 0 && teachers?.map(teacher => (
+                            <Select.Option key={teacher?.id} value={teacher?.id}>
+                                {teacher?.user?.fullName} - {teacher?.department}
                             </Select.Option>
                         ))}
                     </Select>
@@ -611,15 +602,15 @@ const AssignmentForm = ({
                         Chọn Mentor
                     </label>
                     <Select
-                        value={assignmentData.mentorId}
+                        value={assignmentData?.mentorId}
                         onChange={(value) => setAssignmentData(prev => ({ ...prev, mentorId: value }))}
                         placeholder="-- Chọn mentor --"
                         style={{ width: '100%' }}
                         disabled={!assignmentData.companyId}
                     >
-                        {availableMentors.map(mentor => (
-                            <Select.Option key={mentor.id} value={mentor.id}>
-                                {mentor.user?.fullName} - {mentor.company?.companyName}
+                        {availableMentors && availableMentors?.length > 0 && availableMentors?.map(mentor => (
+                            <Select.Option key={mentor?.id} value={mentor?.id}>
+                                {mentor?.user?.fullName} - {mentor?.company?.companyName}
                             </Select.Option>
                         ))}
                     </Select>
@@ -697,38 +688,38 @@ const InternshipDetailView = ({ internship }) => {
                     <div className="internship-detail-content">
                         <Descriptions column={1} bordered>
                             <Descriptions.Item label="Công ty">
-                                <div className="flex items-center">
-                                    <BookOutlined className="mr-2 text-blue-500" />
+                                <div className="!flex !items-center">
+                                    <BookOutlined className="!mr-2 !text-blue-500" />
                                     <div>
-                                        <div className="font-medium">{internship.company?.companyName || 'Chưa phân công'}</div>
-                                        <div className="text-sm text-gray-500">{internship.company?.address || 'Chưa có địa chỉ'}</div>
+                                        <div className="!font-medium">{internship.company?.companyName || 'Chưa phân công'}</div>
+                                        <div className="!text-sm !text-gray-500">{internship.company?.address || 'Chưa có địa chỉ'}</div>
                                     </div>
                                 </div>
                             </Descriptions.Item>
                             <Descriptions.Item label="Sinh viên">
-                                <div className="flex items-center">
-                                    <UserOutlined className="mr-2 text-green-500" />
+                                <div className="!flex !items-center">
+                                    <UserOutlined className="!mr-2 !text-green-500" />
                                     <div>
-                                        <div className="font-medium">{internship.student?.user?.fullName || 'Chưa phân công'}</div>
-                                        <div className="text-sm text-gray-500">Mã SV: {internship.student?.studentCode || 'N/A'}</div>
+                                        <div className="!font-medium">{internship.student?.user?.fullName || 'Chưa phân công'}</div>
+                                        <div className="!text-sm !text-gray-500">Mã SV: {internship.student?.studentCode || 'N/A'}</div>
                                     </div>
                                 </div>
                             </Descriptions.Item>
                             <Descriptions.Item label="Giảng viên phụ trách">
-                                <div className="flex items-center">
-                                    <BookOutlined className="mr-2 text-purple-500" />
+                                <div className="!flex !items-center">
+                                    <BookOutlined className="!mr-2 !text-purple-500" />
                                     <div>
-                                        <div className="font-medium">{internship.teacher?.user?.fullName || 'Chưa phân công'}</div>
-                                        <div className="text-sm text-gray-500">Khoa: {internship.teacher?.department || 'N/A'}</div>
+                                        <div className="!font-medium">{internship.teacher?.user?.fullName || 'Chưa phân công'}</div>
+                                        <div className="!text-sm !text-gray-500">Khoa: {internship.teacher?.department || 'N/A'}</div>
                                     </div>
                                 </div>
                             </Descriptions.Item>
                             <Descriptions.Item label="Mentor">
-                                <div className="flex items-center">
-                                    <UserOutlined className="mr-2 text-orange-500" />
+                                <div className="!flex !items-center">
+                                    <UserOutlined className="!mr-2 !text-orange-500" />
                                     <div>
-                                        <div className="font-medium">{internship.mentor?.user?.fullName || 'Chưa phân công'}</div>
-                                        <div className="text-sm text-gray-500">Chức vụ: {internship.mentor?.position || 'N/A'}</div>
+                                        <div className="!font-medium">{internship.mentor?.user?.fullName || 'Chưa phân công'}</div>
+                                        <div className="!text-sm !text-gray-500">Chức vụ: {internship.mentor?.position || 'N/A'}</div>
                                     </div>
                                 </div>
                             </Descriptions.Item>
@@ -740,7 +731,7 @@ const InternshipDetailView = ({ internship }) => {
                     <div className="internship-detail-content">
                         <div className="space-y-4">
                             <div className="detail-section">
-                                <h4>Mô tả công việc</h4>
+                                <h4 className="!text-lg !font-semibold">Mô tả công việc</h4>
                                 <div className="detail-content">
                                     {internship.jobDescription || 'Chưa có mô tả công việc'}
                                 </div>
@@ -748,7 +739,7 @@ const InternshipDetailView = ({ internship }) => {
 
                             {internship.requirements && (
                                 <div className="detail-section">
-                                    <h4>Yêu cầu</h4>
+                                    <h4 className="!text-lg !font-semibold">Yêu cầu</h4>
                                     <div className="detail-content orange-bg">
                                         {internship.requirements}
                                     </div>
@@ -757,7 +748,7 @@ const InternshipDetailView = ({ internship }) => {
 
                             {internship.benefits && (
                                 <div className="detail-section">
-                                    <h4>Phúc lợi</h4>
+                                    <h4 className="!text-lg !font-semibold">Phúc lợi</h4>
                                     <div className="detail-content green-bg">
                                         {internship.benefits}
                                     </div>
@@ -766,7 +757,7 @@ const InternshipDetailView = ({ internship }) => {
 
                             {internship.notes && (
                                 <div className="detail-section">
-                                    <h4>Ghi chú</h4>
+                                    <h4 className="!text-lg !font-semibold">Ghi chú</h4>
                                     <div className="detail-content yellow-bg">
                                         {internship.notes}
                                     </div>

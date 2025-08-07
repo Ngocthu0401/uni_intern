@@ -54,10 +54,10 @@ D:\WorkSpace\Project\uni_intern\backend\src\main\java\com\internship\controller\
 D:\WorkSpace\Project\uni_intern\backend\src\main\java\com\internship\controller\ContractController.java
 D:\WorkSpace\Project\uni_intern\backend\src\main\java\com\internship\controller\InternshipProgressController.java
 D:\WorkSpace\Project\uni_intern\backend\src\main\java\com\internship\service\CompanyServiceExtension.java
-D:\WorkSpace\Project\uni_intern\backend\src\main\java\com\internship\controller\TestController.java
 D:\WorkSpace\Project\uni_intern\backend\src\main\java\com\internship\controller\ReportController.java
 D:\WorkSpace\Project\uni_intern\backend\src\main\java\com\internship\dto\request\UpdateContractRequest.java
 D:\WorkSpace\Project\uni_intern\backend\src\main\java\com\internship\controller\InternshipBatchController.java
+D:\WorkSpace\Project\uni_intern\backend\src\main\java\com\internship\dto\request\CreateInternshipRequest.java
 D:\WorkSpace\Project\uni_intern\backend\src\main\java\com\internship\repository\UserRepository.java
 D:\WorkSpace\Project\uni_intern\backend\src\main\java\com\internship\dto\response\MessageResponse.java
 D:\WorkSpace\Project\uni_intern\backend\src\main\java\com\internship\service\ContractService.java

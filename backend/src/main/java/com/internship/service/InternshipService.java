@@ -5,12 +5,14 @@ import com.internship.entity.Company;
 import com.internship.entity.Student;
 import com.internship.entity.Mentor;
 import com.internship.entity.Teacher;
+import com.internship.entity.InternshipBatch;
 import com.internship.enums.InternshipStatus;
 import com.internship.repository.InternshipRepository;
 import com.internship.repository.CompanyRepository;
 import com.internship.repository.StudentRepository;
 import com.internship.repository.MentorRepository;
 import com.internship.repository.TeacherRepository;
+import com.internship.repository.InternshipBatchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -42,6 +44,9 @@ public class InternshipService {
 
     @Autowired
     private TeacherRepository teacherRepository;
+
+    @Autowired
+    private InternshipBatchRepository internshipBatchRepository;
 
     public List<Internship> getAllInternships() {
         return internshipRepository.findAllWithDetails();
@@ -116,6 +121,82 @@ public class InternshipService {
             // Generate internship code if not provided
             internship.setInternshipCode(generateInternshipCode());
         }
+
+        // Set default status if not provided
+        if (internship.getStatus() == null) {
+            internship.setStatus(InternshipStatus.PENDING);
+        }
+
+        return internshipRepository.save(internship);
+    }
+
+    @Transactional(readOnly = false)
+    public Internship createInternshipFromRequest(com.internship.dto.request.CreateInternshipRequest request) {
+        Internship internship = new Internship();
+
+        // Set basic fields
+        internship.setJobTitle(request.getJobTitle());
+        internship.setJobDescription(request.getJobDescription());
+        internship.setRequirements(request.getRequirements());
+        internship.setStartDate(request.getStartDate());
+        internship.setEndDate(request.getEndDate());
+        internship.setStatus(request.getStatus());
+        internship.setWorkingHoursPerWeek(request.getWorkingHoursPerWeek());
+        internship.setSalary(request.getSalary());
+        internship.setBenefits(request.getBenefits());
+        internship.setNotes(request.getNotes());
+
+        // Set relationships if IDs are provided
+        if (request.getStudentId() != null) {
+            Optional<Student> student = studentRepository.findById(request.getStudentId());
+            if (student.isPresent()) {
+                internship.setStudent(student.get());
+            } else {
+                throw new RuntimeException("Student not found with ID: " + request.getStudentId());
+            }
+        }
+
+        if (request.getTeacherId() != null) {
+            Optional<Teacher> teacher = teacherRepository.findById(request.getTeacherId());
+            if (teacher.isPresent()) {
+                internship.setTeacher(teacher.get());
+            } else {
+                throw new RuntimeException("Teacher not found with ID: " + request.getTeacherId());
+            }
+        }
+
+        if (request.getMentorId() != null) {
+            Optional<Mentor> mentor = mentorRepository.findById(request.getMentorId());
+            if (mentor.isPresent()) {
+                internship.setMentor(mentor.get());
+            } else {
+                throw new RuntimeException("Mentor not found with ID: " + request.getMentorId());
+            }
+        }
+
+        if (request.getCompanyId() != null) {
+            Optional<Company> company = companyRepository.findById(request.getCompanyId());
+            if (company.isPresent()) {
+                internship.setCompany(company.get());
+            } else {
+                throw new RuntimeException("Company not found with ID: " + request.getCompanyId());
+            }
+        }
+
+        if (request.getInternshipBatchId() != null) {
+            System.out.println("Looking for batch with ID: " + request.getInternshipBatchId());
+            Optional<InternshipBatch> batch = internshipBatchRepository.findById(request.getInternshipBatchId());
+            if (batch.isPresent()) {
+                System.out.println("Found batch: " + batch.get().getBatchName());
+                internship.setInternshipBatch(batch.get());
+            } else {
+                System.out.println("Batch not found with ID: " + request.getInternshipBatchId());
+                throw new RuntimeException("Internship batch not found with ID: " + request.getInternshipBatchId());
+            }
+        }
+
+        // Generate internship code
+        internship.setInternshipCode(generateInternshipCode());
 
         // Set default status if not provided
         if (internship.getStatus() == null) {
