@@ -224,6 +224,90 @@ public class InternshipService {
         return internshipRepository.save(internship);
     }
 
+    @Transactional(readOnly = false)
+    public Internship updateInternshipFromRequest(Long id, com.internship.dto.request.UpdateInternshipRequest request) {
+        Optional<Internship> existingOpt = internshipRepository.findById(id);
+        if (existingOpt.isEmpty()) {
+            throw new RuntimeException("Internship not found with id: " + id);
+        }
+
+        Internship existing = existingOpt.get();
+
+        // Update basic fields
+        existing.setJobTitle(request.getJobTitle());
+        existing.setJobDescription(request.getJobDescription());
+        existing.setRequirements(request.getRequirements());
+        existing.setStartDate(request.getStartDate());
+        existing.setEndDate(request.getEndDate());
+        existing.setStatus(request.getStatus());
+        existing.setWorkingHoursPerWeek(request.getWorkingHoursPerWeek());
+        existing.setSalary(request.getSalary());
+        existing.setBenefits(request.getBenefits());
+        existing.setNotes(request.getNotes());
+
+        // Update relationships if IDs are provided
+        if (request.getStudentId() != null) {
+            Optional<Student> student = studentRepository.findById(request.getStudentId());
+            if (student.isPresent()) {
+                existing.setStudent(student.get());
+            } else {
+                throw new RuntimeException("Student not found with ID: " + request.getStudentId());
+            }
+        } else {
+            existing.setStudent(null);
+        }
+
+        if (request.getTeacherId() != null) {
+            Optional<Teacher> teacher = teacherRepository.findById(request.getTeacherId());
+            if (teacher.isPresent()) {
+                existing.setTeacher(teacher.get());
+            } else {
+                throw new RuntimeException("Teacher not found with ID: " + request.getTeacherId());
+            }
+        } else {
+            existing.setTeacher(null);
+        }
+
+        if (request.getMentorId() != null) {
+            Optional<Mentor> mentor = mentorRepository.findById(request.getMentorId());
+            if (mentor.isPresent()) {
+                existing.setMentor(mentor.get());
+            } else {
+                throw new RuntimeException("Mentor not found with ID: " + request.getMentorId());
+            }
+        } else {
+            existing.setMentor(null);
+        }
+
+        if (request.getCompanyId() != null) {
+            Optional<Company> company = companyRepository.findById(request.getCompanyId());
+            if (company.isPresent()) {
+                existing.setCompany(company.get());
+            } else {
+                throw new RuntimeException("Company not found with ID: " + request.getCompanyId());
+            }
+        } else {
+            existing.setCompany(null);
+        }
+
+        if (request.getInternshipBatchId() != null) {
+            System.out.println("Looking for batch with ID: " + request.getInternshipBatchId());
+            Optional<InternshipBatch> batch = internshipBatchRepository.findById(request.getInternshipBatchId());
+            if (batch.isPresent()) {
+                System.out.println("Found batch: " + batch.get().getBatchName());
+                existing.setInternshipBatch(batch.get());
+            } else {
+                System.out.println("Batch not found with ID: " + request.getInternshipBatchId());
+                throw new RuntimeException("Internship batch not found with ID: " + request.getInternshipBatchId());
+            }
+        } else {
+            System.out.println("No batch ID provided, setting to null");
+            existing.setInternshipBatch(null);
+        }
+
+        return internshipRepository.save(existing);
+    }
+
     @Transactional
     public Internship patchInternship(Long id, Map<String, Object> updates) {
         Optional<Internship> existingOpt = internshipRepository.findById(id);

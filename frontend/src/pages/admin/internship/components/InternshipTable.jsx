@@ -1,6 +1,6 @@
 import React from 'react';
 import { Table, Button, Space, Tag, Avatar, Tooltip, Dropdown, Divider } from 'antd';
-import { EyeOutlined, EditOutlined, DeleteOutlined, CheckCircleOutlined, CloseCircleOutlined, UserAddOutlined, MoreOutlined, UserOutlined, BookOutlined, DollarOutlined } from '@ant-design/icons';
+import { EyeOutlined, EditOutlined, DeleteOutlined, CheckCircleOutlined, CloseCircleOutlined, UserAddOutlined, MoreOutlined, UserOutlined, BookOutlined, DollarOutlined, CalendarOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 
 const InternshipTable = ({ dataSource, loading, pagination, onChange, onAction }) => {
@@ -111,6 +111,25 @@ const InternshipTable = ({ dataSource, loading, pagination, onChange, onAction }
     };
 
     const columns = [
+        {
+            title: 'Đợt thực tập',
+            dataIndex: 'internshipBatch',
+            key: 'batch',
+            width: 200,
+            render: (batch) => (
+
+                <div className="!flex !items-center !bg-blue-50 !p-2 !rounded-md">
+                    <div>
+                        <div className="!font-medium !text-gray-900">
+                            {batch?.batchName || 'Chưa có tên'}
+                        </div>
+                        <div className="!text-xs !text-gray-500 !font-mono">
+                            {batch?.batchCode || 'Chưa có mã'}
+                        </div>
+                    </div>
+                </div>
+            )
+        },
         {
             title: 'Vị trí thực tập',
             dataIndex: 'jobTitle',

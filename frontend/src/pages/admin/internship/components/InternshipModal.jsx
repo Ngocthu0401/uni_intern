@@ -42,6 +42,8 @@ const InternshipModal = ({ visible, mode, internship, onClose, onSuccess }) => {
     const [availableMentors, setAvailableMentors] = useState([]);
     const [activeBatches, setActiveBatches] = useState([]);
 
+    console.log('activeBatches: ', activeBatches);
+
     // Load data for assignment
     const loadAssignmentData = async () => {
         try {
@@ -66,7 +68,7 @@ const InternshipModal = ({ visible, mode, internship, onClose, onSuccess }) => {
     const loadActiveBatches = async () => {
         try {
             const batchesResponse = await batchService.getActiveBatches();
-            setActiveBatches(batchesResponse.data || batchesResponse || []);
+            setActiveBatches(batchesResponse?.data || batchesResponse || []);
         } catch (error) {
             console.error('Error loading active batches:', error);
             message.error('Không thể tải danh sách đợt thực tập');
@@ -134,6 +136,10 @@ const InternshipModal = ({ visible, mode, internship, onClose, onSuccess }) => {
                 notes: values.notes || '',
                 internshipBatchId: values.batchId
             };
+
+            if (mode === 'edit') {
+                delete internshipData.internshipBatchId;
+            }
 
             if (mode === 'create') {
                 await internshipService.createInternship(internshipData);
@@ -230,7 +236,7 @@ const InternshipModal = ({ visible, mode, internship, onClose, onSuccess }) => {
                     teacherId: internship.teacher?.id || ''
                 });
             }
-        } else if (visible && mode === 'create') {
+        } else if (visible && (mode === 'create' || mode === 'edit')) {
             loadActiveBatches();
         }
     }, [visible, mode, internship]);
@@ -242,6 +248,7 @@ const InternshipModal = ({ visible, mode, internship, onClose, onSuccess }) => {
         } else if (visible && mode === 'edit' && internship) {
             form.setFieldsValue({
                 title: internship.jobTitle || '',
+                batchId: internship.internshipBatch?.id || '',
                 description: internship.jobDescription || '',
                 requirements: internship.requirements || '',
                 benefits: internship.benefits || '',
@@ -299,7 +306,7 @@ const InternshipModal = ({ visible, mode, internship, onClose, onSuccess }) => {
                 />;
 
             default:
-                return <InternshipForm form={form} onSubmit={handleSubmit} activeBatches={activeBatches} />;
+                return <InternshipForm form={form} onSubmit={handleSubmit} activeBatches={activeBatches} mode={mode} />;
         }
     };
 
@@ -384,7 +391,7 @@ const InternshipModal = ({ visible, mode, internship, onClose, onSuccess }) => {
             open={visible}
             onCancel={onClose}
             footer={renderModalFooter()}
-            width={mode === 'view' ? 800 : 600}
+            width={800}
             destroyOnClose
         >
             <Spin spinning={loading}>
@@ -395,7 +402,7 @@ const InternshipModal = ({ visible, mode, internship, onClose, onSuccess }) => {
 };
 
 // Internship Form Component
-const InternshipForm = ({ form, onSubmit, activeBatches = [] }) => {
+const InternshipForm = ({ form, onSubmit, activeBatches = [], mode }) => {
     return (
         <Form
             form={form}
@@ -407,7 +414,9 @@ const InternshipForm = ({ form, onSubmit, activeBatches = [] }) => {
                 label="Đợt thực tập"
                 rules={[{ required: true, message: 'Vui lòng chọn đợt thực tập' }]}
             >
-                <Select placeholder="-- Chọn đợt thực tập --">
+                <Select placeholder="-- Chọn đợt thực tập --"
+                    disabled={mode === 'edit'}
+                >
                     {activeBatches.map(batch => (
                         <Select.Option key={batch.id} value={batch.id}>
                             {batch.batchName} - {batch.academicYear} ({batch.semester})

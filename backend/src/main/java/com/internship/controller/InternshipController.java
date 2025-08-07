@@ -1,6 +1,7 @@
 package com.internship.controller;
 
 import com.internship.dto.request.CreateInternshipRequest;
+import com.internship.dto.request.UpdateInternshipRequest;
 import com.internship.entity.Internship;
 import com.internship.enums.InternshipStatus;
 import com.internship.service.InternshipService;
@@ -171,15 +172,21 @@ public class InternshipController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('DEPARTMENT') or hasRole('TEACHER')")
-    public ResponseEntity<?> updateInternship(@PathVariable Long id, @Valid @RequestBody Internship internship) {
+    public ResponseEntity<?> updateInternship(@PathVariable Long id, @RequestBody UpdateInternshipRequest request) {
         try {
-            internship.setId(id);
-            Internship updatedInternship = internshipService.updateInternship(internship);
+            System.out.println("Received update request for ID: " + id);
+            System.out.println("Job title: " + request.getJobTitle());
+            System.out.println("Batch ID: " + request.getInternshipBatchId());
+            Internship updatedInternship = internshipService.updateInternshipFromRequest(id, request);
             return ResponseEntity.ok(updatedInternship);
         } catch (RuntimeException e) {
             System.err.println("Error updating internship: " + e.getMessage());
             e.printStackTrace();
             return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
+        } catch (Exception e) {
+            System.err.println("Unexpected error updating internship: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(Map.of("message", "Unexpected error: " + e.getMessage()));
         }
     }
 
