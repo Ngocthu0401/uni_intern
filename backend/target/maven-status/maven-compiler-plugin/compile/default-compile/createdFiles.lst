@@ -63,6 +63,7 @@ com\internship\service\ReportService.class
 com\internship\enums\ContractStatus.class
 com\internship\security\jwt\AuthTokenFilter.class
 com\internship\dto\request\CreateContractRequest.class
+com\internship\dto\request\CreateInternshipRequest.class
 com\internship\entity\Task$TaskPriority.class
 com\internship\dto\response\TeacherResponse.class
 com\internship\service\InternshipBatchService.class
@@ -90,3 +91,4 @@ com\internship\controller\TaskController.class
 com\internship\dto\response\JwtResponse.class
 com\internship\service\TaskService.class
 com\internship\dto\request\CreateTeacherRequest.class
+com\internship\dto\request\UpdateInternshipRequest.class

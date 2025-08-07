@@ -13,6 +13,7 @@ D:\WorkSpace\Project\uni_intern\backend\src\main\java\com\internship\repository\
 D:\WorkSpace\Project\uni_intern\backend\src\main\java\com\internship\dto\request\UpdateEvaluationRequest.java
 D:\WorkSpace\Project\uni_intern\backend\src\main\java\com\internship\enums\RoleType.java
 D:\WorkSpace\Project\uni_intern\backend\src\main\java\com\internship\dto\response\JwtResponse.java
+D:\WorkSpace\Project\uni_intern\backend\src\main\java\com\internship\dto\request\UpdateInternshipRequest.java
 D:\WorkSpace\Project\uni_intern\backend\src\main\java\com\internship\entity\Teacher.java
 D:\WorkSpace\Project\uni_intern\backend\src\main\java\com\internship\controller\TaskController.java
 D:\WorkSpace\Project\uni_intern\backend\src\main\java\com\internship\enums\ContractStatus.java

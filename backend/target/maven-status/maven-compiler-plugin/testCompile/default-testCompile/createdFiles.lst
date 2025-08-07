@@ -1,9 +1,0 @@
-com\internship\repository\StudentRepositoryTest.class
-com\internship\integration\StudentControllerIntegrationTest.class
-com\internship\AllApiTestSuite.class
-com\internship\config\TestConfig.class
-com\internship\integration\StudentApiIntegrationTest.class
-com\internship\service\StudentServiceTest.class
-com\internship\config\TestDataBuilder.class
-com\internship\integration\AuthControllerIntegrationTest.class
-com\internship\integration\ApiEndpointsIntegrationTest.class
