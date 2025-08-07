@@ -39,18 +39,18 @@ const StudentTable = ({ students = [], loading = false, studentInternships = {},
     };
 
     const getActionItems = (student) => [
-        {
-            key: 'view',
-            label: 'Xem chi tiết',
-            icon: <EyeOutlined />,
-            onClick: () => onView(student)
-        },
-        {
-            key: 'internships',
-            label: 'Thông tin thực tập',
-            icon: <FileTextOutlined />,
-            onClick: () => onViewInternships(student)
-        },
+        // {
+        //     key: 'view',
+        //     label: 'Xem chi tiết',
+        //     icon: <EyeOutlined />,
+        //     onClick: () => onView(student)
+        // },
+        // {
+        //     key: 'internships',
+        //     label: 'Thông tin thực tập',
+        //     icon: <FileTextOutlined />,
+        //     onClick: () => onViewInternships(student)
+        // },
         {
             key: 'edit',
             label: 'Chỉnh sửa',

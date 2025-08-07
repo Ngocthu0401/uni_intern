@@ -95,26 +95,27 @@ const StudentInternshipsModal = ({
             <Panel
                 key={internship.id}
                 header={
-                    <div className="flex items-center justify-between w-full pr-4">
-                        <div className="flex items-center space-x-3">
+                    <div className="!flex !items-center !justify-between !w-full !pr-4">
+                        <div className="!flex !items-center !space-x-3">
                             <Avatar
                                 size={40}
                                 style={{
                                     backgroundColor: isActive ? '#52c41a' : '#1890ff',
                                     color: 'white'
                                 }}
+                                className='!mr-2'
                                 icon={<BankOutlined />}
                             />
                             <div>
-                                <div className="font-semibold text-gray-900">
+                                <div className="!font-semibold !text-gray-900">
                                     {internship.jobTitle || 'Chưa có tiêu đề'}
                                 </div>
-                                <div className="text-sm text-gray-500">
+                                <div className="!text-sm !text-gray-500">
                                     {internship.company?.companyName || 'Chưa có công ty'}
                                 </div>
                             </div>
                         </div>
-                        <div className="flex items-center space-x-2">
+                        <div className="!flex !items-center !space-x-2">
                             <Tag color={getStatusColor(internship.status)}>
                                 {getStatusText(internship.status)}
                             </Tag>
@@ -126,22 +127,22 @@ const StudentInternshipsModal = ({
                         </div>
                     </div>
                 }
-                className={isActive ? 'border-green-300 bg-green-50' : ''}
+                className={isActive ? '!border-green-300 !bg-green-50' : ''}
             >
                 <Row gutter={[16, 16]}>
                     {/* Left Column - Company & People */}
                     <Col xs={24} lg={12}>
-                        <div className="space-y-4">
+                        <div className="!space-y-4">
                             {/* Company Information */}
                             <Card
                                 title={
-                                    <div className="flex items-center">
-                                        <BankOutlined className="text-blue-500 mr-2" />
+                                    <div className="!flex !items-center">
+                                        <BankOutlined className="!text-blue-500 !mr-2" />
                                         <span>Thông tin công ty</span>
                                     </div>
                                 }
                                 size="small"
-                                className="bg-blue-50 border-blue-200"
+                                className="!bg-blue-50 !border-blue-200"
                             >
                                 <Descriptions
                                     column={1}
@@ -183,13 +184,13 @@ const StudentInternshipsModal = ({
                             {/* Teacher Information */}
                             <Card
                                 title={
-                                    <div className="flex items-center">
-                                        <BookOutlined className="text-green-500 mr-2" />
+                                    <div className="!flex !items-center">
+                                        <BookOutlined className="!text-green-500 !mr-2" />
                                         <span>Giảng viên hướng dẫn</span>
                                     </div>
                                 }
                                 size="small"
-                                className="bg-green-50 border-green-200"
+                                className="!bg-green-50 !border-green-200"
                             >
                                 <Descriptions
                                     column={1}
@@ -226,13 +227,13 @@ const StudentInternshipsModal = ({
                             {/* Mentor Information */}
                             <Card
                                 title={
-                                    <div className="flex items-center">
-                                        <TeamOutlined className="text-purple-500 mr-2" />
+                                    <div className="!flex !items-center">
+                                        <TeamOutlined className="!text-purple-500 !mr-2" />
                                         <span>Mentor</span>
                                     </div>
                                 }
                                 size="small"
-                                className="bg-purple-50 border-purple-200"
+                                className="!bg-purple-50 !border-purple-200"
                             >
                                 <Descriptions
                                     column={1}
@@ -270,19 +271,19 @@ const StudentInternshipsModal = ({
 
                     {/* Right Column - Details & Scores */}
                     <Col xs={24} lg={12}>
-                        <div className="space-y-4">
+                        <div className="!space-y-4">
                             {/* Time & Salary */}
                             <Card
                                 title={
-                                    <div className="flex items-center">
-                                        <CalendarOutlined className="text-orange-500 mr-2" />
+                                    <div className="!flex !items-center">
+                                        <CalendarOutlined className="!text-orange-500 !mr-2" />
                                         <span>Thời gian & Lương</span>
                                     </div>
                                 }
                                 size="small"
-                                className="bg-orange-50 border-orange-200"
+                                className="!bg-orange-50 !border-orange-200"
                             >
-                                <div className="space-y-4">
+                                <div className="!space-y-4">
                                     <Descriptions
                                         column={1}
                                         size="small"
@@ -329,18 +330,18 @@ const StudentInternshipsModal = ({
                             {(internship.teacherScore || internship.mentorScore || internship.finalScore) && (
                                 <Card
                                     title={
-                                        <div className="flex items-center">
-                                            <TrophyOutlined className="text-yellow-500 mr-2" />
+                                        <div className="!flex !items-center">
+                                            <TrophyOutlined className="!text-yellow-500 !mr-2" />
                                             <span>Điểm đánh giá</span>
                                         </div>
                                     }
                                     size="small"
-                                    className="bg-yellow-50 border-yellow-200"
+                                    className="!bg-yellow-50 !border-yellow-200"
                                 >
-                                    <div className="space-y-3">
+                                    <div className="!space-y-3">
                                         {internship.teacherScore && (
                                             <div>
-                                                <div className="flex justify-between items-center mb-1">
+                                                <div className="!flex !justify-between !items-center !mb-1">
                                                     <Text>Giảng viên:</Text>
                                                     <Text strong className="text-blue-600 text-lg">
                                                         {internship.teacherScore}
@@ -357,7 +358,7 @@ const StudentInternshipsModal = ({
 
                                         {internship.mentorScore && (
                                             <div>
-                                                <div className="flex justify-between items-center mb-1">
+                                                <div className="!flex !justify-between !items-center !mb-1">
                                                     <Text>Mentor:</Text>
                                                     <Text strong className="text-green-600 text-lg">
                                                         {internship.mentorScore}
@@ -376,7 +377,7 @@ const StudentInternshipsModal = ({
                                             <>
                                                 <Divider className="my-2" />
                                                 <div>
-                                                    <div className="flex justify-between items-center mb-1">
+                                                    <div className="!flex !justify-between !items-center !mb-1">
                                                         <Text strong>Điểm tổng kết:</Text>
                                                         <Text strong className="text-purple-600 text-xl">
                                                             {internship.finalScore}
@@ -398,14 +399,14 @@ const StudentInternshipsModal = ({
                             {internship.jobDescription && (
                                 <Card
                                     title={
-                                        <div className="flex items-center">
-                                            <FileTextOutlined className="text-gray-500 mr-2" />
+                                        <div className="!flex !items-center">
+                                            <FileTextOutlined className="!text-gray-500 !mr-2" />
                                             <span>Mô tả công việc</span>
                                         </div>
                                     }
                                     size="small"
                                 >
-                                    <Paragraph className="text-sm whitespace-pre-line">
+                                    <Paragraph className="!text-sm !whitespace-pre-line">
                                         {internship.jobDescription}
                                     </Paragraph>
                                 </Card>
@@ -424,9 +425,9 @@ const StudentInternshipsModal = ({
                                     <Card
                                         title="Yêu cầu"
                                         size="small"
-                                        className="bg-red-50 border-red-200 h-full"
+                                        className="!bg-red-50 !border-red-200 !h-full"
                                     >
-                                        <Paragraph className="text-sm whitespace-pre-line">
+                                        <Paragraph className="!text-sm !whitespace-pre-line">
                                             {internship.requirements}
                                         </Paragraph>
                                     </Card>
@@ -437,9 +438,9 @@ const StudentInternshipsModal = ({
                                     <Card
                                         title="Phúc lợi"
                                         size="small"
-                                        className="bg-green-50 border-green-200 h-full"
+                                        className="!bg-green-50 !border-green-200 !h-full"
                                     >
-                                        <Paragraph className="text-sm whitespace-pre-line">
+                                        <Paragraph className="!text-sm !whitespace-pre-line">
                                             {internship.benefits}
                                         </Paragraph>
                                     </Card>
@@ -451,7 +452,7 @@ const StudentInternshipsModal = ({
 
                 {/* System Info */}
                 <Divider />
-                <div className="flex justify-between text-xs text-gray-400">
+                <div className="!flex !justify-between !text-xs !text-gray-400">
                     <span>
                         <ClockCircleOutlined className="mr-1" />
                         Tạo: {internship.createdAt ? new Date(internship.createdAt).toLocaleDateString('vi-VN') : 'N/A'}
@@ -469,8 +470,8 @@ const StudentInternshipsModal = ({
         <Modal
             title={
                 <div className="gradient-header -m-6 mb-4">
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-4">
+                    <div className="!flex !items-center !justify-between">
+                        <div className="!flex !items-center !space-x-4">
                             <Avatar
                                 size={64}
                                 style={{
@@ -481,19 +482,19 @@ const StudentInternshipsModal = ({
                                 icon={<FileTextOutlined />}
                             />
                             <div>
-                                <Title level={3} className="text-white mb-1">
+                                <Title level={3} className="!text-white !mb-1">
                                     Thông tin Thực tập
                                 </Title>
-                                <Text className="text-blue-100">
+                                <Text className="!text-blue-100">
                                     {student?.user?.fullName} - {student?.studentCode}
                                 </Text>
                             </div>
                         </div>
-                        <div className="text-right">
-                            <div className="text-2xl font-bold text-white">
+                        <div className="text-right mr-10">
+                            <div className="!text-2xl !font-bold !text-white">
                                 {internships.length}
                             </div>
-                            <div className="text-blue-100 text-sm">Thực tập</div>
+                            <div className="!text-blue-100 !text-sm">Thực tập</div>
                         </div>
                     </div>
                 </div>
@@ -507,7 +508,7 @@ const StudentInternshipsModal = ({
         >
             <div className="space-y-6">
                 {/* Student Summary */}
-                <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200">
+                <Card className="!bg-gradient-to-br !from-blue-50 !to-indigo-50 !border-blue-200 !mb-3">
                     <Row gutter={[16, 16]} align="middle">
                         <Col xs={24} sm={12}>
                             <Descriptions
@@ -540,7 +541,7 @@ const StudentInternshipsModal = ({
                                     items={getTimelineItems().slice(0, 3)}
                                 />
                                 {internships.length > 3 && (
-                                    <Text type="secondary" className="text-xs">
+                                    <Text type="secondary" className="!text-xs">
                                         ... và {internships.length - 3} thực tập khác
                                     </Text>
                                 )}
@@ -552,9 +553,9 @@ const StudentInternshipsModal = ({
                 {/* Internships List */}
                 <Card
                     title={
-                        <div className="flex items-center justify-between">
-                            <div className="flex items-center">
-                                <FileTextOutlined className="text-blue-500 mr-2" />
+                        <div className="!flex !items-center !justify-between">
+                            <div className="!flex !items-center">
+                                <FileTextOutlined className="!text-blue-500 !mr-2" />
                                 <span>Danh sách thực tập ({internships.length})</span>
                             </div>
                         </div>

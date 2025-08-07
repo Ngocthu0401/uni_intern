@@ -240,4 +240,15 @@ public class StudentController {
             return ResponseEntity.badRequest().build();
         }
     }
+
+    @GetMapping("/available")
+    @PreAuthorize("hasRole('DEPARTMENT') or hasRole('TEACHER')")
+    public ResponseEntity<List<Student>> getAvailableStudents() {
+        try {
+            List<Student> availableStudents = studentService.getAvailableStudents();
+            return ResponseEntity.ok(availableStudents);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
 }

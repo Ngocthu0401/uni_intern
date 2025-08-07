@@ -11,7 +11,7 @@ const studentService = {
   searchStudents: async (searchCriteria = {}, pagination = {}) => {
     // Convert 1-based to 0-based pagination for backend
     const page = Math.max(0, (pagination.page || 1) - 1);
-    
+
     const params = {
       keyword: searchCriteria.keyword || null,
       className: searchCriteria.className || null,
@@ -25,7 +25,7 @@ const studentService = {
       sortBy: pagination.sortBy || 'id',
       sortDir: pagination.sortDir || 'desc'
     };
-    
+
     // Remove null/undefined values
     Object.keys(params).forEach(key => {
       if (params[key] === null || params[key] === undefined || params[key] === '') {
@@ -121,6 +121,12 @@ const studentService = {
   // Get students with internship
   getStudentsWithInternship: async () => {
     const response = await axiosClient.get('/students/with-internship');
+    return response.data;
+  },
+
+  // Get available students (not currently in active internship)
+  getAvailableStudents: async () => {
+    const response = await axiosClient.get('/students/available');
     return response.data;
   },
 

@@ -288,6 +288,10 @@ public class StudentService {
         return statistics;
     }
 
+    public List<Student> getAvailableStudents() {
+        return studentRepository.findAvailableStudents();
+    }
+
     // Advanced search method for StudentController - returns DTOs with internships
     public Page<StudentWithInternshipsDto> advancedSearchStudents(
             String keyword,

@@ -141,7 +141,7 @@ const StudentManagement = () => {
                     email: formData.email,
                     fullName: formData.fullName,
                     phoneNumber: formData.phone,
-                    password: 'defaultPassword123',
+                    password: formData.studentCode,
                     role: 'STUDENT',
                     studentCode: formData.studentCode,
                     className: formData.className,
@@ -373,7 +373,7 @@ const StudentManagement = () => {
 
             {/* Modals */}
             <StudentFormModal
-                isOpen={modals.form.isOpen}
+                isOpen={modals?.form?.isOpen}
                 onClose={() => closeModal('form')}
                 onSubmit={handleFormSubmit}
                 mode={modals.form.mode}
@@ -383,13 +383,13 @@ const StudentManagement = () => {
             />
 
             <StudentViewModal
-                isOpen={modals.view.isOpen}
+                isOpen={modals?.view?.isOpen}
                 onClose={() => closeModal('view')}
                 student={selectedStudent}
             />
 
             <StudentDeleteModal
-                isOpen={modals.delete.isOpen}
+                isOpen={modals?.delete?.isOpen}
                 onClose={() => closeModal('delete')}
                 onConfirm={handleDelete}
                 student={selectedStudent}
@@ -397,14 +397,14 @@ const StudentManagement = () => {
             />
 
             <StudentInternshipsModal
-                isOpen={modals.internships.isOpen}
+                isOpen={modals?.internships?.isOpen}
                 onClose={() => closeModal('internships')}
                 student={selectedStudent}
                 internships={studentInternships[selectedStudent?.id] || []}
             />
 
             <StudentScoresModal
-                isOpen={modals.scores.isOpen}
+                isOpen={modals?.scores?.isOpen}
                 onClose={() => closeModal('scores')}
             />
         </div>

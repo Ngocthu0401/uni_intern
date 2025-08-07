@@ -9,10 +9,18 @@ const internshipService = {
 
   // Search internships with criteria and pagination
   searchInternships: async (searchCriteria = {}, pagination = {}) => {
+    // Filter out empty values to avoid sending empty parameters
+    const cleanSearchCriteria = Object.fromEntries(
+      Object.entries(searchCriteria).filter(([key, value]) =>
+        value !== null && value !== undefined && value !== ''
+      )
+    );
+
     const params = {
-      ...searchCriteria,
+      ...cleanSearchCriteria,
       ...pagination
     };
+
     const response = await axiosClient.get('/internships/search', { params });
     return {
       data: response.data.content || response.data,
@@ -145,8 +153,20 @@ const internshipService = {
 
   // Get internship statistics
   getInternshipStatistics: async () => {
-    const response = await axiosClient.get('/internships/statistics');
-    return response.data;
+    try {
+      const response = await axiosClient.get('/internships/statistics');
+      return response.data;
+    } catch (error) {
+      // Return default statistics if API fails
+      return {
+        total: 0,
+        pending: 0,
+        approved: 0,
+        inProgress: 0,
+        completed: 0,
+        rejected: 0
+      };
+    }
   },
 
   // Export internships

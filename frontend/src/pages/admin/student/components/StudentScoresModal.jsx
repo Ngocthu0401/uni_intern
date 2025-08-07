@@ -1,40 +1,6 @@
 import { useState, useEffect } from 'react';
-import {
-    Modal,
-    Table,
-    Card,
-    Typography,
-    Space,
-    Input,
-    Select,
-    Button,
-    Tag,
-    Avatar,
-    Tooltip,
-    Progress,
-    Statistic,
-    Row,
-    Col,
-    Spin,
-    Empty,
-    message,
-    Badge,
-    Descriptions
-} from 'antd';
-import {
-    SearchOutlined,
-    FilterOutlined,
-    ClearOutlined,
-    UserOutlined,
-    TrophyOutlined,
-    StarOutlined,
-    BankOutlined,
-    CalendarOutlined,
-    BookOutlined,
-    CloseOutlined,
-    DownloadOutlined,
-    ReloadOutlined
-} from '@ant-design/icons';
+import { Modal, Table, Card, Typography, Space, Input, Select, Button, Tag, Avatar, Tooltip, Progress, Statistic, Row, Col, Spin, Empty, message, Badge, Descriptions } from 'antd';
+import { SearchOutlined, FilterOutlined, ClearOutlined, UserOutlined, TrophyOutlined, StarOutlined, BankOutlined, CalendarOutlined, BookOutlined, CloseOutlined, DownloadOutlined, ReloadOutlined } from '@ant-design/icons';
 import internshipService from '../../../../services/internshipService';
 import './StudentScoresModal.css';
 
@@ -181,23 +147,23 @@ const StudentScoresModal = ({ isOpen, onClose }) => {
             key: 'student',
             width: 250,
             render: (_, record) => (
-                <div className="flex items-center space-x-3">
+                <div className="!flex !items-center !space-x-3">
                     <Avatar
                         size="large"
                         icon={<UserOutlined />}
-                        className="bg-gradient-to-r from-blue-400 to-purple-500 text-white"
+                        className="!bg-gradient-to-r !from-blue-400 !to-purple-500 !text-white"
                     >
                         {record.student?.user?.fullName?.charAt(0)?.toUpperCase()}
                     </Avatar>
                     <div>
-                        <div className="font-semibold text-gray-900">
+                        <div className="!font-semibold !text-gray-900">
                             {record.student?.user?.fullName || 'Chưa có thông tin'}
                         </div>
-                        <div className="text-sm text-gray-500">
+                        <div className="!text-sm !text-gray-500">
                             <BookOutlined className="mr-1" />
                             {record.student?.studentCode || 'N/A'}
                         </div>
-                        <div className="text-sm text-gray-500">
+                        <div className="!text-sm !text-gray-500">
                             {record.student?.className || 'N/A'}
                         </div>
                     </div>
@@ -210,15 +176,15 @@ const StudentScoresModal = ({ isOpen, onClose }) => {
             width: 280,
             render: (_, record) => (
                 <div className="space-y-1">
-                    <div className="font-medium text-gray-900">
-                        <BankOutlined className="mr-1 text-blue-500" />
+                    <div className="!font-medium !text-gray-900">
+                        <BankOutlined className="!mr-1 !text-blue-500" />
                         {record.company?.companyName || 'Chưa có công ty'}
                     </div>
-                    <div className="text-sm text-gray-600">
+                    <div className="!text-sm !text-gray-600">
                         {record.jobTitle || 'Chưa có vị trí'}
                     </div>
-                    <div className="text-sm text-gray-500">
-                        <CalendarOutlined className="mr-1" />
+                    <div className="!text-sm !text-gray-500">
+                        <CalendarOutlined className="!mr-1" />
                         {record.startDate || 'N/A'} - {record.endDate || 'N/A'}
                     </div>
                     <Tag color={getStatusInfo(record.status).color} size="small">
@@ -233,12 +199,12 @@ const StudentScoresModal = ({ isOpen, onClose }) => {
             width: 200,
             render: (_, record) => (
                 <div>
-                    <div className="font-medium text-gray-900">
+                    <div className="!font-medium !text-gray-900">
                         {record.teacher?.user?.fullName || 'Chưa phân công'}
                     </div>
                     {record.teacherScore && (
                         <div className="mt-1">
-                            <div className="flex items-center space-x-2">
+                            <div className="!flex !items-center !space-x-2">
                                 <Text strong style={{ color: getScoreColor(record.teacherScore) }}>
                                     {record.teacherScore}
                                 </Text>
@@ -263,12 +229,13 @@ const StudentScoresModal = ({ isOpen, onClose }) => {
             width: 200,
             render: (_, record) => (
                 <div>
-                    <div className="font-medium text-gray-900">
-                        {record.mentor?.fullName || 'Chưa có mentor'}
+                    {console.log('mentor', record)}
+                    <div className="!font-medium !text-gray-900">
+                        {record?.mentor?.user?.fullName || 'Chưa có mentor'}
                     </div>
                     {record.mentorScore && (
                         <div className="mt-1">
-                            <div className="flex items-center space-x-2">
+                            <div className="!flex !items-center !space-x-2">
                                 <Text strong style={{ color: getScoreColor(record.mentorScore) }}>
                                     {record.mentorScore}
                                 </Text>
@@ -297,7 +264,7 @@ const StudentScoresModal = ({ isOpen, onClose }) => {
                     {record.finalScore ? (
                         <div className="space-y-2">
                             <div
-                                className="text-2xl font-bold"
+                                className="!text-2xl !font-bold"
                                 style={{ color: getScoreColor(record.finalScore) }}
                             >
                                 {record.finalScore}
@@ -364,7 +331,7 @@ const StudentScoresModal = ({ isOpen, onClose }) => {
                 {/* Statistics Cards */}
                 <Row gutter={[16, 16]}>
                     <Col xs={24} sm={6}>
-                        <Card className="text-center hover:shadow-md transition-shadow">
+                        <Card className="!text-center !hover:shadow-md !transition-shadow">
                             <Statistic
                                 title="Tổng thực tập"
                                 value={statistics.total}
@@ -374,7 +341,7 @@ const StudentScoresModal = ({ isOpen, onClose }) => {
                         </Card>
                     </Col>
                     <Col xs={24} sm={6}>
-                        <Card className="text-center hover:shadow-md transition-shadow">
+                        <Card className="!text-center !hover:shadow-md !transition-shadow">
                             <Statistic
                                 title="Đã có điểm"
                                 value={statistics.hasScores}
@@ -384,7 +351,7 @@ const StudentScoresModal = ({ isOpen, onClose }) => {
                         </Card>
                     </Col>
                     <Col xs={24} sm={6}>
-                        <Card className="text-center hover:shadow-md transition-shadow">
+                        <Card className="!text-center !hover:shadow-md !transition-shadow">
                             <Statistic
                                 title="Điểm trung bình"
                                 value={statistics.averageScore}
@@ -395,7 +362,7 @@ const StudentScoresModal = ({ isOpen, onClose }) => {
                         </Card>
                     </Col>
                     <Col xs={24} sm={6}>
-                        <Card className="text-center hover:shadow-md transition-shadow">
+                        <Card className="!text-center !hover:shadow-md !transition-shadow">
                             <Statistic
                                 title="Điểm cao (≥8.0)"
                                 value={statistics.highScores}
@@ -407,7 +374,7 @@ const StudentScoresModal = ({ isOpen, onClose }) => {
                 </Row>
 
                 {/* Filters */}
-                <Card size="small" className="bg-gray-50">
+                <Card size="small" className="!bg-gray-50">
                     <Row gutter={[16, 16]} align="middle">
                         <Col xs={24} sm={8}>
                             <Input
@@ -486,7 +453,7 @@ const StudentScoresModal = ({ isOpen, onClose }) => {
                         }}
                         onChange={handleTableChange}
                         size="middle"
-                        className="shadow-sm"
+                        className="!shadow-sm"
                         scroll={{ x: 1200 }}
                         locale={{
                             emptyText: (

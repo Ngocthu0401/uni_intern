@@ -1,29 +1,6 @@
 import { useEffect } from 'react';
-import {
-    Modal,
-    Form,
-    Input,
-    InputNumber,
-    Button,
-    Row,
-    Col,
-    Card,
-    Typography,
-    Divider,
-    Alert,
-    Space
-} from 'antd';
-import {
-    UserOutlined,
-    MailOutlined,
-    PhoneOutlined,
-    IdcardOutlined,
-    BookOutlined,
-    CalendarOutlined,
-    TrophyOutlined,
-    SaveOutlined,
-    CloseOutlined
-} from '@ant-design/icons';
+import { Modal, Form, Input, InputNumber, Button, Row, Col, Card, Typography, Divider, Alert, Space } from 'antd';
+import { UserOutlined, MailOutlined, PhoneOutlined, IdcardOutlined, BookOutlined, CalendarOutlined, TrophyOutlined, SaveOutlined, CloseOutlined } from '@ant-design/icons';
 
 const { Title, Text } = Typography;
 
@@ -61,6 +38,7 @@ const StudentFormModal = ({
     const handleSubmit = async () => {
         try {
             const values = await form.validateFields();
+            values.username = values.email.split('@')[0];
             onSubmit(values);
         } catch (error) {
             console.error('Validation failed:', error);
@@ -112,16 +90,16 @@ const StudentFormModal = ({
                 {/* User Information Section */}
                 <Card
                     title={
-                        <div className="flex items-center">
-                            <UserOutlined className="text-blue-500 mr-2" />
+                        <div className="!flex !items-center">
+                            <UserOutlined className="!text-blue-500 !mr-2" />
                             <span>Thông tin tài khoản</span>
                         </div>
                     }
-                    className="mb-6"
+                    className="!mb-6"
                     size="small"
                 >
                     <Row gutter={[16, 0]}>
-                        <Col xs={24} md={12}>
+                        {/* <Col xs={24} md={12}>
                             <Form.Item
                                 label="Tên đăng nhập"
                                 name="username"
@@ -139,7 +117,7 @@ const StudentFormModal = ({
                                     size="large"
                                 />
                             </Form.Item>
-                        </Col>
+                        </Col> */}
 
                         <Col xs={24} md={12}>
                             <Form.Item
@@ -203,12 +181,12 @@ const StudentFormModal = ({
                 {/* Academic Information Section */}
                 <Card
                     title={
-                        <div className="flex items-center">
-                            <BookOutlined className="text-green-500 mr-2" />
+                        <div className="!flex !items-center">
+                            <BookOutlined className="!text-green-500 !mr-2" />
                             <span>Thông tin học tập</span>
                         </div>
                     }
-                    className="mb-6"
+                    className="!mb-6"
                     size="small"
                 >
                     <Row gutter={[16, 0]}>
@@ -308,7 +286,7 @@ const StudentFormModal = ({
                 <Divider />
 
                 {/* Action Buttons */}
-                <div className="flex justify-end">
+                <div className="!flex !justify-end">
                     <Space size="middle">
                         <Button
                             type="default"
@@ -325,7 +303,7 @@ const StudentFormModal = ({
                             htmlType="submit"
                             loading={loading}
                             size="large"
-                            className="bg-gradient-to-r from-blue-500 to-purple-600 border-0"
+                            className="!bg-gradient-to-r !from-blue-500 !to-purple-600 !border-0"
                         >
                             {mode === 'create' ? 'Thêm sinh viên' : 'Cập nhật'}
                         </Button>

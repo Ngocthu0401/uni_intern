@@ -22,10 +22,10 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/internships")
 public class InternshipController {
-    
+
     @Autowired
     private InternshipService internshipService;
-    
+
     @GetMapping
     @PreAuthorize("hasRole('DEPARTMENT') or hasRole('TEACHER') or hasRole('STUDENT')")
     public ResponseEntity<Page<Internship>> getAllInternships(
@@ -33,15 +33,14 @@ public class InternshipController {
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "id") String sortBy,
             @RequestParam(defaultValue = "desc") String sortDir) {
-        
-        Sort sort = sortDir.equalsIgnoreCase("desc") ? 
-            Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
+
+        Sort sort = sortDir.equalsIgnoreCase("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
         Pageable pageable = PageRequest.of(page, size, sort);
-        
+
         Page<Internship> internships = internshipService.getAllInternships(pageable);
         return ResponseEntity.ok(internships);
     }
-    
+
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('DEPARTMENT') or hasRole('TEACHER') or hasRole('STUDENT') or hasRole('MENTOR')")
     public ResponseEntity<Internship> getInternshipById(@PathVariable Long id) {
@@ -49,7 +48,7 @@ public class InternshipController {
         return internship.map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
-    
+
     @GetMapping("/code/{code}")
     @PreAuthorize("hasRole('DEPARTMENT') or hasRole('TEACHER') or hasRole('STUDENT') or hasRole('MENTOR')")
     public ResponseEntity<Internship> getInternshipByCode(@PathVariable String code) {
@@ -57,76 +56,98 @@ public class InternshipController {
         return internship.map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
-    
+
     @GetMapping("/student/{studentId}")
     @PreAuthorize("hasRole('DEPARTMENT') or hasRole('TEACHER') or hasRole('STUDENT')")
     public ResponseEntity<List<Internship>> getInternshipsByStudentId(@PathVariable Long studentId) {
         List<Internship> internships = internshipService.getInternshipsByStudentId(studentId);
         return ResponseEntity.ok(internships);
     }
-    
+
     @GetMapping("/teacher/{teacherId}")
     @PreAuthorize("hasRole('DEPARTMENT') or hasRole('TEACHER')")
     public ResponseEntity<List<Internship>> getInternshipsByTeacherId(@PathVariable Long teacherId) {
         List<Internship> internships = internshipService.getInternshipsByTeacherId(teacherId);
         return ResponseEntity.ok(internships);
     }
-    
+
     @GetMapping("/mentor/{mentorId}")
     @PreAuthorize("hasRole('DEPARTMENT') or hasRole('MENTOR')")
     public ResponseEntity<List<Internship>> getInternshipsByMentorId(@PathVariable Long mentorId) {
         List<Internship> internships = internshipService.getInternshipsByMentorId(mentorId);
         return ResponseEntity.ok(internships);
     }
-    
+
     @GetMapping("/company/{companyId}")
     @PreAuthorize("hasRole('DEPARTMENT') or hasRole('TEACHER') or hasRole('MENTOR')")
     public ResponseEntity<List<Internship>> getInternshipsByCompanyId(@PathVariable Long companyId) {
         List<Internship> internships = internshipService.getInternshipsByCompanyId(companyId);
         return ResponseEntity.ok(internships);
     }
-    
+
     @GetMapping("/batch/{batchId}")
     @PreAuthorize("hasRole('DEPARTMENT') or hasRole('TEACHER')")
     public ResponseEntity<List<Internship>> getInternshipsByBatchId(@PathVariable Long batchId) {
         List<Internship> internships = internshipService.getInternshipsByBatchId(batchId);
         return ResponseEntity.ok(internships);
     }
-    
+
     @GetMapping("/status/{status}")
     @PreAuthorize("hasRole('DEPARTMENT') or hasRole('TEACHER')")
     public ResponseEntity<List<Internship>> getInternshipsByStatus(@PathVariable InternshipStatus status) {
         List<Internship> internships = internshipService.getInternshipsByStatus(status);
         return ResponseEntity.ok(internships);
     }
-    
+
     @GetMapping("/search")
     @PreAuthorize("hasRole('DEPARTMENT') or hasRole('TEACHER')")
     public ResponseEntity<Page<Internship>> searchInternships(
             @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) String type,
+            @RequestParam(required = false) String companyName,
+            @RequestParam(required = false) Long batchId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "id") String sortBy,
             @RequestParam(defaultValue = "desc") String sortDir) {
-        
+
         // Validate pagination parameters
         page = Math.max(0, page);
         size = Math.max(1, Math.min(100, size));
-        
-        Sort sort = sortDir.equalsIgnoreCase("desc") ? 
-            Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
+
+        Sort sort = sortDir.equalsIgnoreCase("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
         Pageable pageable = PageRequest.of(page, size, sort);
-        
+
         Page<Internship> internships;
-        if (keyword != null && !keyword.trim().isEmpty()) {
-            internships = internshipService.searchInternships(keyword.trim(), pageable);
+
+        // Check if any filter is provided
+        boolean hasFilters = (keyword != null && !keyword.trim().isEmpty()) ||
+                (status != null && !status.trim().isEmpty()) ||
+                (companyName != null && !companyName.trim().isEmpty()) ||
+                (batchId != null);
+
+        if (hasFilters) {
+            // Convert status string to enum if provided
+            InternshipStatus statusEnum = null;
+            if (status != null && !status.trim().isEmpty()) {
+                try {
+                    statusEnum = InternshipStatus.valueOf(status.toUpperCase());
+                } catch (IllegalArgumentException e) {
+                    // If invalid status, return empty result
+                    return ResponseEntity.ok(Page.empty(pageable));
+                }
+            }
+
+            internships = internshipService.searchInternshipsWithFilters(
+                    keyword, statusEnum, companyName, batchId, pageable);
         } else {
             internships = internshipService.getAllInternships(pageable);
         }
-        
+
         return ResponseEntity.ok(internships);
     }
-    
+
     @PostMapping
     @PreAuthorize("hasRole('DEPARTMENT') or hasRole('TEACHER')")
     public ResponseEntity<?> createInternship(@Valid @RequestBody Internship internship) {
@@ -139,7 +160,7 @@ public class InternshipController {
             return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
         }
     }
-    
+
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('DEPARTMENT') or hasRole('TEACHER')")
     public ResponseEntity<?> updateInternship(@PathVariable Long id, @Valid @RequestBody Internship internship) {
@@ -166,7 +187,7 @@ public class InternshipController {
             return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
         }
     }
-    
+
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('DEPARTMENT')")
     public ResponseEntity<Void> deleteInternship(@PathVariable Long id) {
@@ -174,10 +195,10 @@ public class InternshipController {
             internshipService.deleteInternship(id);
             return ResponseEntity.noContent().build(); // HTTP 204 No Content
         } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();  // HTTP 404 if not found
+            return ResponseEntity.notFound().build(); // HTTP 404 if not found
         }
     }
-    
+
     @PutMapping("/{id}/assign-teacher/{teacherId}")
     @PreAuthorize("hasRole('DEPARTMENT')")
     public ResponseEntity<Internship> assignTeacher(@PathVariable Long id, @PathVariable Long teacherId) {
@@ -188,7 +209,7 @@ public class InternshipController {
             return ResponseEntity.badRequest().build();
         }
     }
-    
+
     @PutMapping("/{id}/assign-mentor/{mentorId}")
     @PreAuthorize("hasRole('DEPARTMENT') or hasRole('TEACHER')")
     public ResponseEntity<Internship> assignMentor(@PathVariable Long id, @PathVariable Long mentorId) {
@@ -199,38 +220,42 @@ public class InternshipController {
             return ResponseEntity.badRequest().build();
         }
     }
-    
+
     @PutMapping("/{id}/assign")
     @PreAuthorize("hasRole('DEPARTMENT')")
     public ResponseEntity<?> assignInternship(@PathVariable Long id, @RequestBody Map<String, Object> assignmentData) {
         try {
-            Long companyId = assignmentData.get("companyId") != null && 
-                !assignmentData.get("companyId").toString().trim().isEmpty() ? 
-                Long.valueOf(assignmentData.get("companyId").toString()) : null;
-            Long studentId = assignmentData.get("studentId") != null && 
-                !assignmentData.get("studentId").toString().trim().isEmpty() ? 
-                Long.valueOf(assignmentData.get("studentId").toString()) : null;
-            Long mentorId = assignmentData.get("mentorId") != null && 
-                !assignmentData.get("mentorId").toString().trim().isEmpty() ? 
-                Long.valueOf(assignmentData.get("mentorId").toString()) : null;
-            Long teacherId = assignmentData.get("teacherId") != null && 
-                !assignmentData.get("teacherId").toString().trim().isEmpty() ? 
-                Long.valueOf(assignmentData.get("teacherId").toString()) : null;
-                
+            Long companyId = assignmentData.get("companyId") != null &&
+                    !assignmentData.get("companyId").toString().trim().isEmpty()
+                            ? Long.valueOf(assignmentData.get("companyId").toString())
+                            : null;
+            Long studentId = assignmentData.get("studentId") != null &&
+                    !assignmentData.get("studentId").toString().trim().isEmpty()
+                            ? Long.valueOf(assignmentData.get("studentId").toString())
+                            : null;
+            Long mentorId = assignmentData.get("mentorId") != null &&
+                    !assignmentData.get("mentorId").toString().trim().isEmpty()
+                            ? Long.valueOf(assignmentData.get("mentorId").toString())
+                            : null;
+            Long teacherId = assignmentData.get("teacherId") != null &&
+                    !assignmentData.get("teacherId").toString().trim().isEmpty()
+                            ? Long.valueOf(assignmentData.get("teacherId").toString())
+                            : null;
+
             Internship internship = internshipService.assignInternship(id, companyId, studentId, mentorId, teacherId);
             return internship != null ? ResponseEntity.ok(internship) : ResponseEntity.notFound().build();
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
         }
     }
-    
+
     @PutMapping("/{id}/start")
     @PreAuthorize("hasRole('DEPARTMENT') or hasRole('TEACHER')")
     public ResponseEntity<Internship> startInternship(@PathVariable Long id) {
         Internship internship = internshipService.startInternship(id);
         return internship != null ? ResponseEntity.ok(internship) : ResponseEntity.notFound().build();
     }
-    
+
     @PutMapping("/{id}/approve")
     @PreAuthorize("hasRole('DEPARTMENT') or hasRole('TEACHER')")
     public ResponseEntity<Internship> approveInternship(@PathVariable Long id) {
@@ -241,7 +266,7 @@ public class InternshipController {
             return ResponseEntity.badRequest().build();
         }
     }
-    
+
     @PutMapping("/{id}/reject")
     @PreAuthorize("hasRole('DEPARTMENT') or hasRole('TEACHER')")
     public ResponseEntity<Internship> rejectInternship(@PathVariable Long id) {
@@ -259,21 +284,28 @@ public class InternshipController {
         Internship internship = internshipService.completeInternship(id);
         return internship != null ? ResponseEntity.ok(internship) : ResponseEntity.notFound().build();
     }
-    
+
     @GetMapping("/statistics/status/{status}/count")
     @PreAuthorize("hasRole('DEPARTMENT') or hasRole('TEACHER')")
     public ResponseEntity<Long> countByStatus(@PathVariable InternshipStatus status) {
         Long count = internshipService.countByStatus(status);
         return ResponseEntity.ok(count);
     }
-    
+
     @GetMapping("/statistics/batch/{batchId}/count")
     @PreAuthorize("hasRole('DEPARTMENT') or hasRole('TEACHER')")
     public ResponseEntity<Long> countByBatchId(@PathVariable Long batchId) {
         Long count = internshipService.countByBatchId(batchId);
         return ResponseEntity.ok(count);
     }
-    
+
+    @GetMapping("/statistics")
+    @PreAuthorize("hasRole('DEPARTMENT') or hasRole('TEACHER')")
+    public ResponseEntity<Map<String, Long>> getInternshipStatistics() {
+        Map<String, Long> statistics = internshipService.getInternshipStatistics();
+        return ResponseEntity.ok(statistics);
+    }
+
     // Task management endpoints - delegating to TaskController
     @GetMapping("/{internshipId}/tasks")
     @PreAuthorize("hasRole('DEPARTMENT') or hasRole('TEACHER') or hasRole('MENTOR') or hasRole('STUDENT')")
@@ -283,7 +315,7 @@ public class InternshipController {
                 .header("Location", "/api/tasks/internship/" + internshipId)
                 .build();
     }
-    
+
     @PostMapping("/tasks")
     @PreAuthorize("hasRole('DEPARTMENT') or hasRole('TEACHER') or hasRole('MENTOR')")
     public ResponseEntity<?> createTask(@RequestBody Map<String, Object> taskData) {
@@ -292,7 +324,7 @@ public class InternshipController {
                 .header("Location", "/api/tasks")
                 .body(Map.of("message", "Please use /api/tasks endpoint directly"));
     }
-    
+
     @PutMapping("/tasks/{taskId}/status")
     @PreAuthorize("hasRole('DEPARTMENT') or hasRole('TEACHER') or hasRole('MENTOR') or hasRole('STUDENT')")
     public ResponseEntity<?> updateTaskStatus(@PathVariable Long taskId, @RequestBody Map<String, String> statusData) {
@@ -301,7 +333,7 @@ public class InternshipController {
                 .header("Location", "/api/tasks/" + taskId + "/status")
                 .body(Map.of("message", "Please use /api/tasks/" + taskId + "/status endpoint directly"));
     }
-    
+
     // Progress tracking endpoints - delegating to InternshipProgressController
     @GetMapping("/{internshipId}/progress")
     @PreAuthorize("hasRole('DEPARTMENT') or hasRole('TEACHER') or hasRole('MENTOR') or hasRole('STUDENT')")
@@ -311,14 +343,16 @@ public class InternshipController {
                 .header("Location", "/api/internship-progress/internship/" + internshipId + "/latest")
                 .build();
     }
-    
+
     @PutMapping("/{internshipId}/progress")
     @PreAuthorize("hasRole('DEPARTMENT') or hasRole('TEACHER') or hasRole('MENTOR')")
-    public ResponseEntity<?> updateInternshipProgress(@PathVariable Long internshipId, @RequestBody Map<String, Object> progressData) {
+    public ResponseEntity<?> updateInternshipProgress(@PathVariable Long internshipId,
+            @RequestBody Map<String, Object> progressData) {
         // Redirect to InternshipProgressController
         return ResponseEntity.status(302)
                 .header("Location", "/api/internship-progress/internship/" + internshipId)
-                .body(Map.of("message", "Please use /api/internship-progress/internship/" + internshipId + " endpoint directly"));
+                .body(Map.of("message",
+                        "Please use /api/internship-progress/internship/" + internshipId + " endpoint directly"));
     }
-    
+
 }

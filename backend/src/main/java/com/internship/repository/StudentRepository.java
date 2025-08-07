@@ -44,6 +44,12 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
        @Query("SELECT s FROM Student s JOIN FETCH s.user WHERE s.academicYear = :academicYear")
        Page<Student> findByAcademicYear(@Param("academicYear") String academicYear, Pageable pageable);
 
+       @Query("SELECT DISTINCT s FROM Student s " +
+                     "LEFT JOIN FETCH s.user " +
+                     "LEFT JOIN FETCH s.internships i " +
+                     "WHERE i IS NULL OR i.status IN ('COMPLETED', 'CANCELLED', 'REJECTED')")
+       List<Student> findAvailableStudents();
+
        // Statistics queries - using existing fields
        @Query("SELECT COUNT(DISTINCT s) FROM Student s JOIN s.internships i WHERE i.id IS NOT NULL")
        long countStudentsWithInternships();
