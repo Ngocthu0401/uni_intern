@@ -40,7 +40,7 @@ const StudentScoresModal = ({ isOpen, onClose }) => {
                 sort: `${filters.sortBy},${filters.sortDir}`
             };
 
-            const result = await internshipService.searchInternships({}, params);
+            const result = await internshipService.searchInternships({ studentValid: true }, params);
 
             setInternships(result.data || []);
             setPagination({
@@ -81,6 +81,8 @@ const StudentScoresModal = ({ isOpen, onClose }) => {
         });
     };
 
+    console.log('internships: ', internships);
+
     // Get status info
     const getStatusInfo = (status) => {
         const statusMap = {
@@ -113,7 +115,7 @@ const StudentScoresModal = ({ isOpen, onClose }) => {
     };
 
     // Handle table change
-    const handleTableChange = (newPagination, filters, sorter) => {
+    const handleTableChange = (newPagination) => {
         loadInternships(newPagination.current, newPagination.pageSize);
     };
 

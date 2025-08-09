@@ -26,16 +26,16 @@ public interface InternshipRepository extends JpaRepository<Internship, Long> {
        @Query("SELECT i FROM Internship i LEFT JOIN FETCH i.student s LEFT JOIN FETCH s.user LEFT JOIN FETCH i.company LEFT JOIN FETCH i.mentor LEFT JOIN FETCH i.internshipBatch WHERE i.teacher.id = :teacherId")
        List<Internship> findByTeacherId(@Param("teacherId") Long teacherId);
 
-       @Query("SELECT i FROM Internship i LEFT JOIN FETCH i.student s LEFT JOIN FETCH s.user LEFT JOIN FETCH i.company LEFT JOIN FETCH i.teacher LEFT JOIN FETCH i.internshipBatch WHERE i.mentor.id = :mentorId")
+       @Query("SELECT i FROM Internship i LEFT JOIN FETCH i.student s LEFT JOIN FETCH s.user LEFT JOIN FETCH i.company LEFT JOIN FETCH i.mentor LEFT JOIN FETCH i.internshipBatch WHERE i.mentor.id = :mentorId")
        List<Internship> findByMentorId(@Param("mentorId") Long mentorId);
 
        @Query("SELECT i FROM Internship i LEFT JOIN FETCH i.student s LEFT JOIN FETCH s.user LEFT JOIN FETCH i.teacher LEFT JOIN FETCH i.mentor LEFT JOIN FETCH i.internshipBatch WHERE i.company.id = :companyId")
        List<Internship> findByCompanyId(@Param("companyId") Long companyId);
 
-       @Query("SELECT i FROM Internship i LEFT JOIN FETCH i.student s LEFT JOIN FETCH s.user LEFT JOIN FETCH i.company LEFT JOIN FETCH i.mentor LEFT JOIN FETCH i.teacher WHERE i.internshipBatch.id = :batchId")
+       @Query("SELECT i FROM Internship i LEFT JOIN FETCH i.student s LEFT JOIN FETCH s.user LEFT JOIN FETCH i.company LEFT JOIN FETCH i.mentor LEFT JOIN FETCH i.internshipBatch WHERE i.internshipBatch.id = :batchId")
        List<Internship> findByInternshipBatchId(@Param("batchId") Long batchId);
 
-       @Query("SELECT i FROM Internship i LEFT JOIN FETCH i.student s LEFT JOIN FETCH s.user LEFT JOIN FETCH i.company LEFT JOIN FETCH i.mentor LEFT JOIN FETCH i.teacher LEFT JOIN FETCH i.internshipBatch WHERE i.status = :status")
+       @Query("SELECT i FROM Internship i LEFT JOIN FETCH i.student s LEFT JOIN FETCH s.user LEFT JOIN FETCH i.company LEFT JOIN FETCH i.mentor LEFT JOIN FETCH i.teacher WHERE i.status = :status")
        List<Internship> findByStatus(@Param("status") InternshipStatus status);
 
        @Query("SELECT i FROM Internship i WHERE i.student.id = :studentId AND i.status = :status")
@@ -79,11 +79,15 @@ public interface InternshipRepository extends JpaRepository<Internship, Long> {
                      "(:status IS NULL OR i.status = :status) AND " +
                      "(:companyName IS NULL OR :companyName = '' OR LOWER(i.company.companyName) LIKE LOWER(CONCAT('%', :companyName, '%'))) AND "
                      +
-                     "(:batchId IS NULL OR i.internshipBatch.id = :batchId)")
+                     "(:batchId IS NULL OR i.internshipBatch.id = :batchId) AND " +
+                     "(:studentValid IS NULL OR " +
+                     "(:studentValid = true AND i.student IS NOT NULL) OR " +
+                     "(:studentValid = false AND i.student IS NULL))")
        Page<Internship> searchInternshipsWithFilters(@Param("keyword") String keyword,
                      @Param("status") InternshipStatus status,
                      @Param("companyName") String companyName,
                      @Param("batchId") Long batchId,
+                     @Param("studentValid") Boolean studentValid,
                      Pageable pageable);
 
        @Query("SELECT i FROM Internship i " +

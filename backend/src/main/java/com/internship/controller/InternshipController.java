@@ -109,6 +109,7 @@ public class InternshipController {
             @RequestParam(required = false) String type,
             @RequestParam(required = false) String companyName,
             @RequestParam(required = false) Long batchId,
+            @RequestParam(required = false) Boolean studentValid,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "id") String sortBy,
@@ -119,7 +120,7 @@ public class InternshipController {
         size = Math.max(1, Math.min(100, size));
 
         Sort sort = sortDir.equalsIgnoreCase("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
-        Pageable pageable = PageRequest.of(page - 1, size, sort);
+        Pageable pageable = PageRequest.of(page, size, sort);
 
         Page<Internship> internships;
 
@@ -127,7 +128,8 @@ public class InternshipController {
         boolean hasFilters = (keyword != null && !keyword.trim().isEmpty()) ||
                 (status != null && !status.trim().isEmpty()) ||
                 (companyName != null && !companyName.trim().isEmpty()) ||
-                (batchId != null);
+                (batchId != null) ||
+                (studentValid != null);
 
         if (hasFilters) {
             // Convert status string to enum if provided
@@ -142,7 +144,7 @@ public class InternshipController {
             }
 
             internships = internshipService.searchInternshipsWithFilters(
-                    keyword, statusEnum, companyName, batchId, pageable);
+                    keyword, statusEnum, companyName, batchId, studentValid, pageable);
         } else {
             internships = internshipService.getAllInternships(pageable);
         }

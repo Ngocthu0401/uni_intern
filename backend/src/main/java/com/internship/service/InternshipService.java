@@ -106,8 +106,9 @@ public class InternshipService {
     }
 
     public Page<Internship> searchInternshipsWithFilters(String keyword, InternshipStatus status, String companyName,
-            Long batchId, Pageable pageable) {
-        return internshipRepository.searchInternshipsWithFilters(keyword, status, companyName, batchId, pageable);
+            Long batchId, Boolean studentValid, Pageable pageable) {
+        return internshipRepository.searchInternshipsWithFilters(keyword, status, companyName, batchId, studentValid,
+                pageable);
     }
 
     @Transactional(readOnly = false)
