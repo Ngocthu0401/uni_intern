@@ -284,6 +284,21 @@ public class InternshipController {
         }
     }
 
+    @PostMapping("/{id}/apply")
+    @PreAuthorize("hasRole('STUDENT')")
+    public ResponseEntity<?> applyForInternship(@PathVariable Long id, @RequestBody Map<String, Object> body) {
+        try {
+            Long studentId = body.get("studentId") != null ? Long.valueOf(body.get("studentId").toString()) : null;
+            if (studentId == null) {
+                return ResponseEntity.badRequest().body(Map.of("message", "studentId is required"));
+            }
+            Internship applied = internshipService.applyForInternship(id, studentId);
+            return ResponseEntity.ok(applied);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
+        }
+    }
+
     @PutMapping("/{id}/reject")
     @PreAuthorize("hasRole('DEPARTMENT') or hasRole('TEACHER')")
     public ResponseEntity<Internship> rejectInternship(@PathVariable Long id) {

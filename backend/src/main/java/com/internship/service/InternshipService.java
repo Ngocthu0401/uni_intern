@@ -473,6 +473,36 @@ public class InternshipService {
         return null;
     }
 
+    @Transactional(readOnly = false)
+    public Internship applyForInternship(Long internshipId, Long studentId) {
+        Optional<Internship> internshipOpt = internshipRepository.findById(internshipId);
+        if (internshipOpt.isEmpty()) {
+            throw new RuntimeException("Internship not found with id: " + internshipId);
+        }
+        Internship internship = internshipOpt.get();
+
+        if (internship.getStudent() != null) {
+            throw new RuntimeException("Internship already has a student assigned");
+        }
+
+        if (internship.getStatus() == InternshipStatus.COMPLETED ||
+            internship.getStatus() == InternshipStatus.CANCELLED) {
+            throw new RuntimeException("Cannot apply to a closed internship");
+        }
+
+        Optional<Student> studentOpt = studentRepository.findById(studentId);
+        if (studentOpt.isEmpty()) {
+            throw new RuntimeException("Student not found with id: " + studentId);
+        }
+
+        internship.setStudent(studentOpt.get());
+        // Set to PENDING if not already
+        if (internship.getStatus() == null) {
+            internship.setStatus(InternshipStatus.PENDING);
+        }
+        return internshipRepository.save(internship);
+    }
+
     public Long countByStatus(InternshipStatus status) {
         return internshipRepository.countByStatus(status);
     }
