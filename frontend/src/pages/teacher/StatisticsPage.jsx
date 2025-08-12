@@ -396,11 +396,10 @@ const StatisticsPage = () => {
                 {statistics.topPerformers.slice(0, 6).map((student, index) => (
                   <div key={index} className="flex items-center justify-between p-4 bg-gradient-to-r from-yellow-50 to-orange-50 rounded-lg border border-yellow-200">
                     <div className="flex items-center">
-                      <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm mr-3 ${
-                        index === 0 ? 'bg-yellow-500' : 
-                        index === 1 ? 'bg-gray-400' :
-                        index === 2 ? 'bg-orange-600' : 'bg-blue-500'
-                      }`}>
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm mr-3 ${index === 0 ? 'bg-yellow-500' :
+                          index === 1 ? 'bg-gray-400' :
+                            index === 2 ? 'bg-orange-600' : 'bg-blue-500'
+                        }`}>
                         {index + 1}
                       </div>
                       <div>
@@ -422,7 +421,7 @@ const StatisticsPage = () => {
 
 
         {/* Monthly Progress Chart */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100">
+        {/* <div className="bg-white rounded-xl shadow-sm border border-gray-100">
           <div className="p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-6 flex items-center">
               <CalendarDaysIcon className="h-6 w-6 text-blue-500 mr-2" />
@@ -467,7 +466,7 @@ const StatisticsPage = () => {
               </div>
             )}
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

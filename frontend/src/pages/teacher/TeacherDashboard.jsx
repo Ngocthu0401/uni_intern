@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { 
-  teacherService, 
-  studentService, 
-  reportService, 
+import {
+  teacherService,
+  studentService,
+  reportService,
   internshipService,
   evaluationService,
-  contractService 
+  contractService
 } from '../../services';
 import {
   UserGroupIcon,
@@ -77,10 +77,10 @@ const TeacherDashboard = () => {
       const internships = internshipsResponse.data || internshipsResponse || [];
       const activeInternships = internships.filter(i => i.status === 'ACTIVE' || i.status === 'IN_PROGRESS');
       const completedInternships = internships.filter(i => i.status === 'COMPLETED');
-      
+
       // Extract students from internships
       const studentsFromInternships = internships.map(i => i.student).filter(s => s);
-      const uniqueStudents = studentsFromInternships.filter((student, index, self) => 
+      const uniqueStudents = studentsFromInternships.filter((student, index, self) =>
         index === self.findIndex(s => s.id === student.id)
       );
 
@@ -93,7 +93,7 @@ const TeacherDashboard = () => {
       // Process contracts data
       const contracts = contractsResponse.content || contractsResponse.data || [];
       const pendingContracts = contracts.filter(c => c.approvalStatus === 'PENDING').length;
-      
+
       // Calculate statistics
       setDashboardStats({
         totalStudents: uniqueStudents.length,
@@ -153,7 +153,7 @@ const TeacherDashboard = () => {
   // Get the most relevant internship (latest or active one)
   const getCurrentInternship = (internships) => {
     if (!internships || internships.length === 0) return null;
-    
+
     // Priority: IN_PROGRESS > ASSIGNED > others, then by latest date
     const sortedInternships = [...internships].sort((a, b) => {
       const priorityOrder = {
@@ -165,18 +165,18 @@ const TeacherDashboard = () => {
         'TERMINATED': 0,
         'CANCELLED': 0
       };
-      
+
       const aPriority = priorityOrder[a.status] || 0;
       const bPriority = priorityOrder[b.status] || 0;
-      
+
       if (aPriority !== bPriority) {
         return bPriority - aPriority; // Higher priority first
       }
-      
+
       // If same priority, sort by latest created date
       return new Date(b.createdAt) - new Date(a.createdAt);
     });
-    
+
     return sortedInternships[0];
   };
 
@@ -217,7 +217,7 @@ const TeacherDashboard = () => {
         <div className="text-center">
           <ExclamationTriangleIcon className="h-12 w-12 text-red-500 mx-auto" />
           <p className="mt-4 text-gray-600">{error}</p>
-          <button 
+          <button
             onClick={loadDashboardData}
             className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
           >
@@ -245,11 +245,11 @@ const TeacherDashboard = () => {
       link: '/teacher/student-management'
     },
     {
-      title: 'Quản Lý Hợp Đồng',
-      description: 'Tạo và quản lý hợp đồng hỗ trợ',
+      title: 'Quản Lý Đánh Giá',
+      description: 'Tạo và quản lý đánh giá sinh viên',
       icon: ClipboardDocumentCheckIcon,
       color: 'from-indigo-500 to-indigo-600',
-      link: '/teacher/contract-management',
+      link: '/teacher/evaluation-management',
       count: dashboardStats?.pendingContracts
     },
     {
@@ -396,7 +396,7 @@ const TeacherDashboard = () => {
                         // Find the student's internship from the teacher's internships
                         const studentInternships = student.internships || [];
                         const currentInternship = getCurrentInternship(studentInternships);
-                        
+
                         return (
                           <tr key={student.id} className="hover:bg-gray-50">
                             <td className="px-6 py-4 whitespace-nowrap">
@@ -426,13 +426,13 @@ const TeacherDashboard = () => {
                                 } else if (currentInternship?.status === 'ASSIGNED') {
                                   progress = 25;
                                 }
-                                
+
                                 return (
                                   <div className="flex items-center">
                                     <div className="w-16 bg-gray-200 rounded-full h-2 mr-2">
-                                      <div 
-                                        className="bg-blue-600 h-2 rounded-full" 
-                                        style={{width: `${progress}%`}}
+                                      <div
+                                        className="bg-blue-600 h-2 rounded-full"
+                                        style={{ width: `${progress}%` }}
                                       ></div>
                                     </div>
                                     <span className="text-sm text-gray-900">{Math.round(progress)}%</span>
@@ -451,7 +451,7 @@ const TeacherDashboard = () => {
                               })()}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                              {currentInternship?.finalScore 
+                              {currentInternship?.finalScore
                                 ? `${currentInternship.finalScore}/10`
                                 : 'Chưa có'}
                             </td>
@@ -498,7 +498,7 @@ const TeacherDashboard = () => {
                         <p className="text-xs text-gray-500">{report.title} - {formatDate(report.submittedAt)}</p>
                         <p className="text-xs text-gray-500">{report.internship?.company?.companyName || 'N/A'}</p>
                       </div>
-                      <Link 
+                      <Link
                         to={`/teacher/report-review?report=${report.id}`}
                         className="text-blue-600 hover:text-blue-800 text-xs font-medium"
                       >
@@ -512,7 +512,7 @@ const TeacherDashboard = () => {
                     </div>
                   )}
                 </div>
-                <Link 
+                <Link
                   to="/teacher/report-review"
                   className="block text-center text-blue-600 hover:text-blue-800 text-sm font-medium mt-4"
                 >
@@ -522,11 +522,11 @@ const TeacherDashboard = () => {
             </div>
 
             {/* Contract Management Summary */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100">
+            {/* <div className="bg-white rounded-xl shadow-sm border border-gray-100">
               <div className="p-6">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="text-lg font-semibold text-gray-900">Hợp Đồng Hỗ Trợ</h3>
-                  <Link 
+                  <Link
                     to="/teacher/contract-management"
                     className="text-blue-600 hover:text-blue-800 text-sm font-medium"
                   >
@@ -560,7 +560,7 @@ const TeacherDashboard = () => {
                   </div>
                 </div>
               </div>
-            </div>
+            </div> */}
 
           </div>
         </div>

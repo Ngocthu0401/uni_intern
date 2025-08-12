@@ -24,7 +24,7 @@ import ContractsPage from '../pages/student/ContractsPage';
 import EvaluationsPage from '../pages/student/EvaluationsPage';
 import StudentManagementPage from '../pages/teacher/StudentManagementPage';
 import ReportReviewPage from '../pages/teacher/ReportReviewPage';
-import EvaluationManagement from '../pages/teacher/EvaluationManagement';
+import EvaluationManagement from '../pages/teacher/evaluation/EvaluationManagement';
 import ContractManagement from '../pages/admin/ContractManagement';
 import StatisticsPage from '../pages/teacher/StatisticsPage';
 import MentorDashboardPage from '../pages/mentor/MentorDashboardPage';

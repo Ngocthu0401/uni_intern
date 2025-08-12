@@ -88,7 +88,7 @@ const MentorDashboard = () => {
       console.log('Evaluations loaded:', evaluations);
 
       // Calculate statistics  
-      const activeInternships = internships.filter(i => 
+      const activeInternships = internships.filter(i =>
         i.status === 'ACTIVE' || i.status === 'ASSIGNED' || i.status === 'IN_PROGRESS'
       );
       const pendingReports = reports.filter(r => !r.approved && r.submittedAt);
@@ -143,7 +143,7 @@ const MentorDashboard = () => {
     } catch (err) {
       console.error('Error loading dashboard data:', err);
       setError('Không thể tải dữ liệu dashboard. Vui lòng thử lại.');
-      
+
       // Set fallback empty data to prevent UI crashes
       setDashboardData({
         stats: {
@@ -183,7 +183,7 @@ const MentorDashboard = () => {
   };
 
   const getPerformanceFromEvaluations = (evaluations, studentId) => {
-    const studentEvals = evaluations.filter(e => 
+    const studentEvals = evaluations.filter(e =>
       e.internship?.student?.id === studentId || e.studentId === studentId
     );
     if (studentEvals.length === 0) return 'Chưa đánh giá';
@@ -195,7 +195,7 @@ const MentorDashboard = () => {
   };
 
   const getLastReportDate = (reports, studentId) => {
-    const studentReports = reports.filter(r => 
+    const studentReports = reports.filter(r =>
       (r.internship?.student?.id === studentId || r.studentId === studentId) && r.submittedAt
     );
     if (studentReports.length === 0) return 'Chưa có báo cáo';
@@ -223,11 +223,11 @@ const MentorDashboard = () => {
 
     // Check for pending evaluations
     internships.forEach(internship => {
-      const studentEvals = evaluations.filter(e => 
+      const studentEvals = evaluations.filter(e =>
         (e.internship?.student?.id === internship.student?.id || e.studentId === internship.studentId) &&
         new Date(e.createdAt) > new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000)
       );
-      
+
       if (studentEvals.length === 0) {
         tasks.push({
           task: `Đánh giá cho ${internship.student?.user?.fullName || 'sinh viên'}`,
@@ -299,29 +299,29 @@ const MentorDashboard = () => {
       description: 'Đánh giá tiến độ và hiệu suất làm việc',
       icon: ChartBarIcon,
       color: 'from-blue-500 to-blue-600',
-      link: '/mentor/evaluate-students'
+      link: '/mentor/student-evaluation'
     },
     {
-      title: 'Xem Báo Cáo',
-      description: 'Xem và phản hồi báo cáo tuần',
+      title: 'Theo Dõi Thực Tập',
+      description: 'Quản lý và theo dõi thực tập của sinh viên',
       icon: DocumentTextIcon,
       color: 'from-green-500 to-green-600',
-      link: '/mentor/reports'
-    },
-    {
-      title: 'Lịch Họp',
-      description: 'Quản lý lịch họp với sinh viên',
-      icon: CalendarIcon,
-      color: 'from-purple-500 to-purple-600',
-      link: '/mentor/meetings'
-    },
-    {
-      title: 'Tin Nhắn',
-      description: 'Trao đổi với sinh viên và giảng viên',
-      icon: ChatBubbleLeftRightIcon,
-      color: 'from-orange-500 to-orange-600',
-      link: '/mentor/messages'
+      link: '/mentor/internship-tracking'
     }
+    // {
+    //   title: 'Lịch Họp',
+    //   description: 'Quản lý lịch họp với sinh viên',
+    //   icon: CalendarIcon,
+    //   color: 'from-purple-500 to-purple-600',
+    //   link: '/mentor/meetings'
+    // },
+    // {
+    //   title: 'Tin Nhắn',
+    //   description: 'Trao đổi với sinh viên và giảng viên',
+    //   icon: ChatBubbleLeftRightIcon,
+    //   color: 'from-orange-500 to-orange-600',
+    //   link: '/mentor/messages'
+    // }
   ];
 
 
@@ -373,7 +373,7 @@ const MentorDashboard = () => {
             <ExclamationTriangleIcon className="h-5 w-5 text-red-400 mr-2" />
             <p className="text-red-800">{error}</p>
           </div>
-          <button 
+          <button
             onClick={loadDashboardData}
             className="mt-3 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded"
           >
@@ -483,7 +483,7 @@ const MentorDashboard = () => {
                           </p>
                         </div>
                       </div>
-                      
+
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                         <div>
                           <p className="text-sm font-medium text-gray-700">Dự án:</p>
@@ -494,28 +494,28 @@ const MentorDashboard = () => {
                           <p className="text-sm text-gray-600">{student.startDate} - {student.endDate}</p>
                         </div>
                       </div>
-                      
+
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-4">
                           <div className="flex items-center">
                             <span className="text-sm text-gray-600 mr-2">Tiến độ:</span>
                             <div className="w-24 bg-gray-200 rounded-full h-2 mr-2">
-                              <div 
-                                className="bg-blue-600 h-2 rounded-full" 
-                                style={{width: `${student.progress}%`}}
+                              <div
+                                className="bg-blue-600 h-2 rounded-full"
+                                style={{ width: `${student.progress}%` }}
                               ></div>
                             </div>
                             <span className="text-sm font-medium text-gray-900">{student.progress}%</span>
                           </div>
                         </div>
                         <div className="flex space-x-2">
-                          <Link 
+                          <Link
                             to={`/mentor/student/${student.id}`}
                             className="text-blue-600 hover:text-blue-900 p-1"
                           >
                             <EyeIcon className="h-4 w-4" />
                           </Link>
-                          <Link 
+                          <Link
                             to={`/mentor/evaluate/${student.id}`}
                             className="text-green-600 hover:text-green-900 p-1"
                           >
@@ -551,7 +551,7 @@ const MentorDashboard = () => {
                     </div>
                   ))}
                 </div>
-                <Link 
+                <Link
                   to="/mentor/reports"
                   className="block text-center text-blue-600 hover:text-blue-800 text-sm font-medium mt-4"
                 >
@@ -567,9 +567,8 @@ const MentorDashboard = () => {
                 <div className="space-y-3">
                   {upcomingTasks.map((task, index) => (
                     <div key={index} className="flex items-start space-x-3">
-                      <div className={`w-2 h-2 rounded-full mt-2 ${
-                        task.priority === 'high' ? 'bg-red-500' : 'bg-yellow-500'
-                      }`}></div>
+                      <div className={`w-2 h-2 rounded-full mt-2 ${task.priority === 'high' ? 'bg-red-500' : 'bg-yellow-500'
+                        }`}></div>
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium text-gray-900">{task.task}</p>
                         <p className="text-xs text-gray-500">Hạn: {task.deadline}</p>
