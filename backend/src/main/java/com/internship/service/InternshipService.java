@@ -374,6 +374,7 @@ public class InternshipService {
         internshipRepository.deleteById(id);
     }
 
+    @Transactional(readOnly = false)
     public Internship assignTeacher(Long internshipId, Long teacherId) {
         Optional<Internship> internshipOpt = internshipRepository.findById(internshipId);
         if (internshipOpt.isPresent()) {
@@ -385,6 +386,7 @@ public class InternshipService {
         return null;
     }
 
+    @Transactional(readOnly = false)
     public Internship assignMentor(Long internshipId, Long mentorId) {
         Optional<Internship> internshipOpt = internshipRepository.findById(internshipId);
         if (internshipOpt.isPresent()) {
@@ -451,6 +453,7 @@ public class InternshipService {
         throw new RuntimeException("Internship not found with ID: " + internshipId);
     }
 
+    @Transactional(readOnly = false)
     public Internship startInternship(Long internshipId) {
         Optional<Internship> internshipOpt = internshipRepository.findById(internshipId);
         if (internshipOpt.isPresent()) {
@@ -462,6 +465,7 @@ public class InternshipService {
         return null;
     }
 
+    @Transactional(readOnly = false)
     public Internship completeInternship(Long internshipId) {
         Optional<Internship> internshipOpt = internshipRepository.findById(internshipId);
         if (internshipOpt.isPresent()) {
@@ -548,6 +552,7 @@ public class InternshipService {
         return statistics;
     }
 
+    @Transactional(readOnly = false)
     public Internship approveInternship(Long internshipId) {
         Optional<Internship> internshipOpt = internshipRepository.findById(internshipId);
         if (internshipOpt.isEmpty()) {
@@ -564,6 +569,7 @@ public class InternshipService {
         return internshipRepository.save(internship);
     }
 
+    @Transactional(readOnly = false)
     public Internship rejectInternship(Long internshipId) {
         Optional<Internship> internshipOpt = internshipRepository.findById(internshipId);
         if (internshipOpt.isEmpty()) {

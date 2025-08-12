@@ -72,23 +72,23 @@ const InternshipTable = ({ dataSource, loading, pagination, onChange, onAction }
             }
         ];
 
-        // // Add status-specific actions
-        // if (record.status === 'PENDING') {
-        //     items.push(
-        //         {
-        //             key: 'approve',
-        //             label: 'Phê duyệt',
-        //             icon: <CheckCircleOutlined />,
-        //             onClick: () => onAction('approve', record)
-        //         },
-        //         {
-        //             key: 'reject',
-        //             label: 'Từ chối',
-        //             icon: <CloseCircleOutlined />,
-        //             onClick: () => onAction('reject', record)
-        //         }
-        //     );
-        // }
+        // Add status-specific actions for pending internships
+        if (record.status === 'PENDING') {
+            items.push(
+                {
+                    key: 'approve',
+                    label: 'Phê duyệt',
+                    icon: <CheckCircleOutlined />,
+                    onClick: () => onAction('approve', record)
+                },
+                {
+                    key: 'reject',
+                    label: 'Từ chối',
+                    icon: <CloseCircleOutlined />,
+                    onClick: () => onAction('reject', record)
+                }
+            );
+        }
 
         if (record.status === 'APPROVED' || !record.student) {
             items.push({

@@ -134,7 +134,9 @@ const InternshipModal = ({ visible, mode, internship, onClose, onSuccess }) => {
                 salary: values.salary || 0,
                 benefits: values.benefits || 'Chưa xác định',
                 notes: values.notes || '',
-                internshipBatchId: values.batchId
+                internshipBatchId: values.batchId,
+                companyId: values.companyId,
+                teacherId: values.teacherId || null
             };
 
             if (mode === 'edit') {
@@ -402,6 +404,43 @@ const InternshipModal = ({ visible, mode, internship, onClose, onSuccess }) => {
 };
 
 // Internship Form Component
+// Lightweight selects using existing services (inline for simplicity)
+const CompanySelect = (props) => {
+    const [options, setOptions] = React.useState([]);
+    React.useEffect(() => {
+        (async () => {
+            try {
+                const res = await companyService.getActiveCompanies();
+                const list = res.data || res || [];
+                setOptions(list.map(c => ({ label: `${c.companyName} (${c.companyCode})`, value: c.id })));
+            } catch (e) {
+                // ignore
+            }
+        })();
+    }, []);
+    return (
+        <Select placeholder="-- Chọn công ty --" options={options} showSearch optionFilterProp="label" {...props} />
+    );
+};
+
+const TeacherSelect = (props) => {
+    const [options, setOptions] = React.useState([]);
+    React.useEffect(() => {
+        (async () => {
+            try {
+                const res = await teacherService.getTeachers({ page: 0, size: 1000 });
+                const list = res.data?.content || res.content || res || [];
+                setOptions(list.map(t => ({ label: `${t.user?.fullName} - ${t.department || 'N/A'}`, value: t.id })));
+            } catch (e) {
+                // ignore
+            }
+        })();
+    }, []);
+    return (
+        <Select placeholder="-- Chọn giảng viên --" options={options} showSearch optionFilterProp="label" {...props} />
+    );
+};
+
 const InternshipForm = ({ form, onSubmit, activeBatches = [], mode }) => {
     return (
         <Form
@@ -432,6 +471,26 @@ const InternshipForm = ({ form, onSubmit, activeBatches = [], mode }) => {
             >
                 <Input placeholder="Thực tập sinh Phát triển phần mềm" />
             </Form.Item>
+
+            <Row gutter={16}>
+                <Col span={12}>
+                    <Form.Item
+                        name="companyId"
+                        label="Công ty"
+                        rules={[{ required: true, message: 'Vui lòng chọn công ty' }]}
+                    >
+                        <CompanySelect onChange={() => { /* ensures Form captures value */ }} allowClear />
+                    </Form.Item>
+                </Col>
+                <Col span={12}>
+                    <Form.Item
+                        name="teacherId"
+                        label="Giảng viên phụ trách"
+                    >
+                        <TeacherSelect onChange={() => { }} allowClear />
+                    </Form.Item>
+                </Col>
+            </Row>
 
             <Form.Item
                 name="dateRange"

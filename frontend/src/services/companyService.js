@@ -11,7 +11,7 @@ const companyService = {
   searchCompanies: async (searchCriteria = {}, pagination = {}) => {
     // Convert 1-based to 0-based pagination for backend
     const page = Math.max(0, (pagination.page || 1) - 1);
-    
+
     const params = {
       keyword: searchCriteria.keyword || '',
       industry: searchCriteria.industry || null,
@@ -23,7 +23,7 @@ const companyService = {
       sortBy: pagination.sortBy || 'id',
       sortDir: pagination.sortDir || 'desc'
     };
-    
+
     // Remove null/undefined values
     Object.keys(params).forEach(key => {
       if (params[key] === null || params[key] === undefined || params[key] === '') {
@@ -101,9 +101,9 @@ const companyService = {
     return response.data;
   },
 
-  // Get active companies
+  // Get active companies (list)
   getActiveCompanies: async () => {
-    const response = await axiosClient.get('/companies/status/true');
+    const response = await axiosClient.get('/companies/active');
     return response.data;
   },
 
