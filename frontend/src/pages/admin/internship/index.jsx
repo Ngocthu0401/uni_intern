@@ -42,12 +42,14 @@ const InternshipManagement = () => {
             const filtersToUse = currentFilters || filters;
 
             const params = {
-                page: page, // Backend uses 0-based pagination
+                page: page - 1, // Backend uses 0-based pagination
                 size: pageSize,
                 ...filtersToUse
             };
 
-            const response = await internshipService.searchInternships(params, { page, size: pageSize });
+            console.log('params', params);
+
+            const response = await internshipService.searchInternships(params);
 
             setInternships(response.data || []);
             setPagination(prev => ({
