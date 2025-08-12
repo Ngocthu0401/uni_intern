@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  DocumentTextIcon, 
-  EyeIcon, 
-  ArrowDownTrayIcon, 
-  CheckCircleIcon, 
-  ClockIcon, 
+import {
+  DocumentTextIcon,
+  EyeIcon,
+  ArrowDownTrayIcon,
+  CheckCircleIcon,
+  ClockIcon,
   XCircleIcon,
   ExclamationTriangleIcon,
   PlusIcon,
@@ -20,7 +20,7 @@ const ContractsPage = () => {
   const [currentInternship, setCurrentInternship] = useState(null);
   const [selectedContract, setSelectedContract] = useState(null);
   const [showDetailModal, setShowDetailModal] = useState(false);
-  
+
   const { user, loading: authLoading } = useAuth();
 
   useEffect(() => {
@@ -42,16 +42,16 @@ const ContractsPage = () => {
 
       // First get student record from user ID
       const studentData = await studentService.getStudentByUserId(user.id);
-      
+
       // Get current internship using student ID
       const internshipsResponse = await internshipService.getInternshipsByStudent(studentData.id);
-      const activeInternship = internshipsResponse.find(i => 
+      const activeInternship = internshipsResponse.find(i =>
         i.status === 'ACTIVE' || i.status === 'IN_PROGRESS' || i.status === 'APPROVED'
       );
-      
+
       if (activeInternship) {
         setCurrentInternship(activeInternship);
-        
+
         // Load contracts for current internship
         try {
           const contractsResponse = await contractService.getContractsByInternship(activeInternship.id);
@@ -71,7 +71,7 @@ const ContractsPage = () => {
             companyName: activeInternship.companyName,
             mentorName: activeInternship.mentorName
           }));
-          
+
           setContracts(processedContracts);
         } catch (contractError) {
           console.log('No contracts found:', contractError);
@@ -331,7 +331,7 @@ const ContractsPage = () => {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         <div className="flex space-x-2">
-                          <button 
+                          <button
                             onClick={() => {
                               setSelectedContract(contract);
                               setShowDetailModal(true);
@@ -342,7 +342,7 @@ const ContractsPage = () => {
                             <EyeIcon className="w-5 h-5" />
                           </button>
                           {contract.fileName && (
-                            <button 
+                            <button
                               onClick={() => handleDownload(contract.id)}
                               className="text-green-600 hover:text-green-900"
                               title="Tải xuống"

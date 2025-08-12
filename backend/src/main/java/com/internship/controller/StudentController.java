@@ -62,8 +62,8 @@ public class StudentController {
 
     @GetMapping("/user/{userId}")
     @PreAuthorize("hasRole('DEPARTMENT') or hasRole('TEACHER') or hasRole('STUDENT')")
-    public ResponseEntity<Student> getStudentByUserId(@PathVariable Long userId) {
-        Optional<Student> student = studentService.getStudentByUserId(userId);
+    public ResponseEntity<Student> getStudentByUserId(@PathVariable("userId") Long userId) {
+        Optional<Student> student = studentService.getOrCreateStudentByUserId(userId);
         return student.map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }

@@ -20,7 +20,8 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
 
        Optional<Student> findByStudentCode(String studentCode);
 
-       Optional<Student> findByUserId(Long userId);
+       @Query("SELECT s FROM Student s JOIN FETCH s.user WHERE s.user.id = :userId")
+       Optional<Student> findByUserId(@Param("userId") Long userId);
 
        boolean existsByStudentCode(String studentCode);
 
@@ -70,6 +71,7 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
                      "LEFT JOIN FETCH s.internships i " +
                      "LEFT JOIN FETCH i.company " +
                      "LEFT JOIN FETCH i.mentor " +
+                     
                      "LEFT JOIN FETCH i.teacher " +
                      "LEFT JOIN FETCH i.internshipBatch " +
                      "WHERE " +

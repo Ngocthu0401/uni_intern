@@ -85,6 +85,41 @@ public class StudentService {
         return studentRepository.findByUserId(userId);
     }
 
+    @Transactional(readOnly = false)
+    public Optional<Student> getOrCreateStudentByUserId(Long userId) {
+        Optional<Student> existing = studentRepository.findByUserId(userId);
+        if (existing.isPresent()) {
+            return existing;
+        }
+
+        // Create only if user exists and is a STUDENT
+        Optional<User> userOpt = userRepository.findById(userId);
+        if (userOpt.isEmpty()) {
+            return Optional.empty();
+        }
+        User user = userOpt.get();
+        if (user.getRole() != com.internship.enums.RoleType.STUDENT) {
+            return Optional.empty();
+        }
+
+        // Generate a unique student code based on username (fallback to S{userId})
+        String baseCode = (user.getUsername() != null && !user.getUsername().isBlank())
+                ? user.getUsername()
+                : ("S" + userId);
+        String candidateCode = baseCode;
+        int suffix = 1;
+        while (studentRepository.existsByStudentCode(candidateCode)) {
+            candidateCode = baseCode + "_" + suffix;
+            suffix++;
+        }
+
+        Student student = new Student();
+        student.setUser(user);
+        student.setStudentCode(candidateCode);
+        Student saved = studentRepository.save(student);
+        return Optional.of(saved);
+    }
+
     public Page<Student> searchStudents(String keyword, Pageable pageable) {
         return studentRepository.searchStudents(keyword, pageable);
     }
