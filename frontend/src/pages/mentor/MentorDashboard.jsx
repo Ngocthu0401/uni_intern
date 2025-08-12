@@ -461,7 +461,7 @@ const MentorDashboard = () => {
               <div className="p-6">
                 <div className="flex justify-between items-center mb-6">
                   <h2 className="text-xl font-semibold text-gray-900">Sinh Viên Đang Hướng Dẫn</h2>
-                  <Link to="/mentor/students" className="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                  <Link to="/mentor/internship-tracking" className="text-blue-600 hover:text-blue-800 text-sm font-medium">
                     Xem chi tiết
                   </Link>
                 </div>
@@ -510,13 +510,13 @@ const MentorDashboard = () => {
                         </div>
                         <div className="flex space-x-2">
                           <Link
-                            to={`/mentor/student/${student.id}`}
+                            to={`/mentor/internship-tracking?studentId=${student.id}`}
                             className="text-blue-600 hover:text-blue-900 p-1"
                           >
                             <EyeIcon className="h-4 w-4" />
                           </Link>
                           <Link
-                            to={`/mentor/evaluate/${student.id}`}
+                            to={`/mentor/internship-tracking?studentId=${student.id}&edit=true`}
                             className="text-green-600 hover:text-green-900 p-1"
                           >
                             <PencilSquareIcon className="h-4 w-4" />
