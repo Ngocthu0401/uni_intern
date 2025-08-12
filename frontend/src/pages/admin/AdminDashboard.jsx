@@ -12,12 +12,12 @@ import {
   PlusIcon,
   MagnifyingGlassIcon
 } from '@heroicons/react/24/outline';
-import { 
-  studentService, 
-  teacherService, 
-  companyService, 
+import {
+  studentService,
+  teacherService,
+  companyService,
   batchService,
-  internshipService 
+  internshipService
 } from '../../services';
 
 const AdminDashboard = () => {
@@ -38,11 +38,11 @@ const AdminDashboard = () => {
   const loadDashboardData = async () => {
     try {
       setLoading(true);
-      
+
       // Load statistics in parallel
       const [
         studentStats,
-        teacherStats, 
+        teacherStats,
         companyStats,
         batchStats,
         activities
@@ -166,7 +166,7 @@ const AdminDashboard = () => {
 
   const formatTimeAgo = (dateString) => {
     if (!dateString) return 'Vừa xong';
-    
+
     const now = new Date();
     const date = new Date(dateString);
     const diffInMs = now - date;
@@ -223,7 +223,7 @@ const AdminDashboard = () => {
       description: 'Gán nơi, giảng viên, cán bộ, mô tả công việc',
       icon: ClipboardDocumentListIcon,
       color: 'from-teal-500 to-teal-600',
-      link: '/admin/assignments'
+      link: '/admin/internships'
     },
     {
       title: 'Quản lý Hợp đồng',
@@ -244,7 +244,7 @@ const AdminDashboard = () => {
               <h1 className="text-3xl font-bold text-gray-900">Bảng Điều Khiển Bộ Môn</h1>
               <p className="mt-1 text-sm text-gray-500">Quản lý toàn diện hệ thống thực tập sinh viên</p>
             </div>
-           
+
           </div>
         </div>
       </div>
@@ -321,12 +321,11 @@ const AdminDashboard = () => {
                   <div className="space-y-4">
                     {recentActivities.map((activity, index) => (
                       <div key={index} className="flex items-start space-x-3">
-                        <div className={`w-2 h-2 rounded-full mt-2 flex-shrink-0 ${
-                          activity.type === 'internship' ? 'bg-blue-500' :
+                        <div className={`w-2 h-2 rounded-full mt-2 flex-shrink-0 ${activity.type === 'internship' ? 'bg-blue-500' :
                           activity.type === 'batch' ? 'bg-orange-500' :
-                          activity.type === 'evaluation' ? 'bg-green-500' :
-                          'bg-gray-500'
-                        }`}></div>
+                            activity.type === 'evaluation' ? 'bg-green-500' :
+                              'bg-gray-500'
+                          }`}></div>
                         <div className="flex-1 min-w-0">
                           <p className="text-sm text-gray-900">{activity.action}</p>
                           <p className="text-xs text-gray-500">{activity.time}</p>
@@ -337,7 +336,7 @@ const AdminDashboard = () => {
                 )}
               </div>
               <div className="px-6 py-3 bg-gray-50 rounded-b-xl">
-                <button 
+                <button
                   onClick={loadDashboardData}
                   className="text-sm text-blue-600 hover:text-blue-800 font-medium"
                 >

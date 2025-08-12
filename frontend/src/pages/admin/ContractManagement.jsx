@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  DocumentTextIcon, 
-  EyeIcon, 
+import {
+  DocumentTextIcon,
+  EyeIcon,
   PencilIcon,
   PlusIcon,
-  CheckCircleIcon, 
-  ClockIcon, 
+  CheckCircleIcon,
+  ClockIcon,
   XCircleIcon,
   ExclamationTriangleIcon,
   CurrencyDollarIcon,
@@ -45,7 +45,7 @@ const ContractManagement = () => {
   const [filterStatus, setFilterStatus] = useState('ALL');
   const [filterType, setFilterType] = useState('ALL');
   const [dateRange, setDateRange] = useState({ start: '', end: '' });
-  
+
   // Form data for creating new contract
   const [formData, setFormData] = useState({
     title: '',
@@ -81,19 +81,19 @@ const ContractManagement = () => {
 
       // For admin, get all contracts instead of by teacher
       const response = await contractService.getAllContracts(params);
-      
+
       let filteredContracts = response.content || response.data || [];
-      
+
       // Apply status filter
       if (filterStatus !== 'ALL') {
-        filteredContracts = filteredContracts.filter(contract => 
+        filteredContracts = filteredContracts.filter(contract =>
           contract.status === filterStatus
         );
       }
 
       // Apply type filter
       if (filterType !== 'ALL') {
-        filteredContracts = filteredContracts.filter(contract => 
+        filteredContracts = filteredContracts.filter(contract =>
           contract.contractType === filterType
         );
       }
@@ -136,7 +136,7 @@ const ContractManagement = () => {
     try {
       // Generate contract code
       const contractCode = await contractService.generateContractCode();
-      
+
       const contractData = {
         ...formData,
         contractCode: contractCode,
@@ -145,7 +145,7 @@ const ContractManagement = () => {
         status: 'DRAFT',
         approvalStatus: 'PENDING'
       };
-      
+
       // Only include internshipId if it's not empty
       if (formData.internshipId && formData.internshipId.trim() !== '') {
         contractData.internshipId = formData.internshipId;
@@ -221,7 +221,7 @@ const ContractManagement = () => {
     if (!window.confirm('Bạn có chắc chắn muốn chấm dứt hợp đồng này?')) {
       return;
     }
-    
+
     try {
       await contractService.terminateContract(contractId);
       setShowDetailModal(false);
@@ -235,17 +235,17 @@ const ContractManagement = () => {
   const handleUpdateStatus = async () => {
     try {
       if (!selectedContract) return;
-      
+
       // Update contract status
       if (newStatus !== selectedContract.status) {
         await contractService.updateContractStatus(selectedContract.id, newStatus);
       }
-      
+
       // Update payment status
       if (newPaymentStatus !== selectedContract.paymentStatus) {
         await contractService.updatePaymentStatus(selectedContract.id, newPaymentStatus);
       }
-      
+
       setShowStatusModal(false);
       setSelectedContract(null);
       loadContracts();
@@ -258,7 +258,7 @@ const ContractManagement = () => {
   const handleBulkAction = async () => {
     try {
       if (selectedContracts.length === 0) return;
-      
+
       const promises = selectedContracts.map(contractId => {
         if (bulkAction === 'approve') {
           return contractService.approveContract(contractId, user.fullName || user.username);
@@ -271,7 +271,7 @@ const ContractManagement = () => {
         }
         return Promise.resolve();
       });
-      
+
       await Promise.all(promises);
       setSelectedContracts([]);
       setShowBulkModal(false);
@@ -300,41 +300,41 @@ const ContractManagement = () => {
     }
   };
 
-  const handleExportContracts = () => {
-    const csvData = [
-      ['Tiêu đề', 'Mã hợp đồng', 'Sinh viên', 'Mức hỗ trợ', 'Trạng thái', 'Ngày tạo'].join(','),
-      ...contracts.map(contract => [
-        `"${contract.title || ''}",`,
-        `"${contract.contractCode || ''}",`,
-        `"${contract.internship?.student?.user?.fullName || ''}",`,
-        `"${contract.supportAmount || '0'}",`,
-        `"${getStatusText(contract.status)}",`,
-        `"${formatDate(contract.createdAt)}"`
-      ].join(''))
-    ].join('\n');
-    
-    const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `contracts_${new Date().toISOString().split('T')[0]}.csv`;
-    a.click();
-    URL.revokeObjectURL(url);
-  };
+  // const handleExportContracts = () => {
+  //   const csvData = [
+  //     ['Tiêu đề', 'Mã hợp đồng', 'Sinh viên', 'Mức hỗ trợ', 'Trạng thái', 'Ngày tạo'].join(','),
+  //     ...contracts.map(contract => [
+  //       `"${contract.title || ''}",`,
+  //       `"${contract.contractCode || ''}",`,
+  //       `"${contract.internship?.student?.user?.fullName || ''}",`,
+  //       `"${contract.supportAmount || '0'}",`,
+  //       `"${getStatusText(contract.status)}",`,
+  //       `"${formatDate(contract.createdAt)}"`
+  //     ].join(''))
+  //   ].join('\n');
 
-  const getStatusText = (status) => {
-    const statusMap = {
-      'DRAFT': 'Bản nháp',
-      'PENDING': 'Chờ duyệt',
-      'SIGNED': 'Đã ký',
-      'ACTIVE': 'Đang hoạt động',
-      'PAID': 'Đã thanh toán',
-      'REJECTED': 'Từ chối',
-      'EXPIRED': 'Hết hạn',
-      'TERMINATED': 'Chấm dứt'
-    };
-    return statusMap[status] || status;
-  };
+  //   const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
+  //   const url = URL.createObjectURL(blob);
+  //   const a = document.createElement('a');
+  //   a.href = url;
+  //   a.download = `contracts_${new Date().toISOString().split('T')[0]}.csv`;
+  //   a.click();
+  //   URL.revokeObjectURL(url);
+  // };
+
+  // const getStatusText = (status) => {
+  //   const statusMap = {
+  //     'DRAFT': 'Bản nháp',
+  //     'PENDING': 'Chờ duyệt',
+  //     'SIGNED': 'Đã ký',
+  //     'ACTIVE': 'Đang hoạt động',
+  //     'PAID': 'Đã thanh toán',
+  //     'REJECTED': 'Từ chối',
+  //     'EXPIRED': 'Hết hạn',
+  //     'TERMINATED': 'Chấm dứt'
+  //   };
+  //   return statusMap[status] || status;
+  // };
 
   const getStatusBadge = (status) => {
     const statusMap = {
@@ -419,9 +419,9 @@ const ContractManagement = () => {
             </div>
             <button
               onClick={() => setShowCreateModal(true)}
-              className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              className="!flex !items-center !px-4 !py-2 !bg-blue-600 !text-white !rounded-lg !hover:bg-blue-700"
             >
-              <PlusIcon className="w-5 h-5 mr-2" />
+              <PlusIcon className="!w-5 !h-5 !mr-2" />
               Tạo hợp đồng mới
             </button>
           </div>
@@ -527,7 +527,7 @@ const ContractManagement = () => {
               <input
                 type="date"
                 value={dateRange.start}
-                onChange={(e) => setDateRange(prev => ({...prev, start: e.target.value}))}
+                onChange={(e) => setDateRange(prev => ({ ...prev, start: e.target.value }))}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
@@ -536,7 +536,7 @@ const ContractManagement = () => {
               <input
                 type="date"
                 value={dateRange.end}
-                onChange={(e) => setDateRange(prev => ({...prev, end: e.target.value}))}
+                onChange={(e) => setDateRange(prev => ({ ...prev, end: e.target.value }))}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
@@ -554,16 +554,16 @@ const ContractManagement = () => {
               )}
             </div>
             <div className="flex items-center space-x-2">
-              <button
+              {/* <button
                 onClick={handleExportContracts}
                 className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
               >
                 <TableCellsIcon className="w-4 w-4 mr-2" />
                 Xuất CSV
-              </button>
+              </button> */}
               <button
                 onClick={loadContracts}
-                className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700"
+                className="!px-4 !py-2 !bg-gray-600 !text-white !rounded-lg !hover:bg-gray-700"
               >
                 Tải lại
               </button>
@@ -572,95 +572,95 @@ const ContractManagement = () => {
         </div>
 
         {/* Contracts Table */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+        <div className="!bg-white !rounded-lg !shadow-sm !border !border-gray-200">
           {contracts.length === 0 ? (
             <div className="p-8 text-center">
-              <DocumentTextIcon className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">Chưa có hợp đồng nào</h3>
-              <p className="text-gray-600 mb-4">Tạo hợp đồng hỗ trợ đầu tiên cho sinh viên thực tập.</p>
+              <DocumentTextIcon className="!h-12 !w-12 !text-gray-400 !mx-auto !mb-4" />
+              <h3 className="!text-lg !font-medium !text-gray-900 !mb-2">Chưa có hợp đồng nào</h3>
+              <p className="!text-gray-600 !mb-4">Tạo hợp đồng hỗ trợ đầu tiên cho sinh viên thực tập.</p>
               <button
                 onClick={() => setShowCreateModal(true)}
-                className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 mx-auto"
+                className="!flex !items-center !px-4 !py-2 !bg-blue-600 !text-white !rounded-lg !hover:bg-blue-700 !mx-auto"
               >
-                <PlusIcon className="w-5 h-5 mr-2" />
+                <PlusIcon className="!w-5 !h-5 !mr-2" />
                 Tạo hợp đồng mới
               </button>
             </div>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
+            <div className="!overflow-x-auto">
+              <table className="!min-w-full !divide-y !divide-gray-200">
+                <thead className="!bg-gray-50">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="!px-6 !py-3 !text-left !text-xs !font-medium !text-gray-500 !uppercase !tracking-wider">
                       <input
                         type="checkbox"
                         checked={selectedContracts.length === contracts.length && contracts.length > 0}
                         onChange={handleSelectAll}
-                        className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                        className="!h-4 !w-4 !text-blue-600 !focus:ring-blue-500 !border-gray-300 !rounded"
                       />
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="!px-6 !py-3 !text-left !text-xs !font-medium !text-gray-500 !uppercase !tracking-wider">
                       Hợp đồng
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="!px-6 !py-3 !text-left !text-xs !font-medium !text-gray-500 !uppercase !tracking-wider">
                       Sinh viên
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="!px-6 !py-3 !text-left !text-xs !font-medium !text-gray-500 !uppercase !tracking-wider">
                       Mức hỗ trợ
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="!px-6 !py-3 !text-left !text-xs !font-medium !text-gray-500 !uppercase !tracking-wider">
                       Trạng thái
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="!px-6 !py-3 !text-left !text-xs !font-medium !text-gray-500 !uppercase !tracking-wider">
                       Ngày tạo
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="!px-6 !py-3 !text-left !text-xs !font-medium !text-gray-500 !uppercase !tracking-wider">
                       Thao tác
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className="!bg-white !divide-y !divide-gray-200">
                   {contracts.map((contract) => (
-                    <tr key={contract.id} className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap">
+                    <tr key={contract.id} className="!hover:bg-gray-50">
+                      <td className="!px-6 !py-4 !whitespace-nowrap">
                         <input
                           type="checkbox"
                           checked={selectedContracts.includes(contract.id)}
                           onChange={() => handleSelectContract(contract.id)}
-                          className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                          className="!h-4 !w-4 !text-blue-600 !focus:ring-blue-500 !border-gray-300 !rounded"
                         />
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="!px-6 !py-4 !whitespace-nowrap">
                         <div className="flex items-center">
-                          <DocumentTextIcon className="h-5 w-5 text-gray-400 mr-3" />
+                          <DocumentTextIcon className="!h-5 !w-5 !text-gray-400 !mr-3" />
                           <div>
-                            <div className="text-sm font-medium text-gray-900">{contract.title}</div>
-                            <div className="text-sm text-gray-500">{contract.contractCode}</div>
+                            <div className="!text-sm !font-medium !text-gray-900">{contract.title}</div>
+                            <div className="!text-sm !text-gray-500">{contract.contractCode}</div>
                           </div>
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">
+                      <td className="!px-6 !py-4 !whitespace-nowrap">
+                        <div className="!text-sm !text-gray-900">
                           {contract.internship?.student?.user?.fullName || 'N/A'}
                         </div>
-                        <div className="text-sm text-gray-500">
+                        <div className="!text-sm !text-gray-500">
                           {contract.internship?.student?.studentCode || ''}
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm font-medium text-gray-900">
+                      <td className="!px-6 !py-4 !whitespace-nowrap">
+                        <div className="!text-sm !font-medium !text-gray-900">
                           {formatCurrency(contract.supportAmount)}
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="!px-6 !py-4 !whitespace-nowrap">
                         {getStatusBadge(contract.status)}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      <td className="!px-6 !py-4 !whitespace-nowrap !text-sm !text-gray-900">
                         {formatDate(contract.createdAt)}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         <div className="flex space-x-2">
-                          <button 
+                          <button
                             onClick={() => {
                               setSelectedContract(contract);
                               setShowDetailModal(true);
@@ -670,7 +670,7 @@ const ContractManagement = () => {
                           >
                             <EyeIcon className="w-5 h-5" />
                           </button>
-                          <button 
+                          <button
                             onClick={() => {
                               setSelectedContract(contract);
                               setNewStatus(contract.status);
@@ -683,7 +683,7 @@ const ContractManagement = () => {
                             <Cog6ToothIcon className="w-5 h-5" />
                           </button>
                           {contract.status === 'PENDING' && (
-                            <button 
+                            <button
                               onClick={() => handleApproveContract(contract.id)}
                               className="text-green-600 hover:text-green-900"
                               title="Duyệt hợp đồng"
@@ -692,7 +692,7 @@ const ContractManagement = () => {
                             </button>
                           )}
                           {contract.status === 'SIGNED' && (
-                            <button 
+                            <button
                               onClick={() => handleUpdatePayment(contract.id, 'PAID')}
                               className="text-emerald-600 hover:text-emerald-900"
                               title="Đánh dấu đã thanh toán"
@@ -840,14 +840,13 @@ const ContractManagement = () => {
                       <p><span className="font-medium">Sinh viên:</span> {selectedContract.internship?.student?.user?.fullName || 'N/A'}</p>
                       <p><span className="font-medium">Mức hỗ trợ:</span> {formatCurrency(selectedContract.supportAmount)}</p>
                       <p><span className="font-medium">Trạng thái:</span> {getStatusBadge(selectedContract.status)}</p>
-                      <p><span className="font-medium">Trạng thái thanh toán:</span> 
-                        <span className={`ml-2 px-2 py-1 rounded-full text-xs ${
-                          selectedContract.paymentStatus === 'PAID' ? 'bg-green-100 text-green-800' :
+                      <p><span className="font-medium">Trạng thái thanh toán:</span>
+                        <span className={`ml-2 px-2 py-1 rounded-full text-xs ${selectedContract.paymentStatus === 'PAID' ? 'bg-green-100 text-green-800' :
                           selectedContract.paymentStatus === 'PENDING' ? 'bg-yellow-100 text-yellow-800' :
-                          'bg-gray-100 text-gray-800'
-                        }`}>
+                            'bg-gray-100 text-gray-800'
+                          }`}>
                           {selectedContract.paymentStatus === 'PAID' ? 'Đã thanh toán' :
-                           selectedContract.paymentStatus === 'PENDING' ? 'Chờ thanh toán' : 'Chưa xác định'}
+                            selectedContract.paymentStatus === 'PENDING' ? 'Chờ thanh toán' : 'Chưa xác định'}
                         </span>
                       </p>
                     </div>

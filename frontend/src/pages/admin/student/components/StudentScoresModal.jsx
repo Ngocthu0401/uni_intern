@@ -10,6 +10,7 @@ const { Option } = Select;
 const StudentScoresModal = ({ isOpen, onClose }) => {
     // State management
     const [loading, setLoading] = useState(false);
+    const [exporting, setExporting] = useState(false);
     const [internships, setInternships] = useState([]);
     const [pagination, setPagination] = useState({
         current: 1,
@@ -56,6 +57,67 @@ const StudentScoresModal = ({ isOpen, onClose }) => {
             message.error('Không thể tải dữ liệu thực tập');
         } finally {
             setLoading(false);
+        }
+    };
+
+    // Export to Excel
+    const handleExportExcel = async () => {
+        try {
+            setExporting(true);
+            // Fetch all filtered data to export (not only current page)
+            const exportPageSize = pagination.total && pagination.total > 0 ? pagination.total : 1000;
+            const params = {
+                keyword: filters.keyword || '',
+                page: 0,
+                size: exportPageSize,
+                sort: `${filters.sortBy},${filters.sortDir}`
+            };
+            const criteria = {
+                studentValid: true,
+                ...(filters.status ? { status: filters.status } : {})
+            };
+
+            const result = await internshipService.searchInternships(criteria, params);
+            const data = result.data || internships || [];
+
+            if (!data.length) {
+                message.warning('Không có dữ liệu để xuất');
+                return;
+            }
+
+            const module = await import('xlsx');
+            const XLSX = module.default || module;
+
+            const rows = data.map((item, index) => ({
+                STT: index + 1,
+                'Họ và tên': item?.student?.user?.fullName || '',
+                'Mã SV': item?.student?.studentCode || '',
+                'Lớp': item?.student?.className || '',
+                'Công ty': item?.company?.companyName || '',
+                'Vị trí': item?.jobTitle || '',
+                'Giáo viên': item?.teacher?.user?.fullName || '',
+                'Mentor': item?.mentor?.user?.fullName || '',
+                'Trạng thái': getStatusInfo(item?.status)?.text || '',
+                'Điểm GV': item?.teacherScore ?? '',
+                'Điểm Mentor': item?.mentorScore ?? '',
+                'Điểm tổng kết': item?.finalScore ?? '',
+                'Xếp loại': (item?.finalScore ?? null) !== null ? getScoreLevel(item.finalScore) : '',
+                'Ngày bắt đầu': item?.startDate || '',
+                'Ngày kết thúc': item?.endDate || ''
+            }));
+
+            const worksheet = XLSX.utils.json_to_sheet(rows);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, 'Bang diem');
+
+            const filename = `bang_diem_thuc_tap_${new Date().toISOString().split('T')[0]}.xlsx`;
+            XLSX.writeFile(workbook, filename);
+            message.success('Đã xuất Excel thành công');
+        } catch (err) {
+            console.error('Export Excel error:', err);
+            message.error('Không thể xuất Excel. Vui lòng cài đặt thư viện xlsx.');
+        } finally {
+            setExporting(false);
         }
     };
 
@@ -425,6 +487,13 @@ const StudentScoresModal = ({ isOpen, onClose }) => {
                                     onClick={clearAndReload}
                                 >
                                     Xóa bộ lọc
+                                </Button>
+                                <Button
+                                    icon={<DownloadOutlined />}
+                                    onClick={handleExportExcel}
+                                    loading={exporting}
+                                >
+                                    Xuất Excel
                                 </Button>
                                 <Button
                                     icon={<ReloadOutlined />}

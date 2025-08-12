@@ -42,7 +42,7 @@ const InternshipManagement = () => {
             const filtersToUse = currentFilters || filters;
 
             const params = {
-                page: page - 1, // Backend uses 0-based pagination
+                page: page, // Backend uses 0-based pagination
                 size: pageSize,
                 ...filtersToUse
             };

@@ -11,15 +11,15 @@ import {
   XMarkIcon
 } from '@heroicons/react/24/outline';
 import { companyService } from '../../services';
-import { 
-  Company, 
-  CreateCompanyRequest, 
+import {
+  Company,
+  CreateCompanyRequest,
   UpdateCompanyRequest,
   CompanySearchCriteria,
   PaginationOptions,
   CompanyType,
   IndustryType,
-  CompanySize 
+  CompanySize
 } from '../../models';
 
 const CompanyManagement = () => {
@@ -105,7 +105,7 @@ const CompanyManagement = () => {
   const openModal = (mode, company = null) => {
     setModalMode(mode);
     setSelectedCompany(company);
-    
+
     if (mode === 'create') {
       setFormData(new CreateCompanyRequest());
     } else if (mode === 'edit' && company) {
@@ -128,7 +128,7 @@ const CompanyManagement = () => {
         description: company.description || ''
       });
     }
-    
+
     setFormErrors({});
     setShowModal(true);
   };
@@ -143,7 +143,7 @@ const CompanyManagement = () => {
   const handleFormChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
-    
+
     // Clear error when user starts typing
     if (formErrors[name]) {
       setFormErrors(prev => ({ ...prev, [name]: '' }));
@@ -152,40 +152,40 @@ const CompanyManagement = () => {
 
   const validateForm = () => {
     const errors = {};
-    
+
     if (!formData.companyName?.trim()) {
       errors.companyName = 'Tên công ty không được để trống';
     }
-    
+
     if (!formData.abbreviatedName?.trim()) {
       errors.abbreviatedName = 'Tên viết tắt không được để trống';
     }
-    
+
     if (!formData.companyType?.trim()) {
       errors.companyType = 'Loại hình công ty không được để trống';
     }
-    
+
     if (!formData.industry?.trim()) {
       errors.industry = 'Ngành nghề không được để trống';
     }
-    
+
     if (!formData.address?.trim()) {
       errors.address = 'Địa chỉ không được để trống';
     }
-    
+
     if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       errors.email = 'Email không hợp lệ';
     }
-    
+
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) return;
-    
+
     try {
       // Map frontend form data to backend Company entity structure
       const companyData = {
@@ -212,7 +212,7 @@ const CompanyManagement = () => {
       } else if (modalMode === 'edit') {
         await companyService.updateCompany(selectedCompany.id, companyData);
       }
-      
+
       closeModal();
       loadCompanies();
     } catch (err) {
@@ -223,7 +223,7 @@ const CompanyManagement = () => {
 
   const handleDelete = async () => {
     if (!selectedCompany) return;
-    
+
     try {
       await companyService.deleteCompany(selectedCompany.id);
       closeModal();
@@ -234,22 +234,22 @@ const CompanyManagement = () => {
     }
   };
 
-  const handleExport = async () => {
-    try {
-      const blob = await companyService.exportCompanies(searchCriteria);
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `companies_${new Date().toISOString().split('T')[0]}.xlsx`;
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(url);
-      document.body.removeChild(a);
-    } catch (err) {
-      console.error('Error exporting companies:', err);
-      setError('Không thể xuất danh sách công ty.');
-    }
-  };
+  // const handleExport = async () => {
+  //   try {
+  //     const blob = await companyService.exportCompanies(searchCriteria);
+  //     const url = window.URL.createObjectURL(blob);
+  //     const a = document.createElement('a');
+  //     a.href = url;
+  //     a.download = `companies_${new Date().toISOString().split('T')[0]}.xlsx`;
+  //     document.body.appendChild(a);
+  //     a.click();
+  //     window.URL.revokeObjectURL(url);
+  //     document.body.removeChild(a);
+  //   } catch (err) {
+  //     console.error('Error exporting companies:', err);
+  //     setError('Không thể xuất danh sách công ty.');
+  //   }
+  // };
 
   const totalPages = Math.ceil(totalCompanies / pagination.size);
 
@@ -258,30 +258,30 @@ const CompanyManagement = () => {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Quản lý Công ty</h1>
-          <p className="text-gray-600">Quản lý thông tin và hợp tác với các công ty</p>
+          <h1 className="!text-2xl !font-bold !text-gray-900">Quản lý Công ty</h1>
+          <p className="!text-gray-600">Quản lý thông tin và hợp tác với các công ty</p>
         </div>
-        <div className="flex space-x-3">
-          <button
+        <div className="!flex !space-x-3">
+          {/* <button
             onClick={handleExport}
             className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
           >
             <ArrowDownTrayIcon className="h-5 w-5 mr-2" />
             Xuất Excel
-          </button>
+          </button> */}
           <button
             onClick={() => openModal('create')}
-            className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            className="!flex !items-center !px-4 !py-2 !bg-blue-600 !text-white !rounded-lg !hover:bg-blue-700"
           >
-            <PlusIcon className="h-5 w-5 mr-2" />
+            <PlusIcon className="!h-5 !w-5 !mr-2" />
             Thêm Công ty
           </button>
         </div>
       </div>
 
       {/* Search and Filters */}
-      <div className="bg-white p-6 rounded-lg shadow">
-        <div className="flex flex-col lg:flex-row gap-4">
+      <div className="!bg-white !p-6 !rounded-lg !shadow">
+        <div className="!flex !flex-col !lg:!flex-row !gap-4">
           {/* Search */}
           <div className="flex-1">
             <div className="relative">
@@ -295,7 +295,7 @@ const CompanyManagement = () => {
               />
             </div>
           </div>
-          
+
           {/* Filter Toggle */}
           <button
             onClick={() => setShowFilters(!showFilters)}
@@ -446,11 +446,10 @@ const CompanyManagement = () => {
                       <div className="text-sm text-gray-500">{company.website || 'Chưa có website'}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                        company.isActive 
-                          ? 'bg-green-100 text-green-800' 
-                          : 'bg-red-100 text-red-800'
-                      }`}>
+                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${company.isActive
+                        ? 'bg-green-100 text-green-800'
+                        : 'bg-red-100 text-red-800'
+                        }`}>
                         {company.isActive ? 'Hoạt động' : 'Không hoạt động'}
                       </span>
                     </td>
@@ -507,11 +506,10 @@ const CompanyManagement = () => {
                     <button
                       key={page}
                       onClick={() => handlePageChange(page)}
-                      className={`px-3 py-1 text-sm border rounded-lg ${
-                        page === pagination.page
-                          ? 'bg-blue-600 text-white border-blue-600'
-                          : 'border-gray-300 hover:bg-gray-100'
-                      }`}
+                      className={`px-3 py-1 text-sm border rounded-lg ${page === pagination.page
+                        ? 'bg-blue-600 text-white border-blue-600'
+                        : 'border-gray-300 hover:bg-gray-100'
+                        }`}
                     >
                       {page + 1}
                     </button>
@@ -640,11 +638,10 @@ const CompanyManagement = () => {
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700">Trạng thái</label>
-                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                      selectedCompany?.isActive 
-                        ? 'bg-green-100 text-green-800' 
-                        : 'bg-red-100 text-red-800'
-                    }`}>
+                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${selectedCompany?.isActive
+                      ? 'bg-green-100 text-green-800'
+                      : 'bg-red-100 text-red-800'
+                      }`}>
                       {selectedCompany?.isActive ? 'Hoạt động' : 'Không hoạt động'}
                     </span>
                   </div>
@@ -668,16 +665,15 @@ const CompanyManagement = () => {
                       name="companyName"
                       value={formData.companyName || ''}
                       onChange={handleFormChange}
-                      className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-                        formErrors.companyName ? 'border-red-300' : 'border-gray-300'
-                      }`}
+                      className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${formErrors.companyName ? 'border-red-300' : 'border-gray-300'
+                        }`}
                       placeholder="Công ty ABC"
                     />
                     {formErrors.companyName && (
                       <p className="mt-1 text-sm text-red-600">{formErrors.companyName}</p>
                     )}
                   </div>
-                  
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                       Tên viết tắt <span className="text-red-500">*</span>
@@ -687,9 +683,8 @@ const CompanyManagement = () => {
                       name="abbreviatedName"
                       value={formData.abbreviatedName || ''}
                       onChange={handleFormChange}
-                      className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-                        formErrors.abbreviatedName ? 'border-red-300' : 'border-gray-300'
-                      }`}
+                      className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${formErrors.abbreviatedName ? 'border-red-300' : 'border-gray-300'
+                        }`}
                       placeholder="VD: ABC, XYZ..."
                     />
                     {formErrors.abbreviatedName && (
@@ -705,9 +700,8 @@ const CompanyManagement = () => {
                       name="companyType"
                       value={formData.companyType || ''}
                       onChange={handleFormChange}
-                      className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-                        formErrors.companyType ? 'border-red-300' : 'border-gray-300'
-                      }`}
+                      className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${formErrors.companyType ? 'border-red-300' : 'border-gray-300'
+                        }`}
                     >
                       <option value="">Chọn loại hình công ty</option>
                       {Object.values(CompanyType).map(type => (
@@ -730,16 +724,15 @@ const CompanyManagement = () => {
                       name="industry"
                       value={formData.industry || ''}
                       onChange={handleFormChange}
-                      className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-                        formErrors.industry ? 'border-red-300' : 'border-gray-300'
-                      }`}
+                      className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${formErrors.industry ? 'border-red-300' : 'border-gray-300'
+                        }`}
                       placeholder="Công nghệ thông tin"
                     />
                     {formErrors.industry && (
                       <p className="mt-1 text-sm text-red-600">{formErrors.industry}</p>
                     )}
                   </div>
-                  
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                       Quy mô công ty
@@ -768,9 +761,8 @@ const CompanyManagement = () => {
                       name="address"
                       value={formData.address || ''}
                       onChange={handleFormChange}
-                      className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-                        formErrors.address ? 'border-red-300' : 'border-gray-300'
-                      }`}
+                      className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${formErrors.address ? 'border-red-300' : 'border-gray-300'
+                        }`}
                       placeholder="123 Đường ABC, Quận 1, TP.HCM"
                     />
                     {formErrors.address && (
@@ -787,9 +779,8 @@ const CompanyManagement = () => {
                       name="email"
                       value={formData.email || ''}
                       onChange={handleFormChange}
-                      className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-                        formErrors.email ? 'border-red-300' : 'border-gray-300'
-                      }`}
+                      className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${formErrors.email ? 'border-red-300' : 'border-gray-300'
+                        }`}
                       placeholder="contact@company.com"
                     />
                     {formErrors.email && (
@@ -838,7 +829,7 @@ const CompanyManagement = () => {
                       placeholder="Nguyễn Văn A"
                     />
                   </div>
-                  
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                       Chức vụ người liên hệ
