@@ -14,7 +14,7 @@ import MentorDashboard from '../pages/mentor/MentorDashboard';
 import StudentManagement from '../pages/admin/student/StudentManagement';
 import CompanyManagement from '../pages/admin/CompanyManagement';
 import TeacherManagement from '../pages/admin/TeacherManagement';
-import MentorManagement from '../pages/admin/MentorManagement';
+import MentorManagement from '../pages/admin/mentor/MentorManagement';
 import BatchManagement from '../pages/admin/BatchManagement';
 import InternshipManagement from '../pages/admin/internship';
 import ProfilePage from '../pages/student/ProfilePage';

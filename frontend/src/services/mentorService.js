@@ -11,18 +11,24 @@ const mentorService = {
   searchMentors: async (searchCriteria = {}, pagination = {}) => {
     // Convert 1-based to 0-based pagination for backend
     const page = Math.max(0, (pagination.page || 1) - 1);
-    
+
+    const inferredCompanyId = typeof searchCriteria.company === 'string' && /^\d+$/.test(searchCriteria.company)
+      ? parseInt(searchCriteria.company, 10)
+      : (typeof searchCriteria.company === 'number' ? searchCriteria.company : null);
+
     const params = {
       keyword: searchCriteria.keyword || '',
+      // send both for backend compatibility
       company: searchCriteria.company || null,
+      companyId: searchCriteria.companyId || inferredCompanyId || null,
       expertiseLevel: searchCriteria.expertiseLevel || null,
-      minYearsOfExperience: searchCriteria.minYearsOfExperience || null,
+      minYearsOfExperience: searchCriteria.minYearsOfExperience ?? null,
       page: page,
       size: pagination.size || 10,
       sortBy: pagination.sortBy || 'id',
       sortDir: pagination.sortDir || 'desc'
     };
-    
+
     // Remove null/undefined values
     Object.keys(params).forEach(key => {
       if (params[key] === null || params[key] === undefined || params[key] === '') {
