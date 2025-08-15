@@ -22,7 +22,7 @@ import InternshipApplicationPage from '../pages/student/InternshipApplicationPag
 import ReportsPage from '../pages/student/ReportsPage';
 import ContractsPage from '../pages/student/ContractsPage';
 import EvaluationsPage from '../pages/student/EvaluationsPage';
-import StudentManagementPage from '../pages/teacher/StudentManagementPage';
+import StudentManagementPage from '../pages/teacher/student_management/StudentManagementPage';
 import ReportReviewPage from '../pages/teacher/ReportReviewPage';
 import EvaluationManagement from '../pages/teacher/evaluation/EvaluationManagement';
 import ContractManagement from '../pages/admin/ContractManagement';
