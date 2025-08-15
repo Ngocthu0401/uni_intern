@@ -9,41 +9,59 @@ const getScoreBadgeColor = (score) => {
     return 'red';
 };
 
-const EvaluationTable = ({
-    data = [],
-    loading = false,
-    pagination,
-    onChange,
-    onView,
-    onEdit,
-}) => {
+const EvaluationTable = ({ data = [], loading = false, pagination, onChange, onView, onEdit, }) => {
+
     const columns = [
         {
             title: 'Sinh viên',
             dataIndex: ['internship', 'student', 'user', 'fullName'],
             key: 'studentName',
             render: (text) => text || 'N/A',
+            width: 150,
         },
         {
             title: 'Mã SV',
             dataIndex: ['internship', 'student', 'studentCode'],
             key: 'studentCode',
-            width: 120,
+            width: 100,
         },
         {
             title: 'Công ty',
             dataIndex: ['internship', 'company', 'companyName'],
             key: 'company',
             render: (text) => text || 'N/A',
+            width: 150,
         },
         {
-            title: 'Điểm',
+            title: 'Điểm I',
+            dataIndex: 'disciplineScore',
+            key: 'disciplineScore',
+            width: 80,
+            render: (score) => {
+                const value = score || 0;
+                return <Tag color="blue">{value.toFixed(1)}/6.0</Tag>;
+            },
+            sorter: (a, b) => (a.disciplineScore || 0) - (b.disciplineScore || 0),
+        },
+        {
+            title: 'Điểm II',
+            dataIndex: 'professionalScore',
+            key: 'professionalScore',
+            width: 80,
+            render: (score) => {
+                const value = score || 0;
+                return <Tag color="green">{value.toFixed(1)}/4.0</Tag>;
+            },
+            sorter: (a, b) => (a.professionalScore || 0) - (b.professionalScore || 0),
+        },
+        {
+            title: 'Tổng điểm',
             dataIndex: 'overallScore',
             key: 'score',
             width: 110,
             render: (score, record) => {
                 const value = score || record.totalScore || 0;
-                return <Tag color={getScoreBadgeColor(value)}>{value}/10</Tag>;
+                return <Tag color={getScoreBadgeColor(value)}>{value.toFixed(1)}/10</Tag>;
             },
             sorter: (a, b) => (a.overallScore || a.totalScore || 0) - (b.overallScore || b.totalScore || 0),
         },
@@ -83,7 +101,7 @@ const EvaluationTable = ({
             loading={loading}
             pagination={pagination}
             onChange={onChange}
-            scroll={{ x: 900 }}
+            scroll={{ x: 1000 }}
         />
     );
 };

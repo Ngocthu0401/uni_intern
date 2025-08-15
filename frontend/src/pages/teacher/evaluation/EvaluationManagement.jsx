@@ -41,16 +41,35 @@ const EvaluationManagement = () => {
 
     const calculateTotalScore = (scores) => {
         const {
-            discipline = 0, knowledge = 0, compliance = 0, communication = 0,
-            protection = 0, initiative = 0, jobRequirements = 0, learning = 0,
-            creativity = 0
+            // Part I: Tinh thần kỷ luật, thái độ (6.0 điểm tối đa)
+            understandingOrganization = 0,
+            followingRules = 0,
+            workScheduleCompliance = 0,
+            communicationAttitude = 0,
+            propertyProtection = 0,
+            workEnthusiasm = 0,
+            // Part II: Khả năng chuyên môn, nghiệp vụ (4.0 điểm tối đa)
+            jobRequirementsFulfillment = 0,
+            learningSpirit = 0,
+            initiativeCreativity = 0
         } = scores || {};
-        const total = (
-            discipline + knowledge + compliance + communication +
-            protection + initiative + jobRequirements + learning +
-            creativity
-        );
-        return total;
+
+        // Calculate discipline score (Part I)
+        const disciplineScore = understandingOrganization + followingRules +
+            workScheduleCompliance + communicationAttitude +
+            propertyProtection + workEnthusiasm;
+
+        // Calculate professional score (Part II)
+        const professionalScore = jobRequirementsFulfillment + learningSpirit + initiativeCreativity;
+
+        // Calculate overall score
+        const total = disciplineScore + professionalScore;
+
+        return {
+            disciplineScore,
+            professionalScore,
+            total
+        };
     };
 
     const loadEvaluationData = useCallback(async () => {
@@ -180,11 +199,18 @@ const EvaluationManagement = () => {
                     try {
                         const teacherResponse = await teacherService.getTeacherByUserId(user.id);
                         const teacherId = teacherResponse.id;
+
+                        // Calculate scores
+                        const scoreCalculation = calculateTotalScore(values);
+
                         const payload = {
                             ...values,
                             teacherId,
-                            totalScore: calculateTotalScore(values)
+                            disciplineScore: scoreCalculation.disciplineScore,
+                            professionalScore: scoreCalculation.professionalScore,
+                            overallScore: scoreCalculation.total
                         };
+
                         if (modalMode === 'create') {
                             await evaluationService.createEvaluation(payload);
                         } else if (modalMode === 'edit' && selectedEvaluation) {
@@ -204,30 +230,34 @@ const EvaluationManagement = () => {
                     internshipId: '',
                     semester: '',
                     academicYear: '',
-                    discipline: 0,
-                    knowledge: 0,
-                    compliance: 0,
-                    communication: 0,
-                    protection: 0,
-                    initiative: 0,
-                    jobRequirements: 0,
-                    learning: 0,
-                    creativity: 0,
+                    // Part I: Tinh thần kỷ luật, thái độ (6.0 điểm tối đa)
+                    understandingOrganization: 0,
+                    followingRules: 0,
+                    workScheduleCompliance: 0,
+                    communicationAttitude: 0,
+                    propertyProtection: 0,
+                    workEnthusiasm: 0,
+                    // Part II: Khả năng chuyên môn, nghiệp vụ (4.0 điểm tối đa)
+                    jobRequirementsFulfillment: 0,
+                    learningSpirit: 0,
+                    initiativeCreativity: 0,
                     comments: ''
                 } : (selectedEvaluation ? {
                     studentId: selectedEvaluation.internship?.student?.id || '',
                     internshipId: selectedEvaluation.internship?.id || '',
-                    semester: '',
-                    academicYear: '',
-                    discipline: selectedEvaluation.discipline || 0,
-                    knowledge: selectedEvaluation.knowledge || 0,
-                    compliance: selectedEvaluation.compliance || 0,
-                    communication: selectedEvaluation.communication || 0,
-                    protection: selectedEvaluation.protection || 0,
-                    initiative: selectedEvaluation.initiative || 0,
-                    jobRequirements: selectedEvaluation.jobRequirements || 0,
-                    learning: selectedEvaluation.learning || 0,
-                    creativity: selectedEvaluation.creativity || 0,
+                    semester: selectedEvaluation.semester || '',
+                    academicYear: selectedEvaluation.academicYear || '',
+                    // Part I: Tinh thần kỷ luật, thái độ
+                    understandingOrganization: selectedEvaluation.understandingOrganization || 0,
+                    followingRules: selectedEvaluation.followingRules || 0,
+                    workScheduleCompliance: selectedEvaluation.workScheduleCompliance || 0,
+                    communicationAttitude: selectedEvaluation.communicationAttitude || 0,
+                    propertyProtection: selectedEvaluation.propertyProtection || 0,
+                    workEnthusiasm: selectedEvaluation.workEnthusiasm || 0,
+                    // Part II: Khả năng chuyên môn, nghiệp vụ
+                    jobRequirementsFulfillment: selectedEvaluation.jobRequirementsFulfillment || 0,
+                    learningSpirit: selectedEvaluation.learningSpirit || 0,
+                    initiativeCreativity: selectedEvaluation.initiativeCreativity || 0,
                     comments: selectedEvaluation.comments || ''
                 } : {})}
                 loading={loading}

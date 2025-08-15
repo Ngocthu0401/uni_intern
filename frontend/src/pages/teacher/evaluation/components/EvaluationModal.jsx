@@ -1,18 +1,24 @@
 import React, { useMemo } from 'react';
-import { Modal, Form, Select, InputNumber, Input, Row, Col, Divider } from 'antd';
+import { Modal, Form, Select, InputNumber, Input, Row, Col, Divider, Typography } from 'antd';
 
 const { TextArea } = Input;
+const { Title } = Typography;
 
-const scoreFields = [
-    { key: 'discipline', label: 'Tinh thần kỷ luật' },
-    { key: 'knowledge', label: 'Hiểu biết về cơ quan' },
-    { key: 'compliance', label: 'Thực hiện nội quy' },
-    { key: 'communication', label: 'Giao tiếp' },
-    { key: 'protection', label: 'Bảo vệ của công' },
-    { key: 'initiative', label: 'Sáng kiến' },
-    { key: 'jobRequirements', label: 'Đáp ứng yêu cầu công việc' },
-    { key: 'learning', label: 'Tinh thần học hỏi' },
-    { key: 'creativity', label: 'Sáng tạo' }
+// Part I: Tinh thần kỷ luật, thái độ (6.0 điểm tối đa)
+const disciplineFields = [
+    { key: 'understandingOrganization', label: 'Hiểu biết về cơ quan nơi thực tập', maxScore: 1.0 },
+    { key: 'followingRules', label: 'Thực hiện nội quy của cơ quan, đơn vị', maxScore: 1.0 },
+    { key: 'workScheduleCompliance', label: 'Chấp hành giờ giấc làm việc', maxScore: 1.0 },
+    { key: 'communicationAttitude', label: 'Thái độ giao tiếp với cán bộ, nhân viên', maxScore: 1.0 },
+    { key: 'propertyProtection', label: 'Ý thức bảo vệ của công', maxScore: 1.0 },
+    { key: 'workEnthusiasm', label: 'Tích cực trong công việc', maxScore: 1.0 }
+];
+
+// Part II: Khả năng chuyên môn, nghiệp vụ (4.0 điểm tối đa)
+const professionalFields = [
+    { key: 'jobRequirementsFulfillment', label: 'Đáp ứng yêu cầu công việc', maxScore: 2.0 },
+    { key: 'learningSpirit', label: 'Tinh thần học hỏi, nâng cao trình độ chuyên môn, nghiệp vụ', maxScore: 1.0 },
+    { key: 'initiativeCreativity', label: 'Có đề xuất, sáng kiến, năng động trong công việc', maxScore: 1.0 }
 ];
 
 const EvaluationModal = ({
@@ -29,19 +35,28 @@ const EvaluationModal = ({
 
     const isView = mode === 'view';
 
-    const totalScore = useMemo(() => {
+    const scores = useMemo(() => {
         const values = form.getFieldsValue();
-        const {
-            discipline = 0, knowledge = 0, compliance = 0, communication = 0,
-            protection = 0, initiative = 0, jobRequirements = 0, learning = 0,
-            creativity = 0
-        } = { ...initialValues, ...values };
-        const total = (
-            discipline + knowledge + compliance + communication +
-            protection + initiative + jobRequirements + learning +
-            creativity
-        );
-        return total;
+        const allValues = { ...initialValues, ...values };
+
+        // Calculate discipline score (Part I)
+        const disciplineScore = disciplineFields.reduce((sum, field) => {
+            return sum + (allValues[field.key] || 0);
+        }, 0);
+
+        // Calculate professional score (Part II)
+        const professionalScore = professionalFields.reduce((sum, field) => {
+            return sum + (allValues[field.key] || 0);
+        }, 0);
+
+        // Calculate overall score
+        const totalScore = disciplineScore + professionalScore;
+
+        return {
+            disciplineScore,
+            professionalScore,
+            totalScore
+        };
     }, [form, initialValues]);
 
     return (
@@ -53,7 +68,7 @@ const EvaluationModal = ({
             okButtonProps={{ loading, disabled: isView }}
             cancelButtonProps={{ disabled: loading }}
             okText={mode === 'create' ? 'Tạo đánh giá' : 'Cập nhật'}
-            width={900}
+            width={1000}
             destroyOnClose
         >
             <Form
@@ -96,21 +111,78 @@ const EvaluationModal = ({
                     </Col>
                 </Row>
 
-                <Divider orientation="left">Tiêu chí đánh giá (0-10 điểm)</Divider>
+                {/* Part I: Tinh thần kỷ luật, thái độ */}
+                <Divider orientation="left">
+                    <Title level={4} style={{ margin: 0 }}>I. Tinh thần kỷ luật, thái độ (6.0 điểm tối đa)</Title>
+                </Divider>
 
                 <Row gutter={16}>
-                    {scoreFields.map((field) => (
+                    {disciplineFields.map((field) => (
                         <Col xs={24} md={12} key={field.key}>
-                            <Form.Item name={field.key} label={field.label} rules={[{ type: 'number', min: 0, max: 10 }]}>
-                                <InputNumber min={0} max={10} className="w-full" />
+                            <Form.Item
+                                name={field.key}
+                                label={`${field.label} (${field.maxScore} điểm)`}
+                                rules={[{ type: 'number', min: 0, max: field.maxScore }]}
+                            >
+                                <InputNumber
+                                    min={0}
+                                    max={field.maxScore}
+                                    step={0.1}
+                                    className="w-full"
+                                    placeholder={`0 - ${field.maxScore}`}
+                                />
                             </Form.Item>
                         </Col>
                     ))}
                 </Row>
 
-                <div className="mt-2 p-3 bg-gray-50 rounded-md flex items-center justify-between">
-                    <span className="text-base font-medium">Tổng điểm:</span>
-                    <span className="text-xl font-bold">{totalScore}/10</span>
+                {/* Part II: Khả năng chuyên môn, nghiệp vụ */}
+                <Divider orientation="left">
+                    <Title level={4} style={{ margin: 0 }}>II. Khả năng chuyên môn, nghiệp vụ (4.0 điểm tối đa)</Title>
+                </Divider>
+
+                <Row gutter={16}>
+                    {professionalFields.map((field) => (
+                        <Col xs={24} md={12} key={field.key}>
+                            <Form.Item
+                                name={field.key}
+                                label={`${field.label} (${field.maxScore} điểm)`}
+                                rules={[{ type: 'number', min: 0, max: field.maxScore }]}
+                            >
+                                <InputNumber
+                                    min={0}
+                                    max={field.maxScore}
+                                    step={0.1}
+                                    className="w-full"
+                                    placeholder={`0 - ${field.maxScore}`}
+                                />
+                            </Form.Item>
+                        </Col>
+                    ))}
+                </Row>
+
+                {/* Score Summary */}
+                <div className="mt-4 p-4 bg-blue-50 rounded-lg">
+                    <Row gutter={16}>
+                        <Col xs={24} md={8}>
+                            <div className="text-center">
+                                <div className="text-sm text-gray-600">Điểm phần I</div>
+                                <div className="text-lg font-bold text-blue-600">{scores.disciplineScore.toFixed(1)}/6.0</div>
+                            </div>
+                        </Col>
+                        <Col xs={24} md={8}>
+                            <div className="text-center">
+                                <div className="text-sm text-gray-600">Điểm phần II</div>
+                                <div className="text-lg font-bold text-green-600">{scores.professionalScore.toFixed(1)}/4.0</div>
+                            </div>
+                        </Col>
+                        <Col xs={24} md={8}>
+                            <div className="text-center">
+                                <div className="text-sm text-gray-600">Tổng điểm</div>
+                                <div className="text-xl font-bold text-red-600">{scores.totalScore.toFixed(1)}/10.0</div>
+                            </div>
+                        </Col>
+                    </Row>
                 </div>
 
                 <Divider orientation="left">Nhận xét</Divider>
