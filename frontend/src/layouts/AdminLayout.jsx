@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { 
-  UserGroupIcon, 
-  AcademicCapIcon, 
+import {
+  UserGroupIcon,
+  AcademicCapIcon,
   BuildingOfficeIcon,
   ChartBarIcon,
   Cog6ToothIcon,
@@ -42,13 +42,13 @@ const AdminLayout = ({ children }) => {
   // Lấy role display name
   const getRoleDisplayName = (role) => {
     if (!role) return 'Chưa xác định';
-    
+
     // Xử lý role có thể là string hoặc object
     const roleValue = typeof role === 'object' ? role.name || role.authority : role;
-    
+
     const roleMap = {
       'ADMIN': 'Quản trị viên',
-      'TEACHER': 'Giảng viên', 
+      'TEACHER': 'Giảng viên',
       'STUDENT': 'Sinh viên',
       'MENTOR': 'Mentor',
       'COMPANY': 'Doanh nghiệp',
@@ -58,7 +58,7 @@ const AdminLayout = ({ children }) => {
       'ROLE_MENTOR': 'Mentor',
       'ROLE_COMPANY': 'Doanh nghiệp'
     };
-    
+
     return roleMap[roleValue?.toUpperCase()] || `Phân quyền: ${roleValue}`;
   };
 
@@ -70,7 +70,7 @@ const AdminLayout = ({ children }) => {
     { name: 'Quản lý Mentor', href: '/admin/mentors', icon: UserIcon },
     { name: 'Quản lý Đợt thực tập', href: '/admin/batches', icon: CalendarDaysIcon },
     { name: 'Quản lý Thực tập', href: '/admin/internships', icon: ClipboardDocumentListIcon },
-    { name: 'Quản lý Hợp đồng', href: '/admin/contracts', icon: DocumentTextIcon },
+    { name: 'Quản lý Thanh Toán', href: '/admin/payments', icon: DocumentTextIcon },
   ];
 
   const isActiveRoute = (href) => {
@@ -99,7 +99,7 @@ const AdminLayout = ({ children }) => {
             <XMarkIcon className="h-5 w-5" />
           </button>
         </div>
-        
+
         {/* Navigation */}
         <nav className="mt-8 px-4">
           <div className="space-y-2">
@@ -110,20 +110,17 @@ const AdminLayout = ({ children }) => {
                 <Link
                   key={item.name}
                   to={item.href}
-                  className={`group flex items-center px-4 py-3.5 rounded-xl font-medium transition-all duration-200 ${
-                    isActive
+                  className={`group flex items-center px-4 py-3.5 rounded-xl font-medium transition-all duration-200 ${isActive
                       ? 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg shadow-blue-500/25'
                       : 'text-gray-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 hover:text-blue-700'
-                  }`}
+                    }`}
                 >
-                  <div className={`p-2 rounded-lg mr-4 transition-colors duration-200 ${
-                    isActive 
-                      ? 'bg-white/20' 
+                  <div className={`p-2 rounded-lg mr-4 transition-colors duration-200 ${isActive
+                      ? 'bg-white/20'
                       : 'bg-gray-100 group-hover:bg-blue-100'
-                  }`}>
-                    <Icon className={`h-5 w-5 ${
-                      isActive ? 'text-white' : 'text-gray-600 group-hover:text-blue-600'
-                    }`} />
+                    }`}>
+                    <Icon className={`h-5 w-5 ${isActive ? 'text-white' : 'text-gray-600 group-hover:text-blue-600'
+                      }`} />
                   </div>
                   <span className="text-sm">{item.name}</span>
                   {isActive && (
@@ -157,7 +154,7 @@ const AdminLayout = ({ children }) => {
                 </p>
               </div>
             </div>
-            
+
             <div className="flex items-center space-x-4">
               {/* Search */}
               <div className="hidden md:flex items-center space-x-2 bg-gray-100 rounded-xl px-4 py-2.5 min-w-[300px]">
@@ -168,23 +165,23 @@ const AdminLayout = ({ children }) => {
                   className="bg-transparent border-none outline-none text-sm text-gray-700 placeholder-gray-400 flex-1"
                 />
               </div>
-              
+
               {/* Notifications */}
               <button className="relative p-2.5 rounded-xl bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-800 transition-all duration-200">
                 <BellIcon className="h-5 w-5" />
                 <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
               </button>
-              
+
               {/* User Menu */}
               <div className="flex items-center space-x-3 pl-4 border-l border-gray-200">
                 <div className="text-right hidden sm:block">
-                <p className="text-sm font-semibold text-gray-800">
-                  {user?.fullName || 'Administrator'}
-                </p>
-                <p className="text-xs text-gray-500">
-                  {getRoleDisplayName(user?.role)}
-                </p>
-              </div>
+                  <p className="text-sm font-semibold text-gray-800">
+                    {user?.fullName || 'Administrator'}
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    {getRoleDisplayName(user?.role)}
+                  </p>
+                </div>
                 <button
                   onClick={handleLogout}
                   className="flex items-center space-x-2 px-4 py-2.5 text-sm font-medium text-red-600 hover:text-red-700 hover:bg-red-50 rounded-xl transition-all duration-200 border border-red-200 hover:border-red-300"

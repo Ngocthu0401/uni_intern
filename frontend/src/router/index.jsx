@@ -25,7 +25,7 @@ import EvaluationsPage from '../pages/student/EvaluationsPage';
 import StudentManagementPage from '../pages/teacher/student_management/StudentManagementPage';
 import ReportReviewPage from '../pages/teacher/ReportReviewPage';
 import EvaluationManagement from '../pages/teacher/evaluation/EvaluationManagement';
-import ContractManagement from '../pages/admin/ContractManagement';
+// import PaymentManagement from '../pages/admin/payment/PaymentManagement';
 import StatisticsPage from '../pages/teacher/StatisticsPage';
 import MentorDashboardPage from '../pages/mentor/MentorDashboardPage';
 import StudentEvaluationPage from '../pages/mentor/StudentEvaluationPage';
@@ -37,6 +37,7 @@ import AdminLayout from '../layouts/AdminLayout';
 import StudentLayout from '../layouts/StudentLayout';
 import TeacherLayout from '../layouts/TeacherLayout';
 import MentorLayout from '../layouts/MentorLayout';
+import PaymentManagement from '../pages/admin/payment/PaymentManagement';
 
 const AppRouter = () => {
   return (
@@ -60,7 +61,8 @@ const AppRouter = () => {
       <Route path="/admin/mentors" element={<AdminLayout><MentorManagement /></AdminLayout>} />
       <Route path="/admin/batches" element={<AdminLayout><BatchManagement /></AdminLayout>} />
       <Route path="/admin/internships" element={<AdminLayout><InternshipManagement /></AdminLayout>} />
-      <Route path="/admin/contracts" element={<AdminLayout><ContractManagement /></AdminLayout>} />
+      {/* <Route path="/admin/contracts" element={<AdminLayout><ContractManagement /></AdminLayout>} /> */}
+      <Route path="/admin/payments" element={<AdminLayout><PaymentManagement /></AdminLayout>} />
 
       {/* Student Routes */}
       <Route path="/student" element={<StudentLayout><StudentDashboard /></StudentLayout>} />

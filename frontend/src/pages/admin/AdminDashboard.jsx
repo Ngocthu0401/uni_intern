@@ -226,11 +226,11 @@ const AdminDashboard = () => {
       link: '/admin/internships'
     },
     {
-      title: 'Quản lý Hợp đồng',
-      description: 'Tạo mẫu, quản lý trạng thái hợp đồng',
+      title: 'Quản lý Thanh Toán',
+      description: 'Tạo mẫu, quản lý trạng thái thanh toán',
       icon: DocumentTextIcon,
       color: 'from-pink-500 to-pink-600',
-      link: '/admin/contracts'
+      link: '/admin/payments'
     }
   ];
 
