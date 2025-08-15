@@ -4,17 +4,15 @@ import { Modal, Form, Select, InputNumber, Input, Row, Col, Divider } from 'antd
 const { TextArea } = Input;
 
 const scoreFields = [
-    { key: 'technicalSkills', label: 'Kỹ năng chuyên môn (20%)' },
-    { key: 'softSkills', label: 'Kỹ năng mềm (15%)' },
-    { key: 'workAttitude', label: 'Thái độ làm việc (15%)' },
-    { key: 'learningAbility', label: 'Khả năng học hỏi (10%)' },
-    { key: 'teamwork', label: 'Làm việc nhóm (10%)' },
-    { key: 'communication', label: 'Giao tiếp (10%)' },
-    { key: 'problemSolving', label: 'Giải quyết vấn đề (10%)' },
-    { key: 'creativity', label: 'Sáng tạo (5%)' },
-    { key: 'punctuality', label: 'Tính đúng giờ (5%)' },
-    { key: 'responsibility', label: 'Trách nhiệm (10%)' },
-    { key: 'overallPerformance', label: 'Hiệu suất tổng thể (10%)' },
+    { key: 'discipline', label: 'Tinh thần kỷ luật' },
+    { key: 'knowledge', label: 'Hiểu biết về cơ quan' },
+    { key: 'compliance', label: 'Thực hiện nội quy' },
+    { key: 'communication', label: 'Giao tiếp' },
+    { key: 'protection', label: 'Bảo vệ của công' },
+    { key: 'initiative', label: 'Sáng kiến' },
+    { key: 'jobRequirements', label: 'Đáp ứng yêu cầu công việc' },
+    { key: 'learning', label: 'Tinh thần học hỏi' },
+    { key: 'creativity', label: 'Sáng tạo' }
 ];
 
 const EvaluationModal = ({
@@ -34,28 +32,17 @@ const EvaluationModal = ({
     const totalScore = useMemo(() => {
         const values = form.getFieldsValue();
         const {
-            technicalSkills = 0, softSkills = 0, workAttitude = 0, learningAbility = 0,
-            teamwork = 0, communication = 0, problemSolving = 0, creativity = 0,
-            punctuality = 0, responsibility = 0, overallPerformance = 0,
+            discipline = 0, knowledge = 0, compliance = 0, communication = 0,
+            protection = 0, initiative = 0, jobRequirements = 0, learning = 0,
+            creativity = 0
         } = { ...initialValues, ...values };
-        const weightedTotal = (
-            (technicalSkills * 0.20) +
-            (softSkills * 0.15) +
-            (workAttitude * 0.15) +
-            (learningAbility * 0.10) +
-            (teamwork * 0.10) +
-            (communication * 0.10) +
-            (problemSolving * 0.10) +
-            (creativity * 0.05) +
-            (punctuality * 0.05) +
-            (responsibility * 0.10) +
-            (overallPerformance * 0.10)
+        const total = (
+            discipline + knowledge + compliance + communication +
+            protection + initiative + jobRequirements + learning +
+            creativity
         );
-        return Math.round(weightedTotal);
+        return total;
     }, [form, initialValues]);
-
-    console.log('students', students);
-    console.log('internships', internships);
 
     return (
         <Modal
@@ -98,17 +85,6 @@ const EvaluationModal = ({
                         </Form.Item>
                     </Col>
                     <Col xs={24} md={8}>
-                        <Form.Item name="evaluationType" label="Loại đánh giá" rules={[{ required: true }]}>
-                            <Select
-                                options={[
-                                    { value: 'MIDTERM', label: 'Giữa kỳ' },
-                                    { value: 'FINAL', label: 'Cuối kỳ' },
-                                    { value: 'MONTHLY', label: 'Hàng tháng' },
-                                ]}
-                            />
-                        </Form.Item>
-                    </Col>
-                    <Col xs={24} md={8}>
                         <Form.Item name="semester" label="Học kỳ" rules={[{ required: true, message: 'Vui lòng nhập học kỳ' }]}>
                             <Input placeholder="VD: 1, 2, 3" />
                         </Form.Item>
@@ -120,13 +96,13 @@ const EvaluationModal = ({
                     </Col>
                 </Row>
 
-                <Divider orientation="left">Tiêu chí đánh giá (0-100 điểm)</Divider>
+                <Divider orientation="left">Tiêu chí đánh giá (0-10 điểm)</Divider>
 
                 <Row gutter={16}>
                     {scoreFields.map((field) => (
                         <Col xs={24} md={12} key={field.key}>
-                            <Form.Item name={field.key} label={field.label} rules={[{ type: 'number', min: 0, max: 100 }]}>
-                                <InputNumber min={0} max={100} className="w-full" />
+                            <Form.Item name={field.key} label={field.label} rules={[{ type: 'number', min: 0, max: 10 }]}>
+                                <InputNumber min={0} max={10} className="w-full" />
                             </Form.Item>
                         </Col>
                     ))}
@@ -134,26 +110,11 @@ const EvaluationModal = ({
 
                 <div className="mt-2 p-3 bg-gray-50 rounded-md flex items-center justify-between">
                     <span className="text-base font-medium">Tổng điểm:</span>
-                    <span className="text-xl font-bold">{totalScore}/100</span>
+                    <span className="text-xl font-bold">{totalScore}/10</span>
                 </div>
 
                 <Divider orientation="left">Nhận xét</Divider>
                 <Row gutter={16}>
-                    <Col span={24}>
-                        <Form.Item name="strengths" label="Điểm mạnh">
-                            <TextArea rows={3} placeholder="Mô tả các điểm mạnh..." />
-                        </Form.Item>
-                    </Col>
-                    <Col span={24}>
-                        <Form.Item name="weaknesses" label="Điểm yếu cần cải thiện">
-                            <TextArea rows={3} placeholder="Mô tả các điểm yếu cần cải thiện..." />
-                        </Form.Item>
-                    </Col>
-                    <Col span={24}>
-                        <Form.Item name="recommendations" label="Đề xuất và khuyến nghị">
-                            <TextArea rows={3} placeholder="Đưa ra các đề xuất..." />
-                        </Form.Item>
-                    </Col>
                     <Col span={24}>
                         <Form.Item name="comments" label="Nhận xét chung">
                             <TextArea rows={4} placeholder="Nhận xét tổng thể..." />

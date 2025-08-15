@@ -3,9 +3,9 @@ import { Table, Tag, Space, Button, Tooltip } from 'antd';
 import { EyeOutlined, EditOutlined } from '@ant-design/icons';
 
 const getScoreBadgeColor = (score) => {
-    if (score >= 85) return 'green';
-    if (score >= 70) return 'blue';
-    if (score >= 60) return 'gold';
+    if (score >= 8.5) return 'green';
+    if (score >= 7) return 'blue';
+    if (score >= 6) return 'gold';
     return 'red';
 };
 
@@ -37,20 +37,13 @@ const EvaluationTable = ({
             render: (text) => text || 'N/A',
         },
         {
-            title: 'Loại',
-            dataIndex: 'isFinalEvaluation',
-            key: 'type',
-            width: 110,
-            render: (isFinal) => <Tag color="blue">{isFinal ? 'Cuối kỳ' : 'Giữa kỳ'}</Tag>,
-        },
-        {
             title: 'Điểm',
             dataIndex: 'overallScore',
             key: 'score',
             width: 110,
             render: (score, record) => {
                 const value = score || record.totalScore || 0;
-                return <Tag color={getScoreBadgeColor(value)}>{value}/100</Tag>;
+                return <Tag color={getScoreBadgeColor(value)}>{value}/10</Tag>;
             },
             sorter: (a, b) => (a.overallScore || a.totalScore || 0) - (b.overallScore || b.totalScore || 0),
         },

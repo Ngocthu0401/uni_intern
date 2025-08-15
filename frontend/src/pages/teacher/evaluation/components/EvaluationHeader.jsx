@@ -17,7 +17,7 @@ const EvaluationHeader = ({ stats = {} }) => {
                     <Statistic
                         title="Tổng đánh giá"
                         value={totalEvaluations}
-                        prefix={<FileTextOutlined className="text-blue-600" />}
+                        prefix={<FileTextOutlined className="!text-blue-600" />}
                     />
                 </Card>
             </Col>
@@ -26,7 +26,7 @@ const EvaluationHeader = ({ stats = {} }) => {
                     <Statistic
                         title="Chờ đánh giá"
                         value={pendingEvaluations}
-                        prefix={<CalendarOutlined className="text-yellow-600" />}
+                        prefix={<CalendarOutlined className="!text-yellow-600" />}
                     />
                 </Card>
             </Col>
@@ -35,7 +35,7 @@ const EvaluationHeader = ({ stats = {} }) => {
                     <Statistic
                         title="Đã hoàn thành"
                         value={completedEvaluations}
-                        prefix={<CheckCircleOutlined className="text-green-600" />}
+                        prefix={<CheckCircleOutlined className="!text-green-600" />}
                     />
                 </Card>
             </Col>
@@ -44,9 +44,9 @@ const EvaluationHeader = ({ stats = {} }) => {
                     <Statistic
                         title="Điểm TB"
                         value={averageScore}
-                        suffix="/100"
-                        precision={0}
-                        prefix={<LineChartOutlined className="text-purple-600" />}
+                        suffix="/10"
+                        precision={1}
+                        prefix={<LineChartOutlined className="!text-purple-600" />}
                     />
                 </Card>
             </Col>

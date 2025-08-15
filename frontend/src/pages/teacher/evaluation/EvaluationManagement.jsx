@@ -22,8 +22,7 @@ const EvaluationManagement = () => {
         totalEvaluations: 0,
         pendingEvaluations: 0,
         completedEvaluations: 0,
-        averageScore: 0,
-        evaluationsByType: {}
+        averageScore: 0
     });
 
     // UI state
@@ -42,24 +41,16 @@ const EvaluationManagement = () => {
 
     const calculateTotalScore = (scores) => {
         const {
-            technicalSkills = 0, softSkills = 0, workAttitude = 0, learningAbility = 0,
-            teamwork = 0, communication = 0, problemSolving = 0, creativity = 0,
-            punctuality = 0, responsibility = 0, overallPerformance = 0
+            discipline = 0, knowledge = 0, compliance = 0, communication = 0,
+            protection = 0, initiative = 0, jobRequirements = 0, learning = 0,
+            creativity = 0
         } = scores || {};
-        const weightedTotal = (
-            (technicalSkills * 0.20) +
-            (softSkills * 0.15) +
-            (workAttitude * 0.15) +
-            (learningAbility * 0.10) +
-            (teamwork * 0.10) +
-            (communication * 0.10) +
-            (problemSolving * 0.10) +
-            (creativity * 0.05) +
-            (punctuality * 0.05) +
-            (responsibility * 0.10) +
-            (overallPerformance * 0.10)
+        const total = (
+            discipline + knowledge + compliance + communication +
+            protection + initiative + jobRequirements + learning +
+            creativity
         );
-        return Math.round(weightedTotal);
+        return total;
     };
 
     const loadEvaluationData = useCallback(async () => {
@@ -89,7 +80,6 @@ const EvaluationManagement = () => {
             setEvaluations(
                 evaluationsResponse.data.map(e => ({
                     ...e,
-                    evaluationType: e.isFinalEvaluation ? 'FINAL' : 'MIDTERM',
                     totalScore: e.overallScore || 0,
                     student: e.internship?.student,
                     company: e.internship?.company
@@ -212,44 +202,32 @@ const EvaluationManagement = () => {
                 initialValues={modalMode === 'create' ? {
                     studentId: '',
                     internshipId: '',
-                    evaluationType: 'MIDTERM',
                     semester: '',
                     academicYear: '',
-                    technicalSkills: 0,
-                    softSkills: 0,
-                    workAttitude: 0,
-                    learningAbility: 0,
-                    teamwork: 0,
+                    discipline: 0,
+                    knowledge: 0,
+                    compliance: 0,
                     communication: 0,
-                    problemSolving: 0,
+                    protection: 0,
+                    initiative: 0,
+                    jobRequirements: 0,
+                    learning: 0,
                     creativity: 0,
-                    punctuality: 0,
-                    responsibility: 0,
-                    overallPerformance: 0,
-                    strengths: '',
-                    weaknesses: '',
-                    recommendations: '',
                     comments: ''
                 } : (selectedEvaluation ? {
                     studentId: selectedEvaluation.internship?.student?.id || '',
                     internshipId: selectedEvaluation.internship?.id || '',
-                    evaluationType: selectedEvaluation.isFinalEvaluation ? 'FINAL' : 'MIDTERM',
                     semester: '',
                     academicYear: '',
-                    technicalSkills: selectedEvaluation.technicalScore || 0,
-                    softSkills: selectedEvaluation.softSkillScore || 0,
-                    workAttitude: selectedEvaluation.attitudeScore || 0,
-                    learningAbility: 0,
-                    teamwork: 0,
-                    communication: selectedEvaluation.communicationScore || 0,
-                    problemSolving: 0,
-                    creativity: 0,
-                    punctuality: 0,
-                    responsibility: 0,
-                    overallPerformance: 0,
-                    strengths: selectedEvaluation.strengths || '',
-                    weaknesses: selectedEvaluation.weaknesses || '',
-                    recommendations: selectedEvaluation.recommendations || '',
+                    discipline: selectedEvaluation.discipline || 0,
+                    knowledge: selectedEvaluation.knowledge || 0,
+                    compliance: selectedEvaluation.compliance || 0,
+                    communication: selectedEvaluation.communication || 0,
+                    protection: selectedEvaluation.protection || 0,
+                    initiative: selectedEvaluation.initiative || 0,
+                    jobRequirements: selectedEvaluation.jobRequirements || 0,
+                    learning: selectedEvaluation.learning || 0,
+                    creativity: selectedEvaluation.creativity || 0,
                     comments: selectedEvaluation.comments || ''
                 } : {})}
                 loading={loading}

@@ -93,6 +93,15 @@ const companyService = {
     return response.data;
   },
 
+  // Get all companies (for dropdowns)
+  getAllCompanies: async () => {
+    const response = await axiosClient.get('/companies/all');
+    return {
+      data: response.data.content || response.data || [],
+      total: response.data.totalElements || response.data.length || 0
+    };
+  },
+
   // Get companies by type
   getCompaniesByType: async (type) => {
     const response = await axiosClient.get('/companies/type', {

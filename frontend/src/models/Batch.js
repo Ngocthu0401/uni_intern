@@ -22,28 +22,28 @@ export class Batch {
     batchName = '',
     batchCode = '',
     description = '',
-    
+
     // Academic Information
     academicYear = '',
     semester = Semester.SPRING,
-    
+
     // Timeline
     registrationStartDate = null,
     registrationEndDate = null,
     startDate = null,
     endDate = null,
-    
+
     // Capacity & Enrollment
     maxStudents = 100,
     currentStudentsCount = 0,
-    
+
     // Status - handle both isActive and active from backend
     isActive = true,
     active = null,
-    
+
     // Relations
     internships = [],
-    
+
     // Timestamps
     createdAt = null,
     updatedAt = null
@@ -52,23 +52,23 @@ export class Batch {
     this.batchName = batchName;
     this.batchCode = batchCode;
     this.description = description;
-    
+
     this.academicYear = academicYear;
     this.semester = semester;
-    
+
     this.registrationStartDate = registrationStartDate;
     this.registrationEndDate = registrationEndDate;
     this.startDate = startDate;
     this.endDate = endDate;
-    
+
     this.maxStudents = maxStudents;
     this.currentStudentsCount = currentStudentsCount;
-    
+
     // Handle both isActive and active from backend
     this._isActive = active !== null ? active : isActive;
-    
+
     this.internships = Array.isArray(internships) ? internships : [];
-    
+
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
   }
@@ -197,12 +197,12 @@ export class Batch {
     const now = new Date();
     const regEnd = new Date(this.registrationEndDate);
     const diffTime = regEnd - now;
-    
+
     if (diffTime <= 0) return 'Đã hết hạn';
-    
+
     const days = Math.floor(diffTime / (1000 * 60 * 60 * 24));
     const hours = Math.floor((diffTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    
+
     if (days > 0) return `${days} ngày`;
     return `${hours} giờ`;
   }
@@ -213,14 +213,14 @@ export class Batch {
   }
 
   hasValidDates() {
-    if (!this.registrationStartDate || !this.registrationEndDate || 
-        !this.startDate || !this.endDate) return false;
-    
+    if (!this.registrationStartDate || !this.registrationEndDate ||
+      !this.startDate || !this.endDate) return false;
+
     const regStart = new Date(this.registrationStartDate);
     const regEnd = new Date(this.registrationEndDate);
     const internStart = new Date(this.startDate);
     const internEnd = new Date(this.endDate);
-    
+
     return regStart < regEnd && regEnd <= internStart && internStart < internEnd;
   }
 
@@ -250,8 +250,7 @@ export class Batch {
 // Batch Request Models
 export class CreateBatchRequest {
   constructor({
-    batchName = '',
-    batchCode = '',
+    name = '',
     description = '',
     academicYear = '',
     semester = Semester.SPRING,
@@ -259,10 +258,9 @@ export class CreateBatchRequest {
     registrationEndDate = null,
     startDate = null,
     endDate = null,
-    maxStudents = 100
+    companies = []
   } = {}) {
-    this.batchName = batchName;
-    this.batchCode = batchCode;
+    this.name = name;
     this.description = description;
     this.academicYear = academicYear;
     this.semester = semester;
@@ -270,16 +268,16 @@ export class CreateBatchRequest {
     this.registrationEndDate = registrationEndDate;
     this.startDate = startDate;
     this.endDate = endDate;
-    this.maxStudents = maxStudents;
+    this.companies = companies;
   }
 
   // Alias for compatibility
-  get name() {
-    return this.batchName;
+  get batchName() {
+    return this.name;
   }
 
-  set name(value) {
-    this.batchName = value;
+  set batchName(value) {
+    this.name = value;
   }
 }
 

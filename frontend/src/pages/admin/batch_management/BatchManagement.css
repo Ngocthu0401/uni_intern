@@ -1,0 +1,228 @@
+/* Custom styling for Batch Management components */
+
+/* Modal styling */
+.batch-form-modal .ant-modal-content,
+.batch-detail-modal .ant-modal-content,
+.batch-delete-modal .ant-modal-content,
+.student-detail-modal .ant-modal-content {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.batch-form-modal .ant-modal-header,
+.batch-detail-modal .ant-modal-header,
+.batch-delete-modal .ant-modal-header,
+.student-detail-modal .ant-modal-header {
+  border-bottom: 1px solid #e5e7eb;
+  padding: 20px 24px;
+}
+
+.batch-form-modal .ant-modal-body,
+.batch-detail-modal .ant-modal-body,
+.batch-delete-modal .ant-modal-body,
+.student-detail-modal .ant-modal-body {
+  padding: 24px;
+}
+
+/* Table styling */
+.custom-table .ant-table-thead > tr > th {
+  background-color: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
+  font-weight: 600;
+  color: #374151;
+  padding: 12px 16px;
+}
+
+.custom-table .ant-table-tbody > tr > td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.custom-table .ant-table-tbody > tr:hover > td {
+  background-color: #f9fafb;
+}
+
+/* Card styling */
+.ant-card {
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+.ant-card-head {
+  border-bottom: 1px solid #e5e7eb;
+  padding: 16px 20px;
+}
+
+.ant-card-body {
+  padding: 20px;
+}
+
+/* Form styling */
+.ant-form-item-label > label {
+  font-weight: 500;
+  color: #374151;
+}
+
+.ant-input,
+.ant-select-selector,
+.ant-picker {
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+}
+
+.ant-input:focus,
+.ant-select-focused .ant-select-selector,
+.ant-picker-focused {
+  border-color: #8b5cf6;
+  box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.1);
+}
+
+/* Button styling */
+.ant-btn {
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+.ant-btn-primary {
+  background-color: #8b5cf6;
+  border-color: #8b5cf6;
+}
+
+.ant-btn-primary:hover {
+  background-color: #7c3aed;
+  border-color: #7c3aed;
+}
+
+/* Tag styling */
+.ant-tag {
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+/* Progress bar styling */
+.ant-progress-bg {
+  background-color: #8b5cf6;
+}
+
+/* Pagination styling */
+.custom-pagination .ant-pagination-item {
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+}
+
+.custom-pagination .ant-pagination-item-active {
+  background-color: #8b5cf6;
+  border-color: #8b5cf6;
+}
+
+.custom-pagination .ant-pagination-item-active a {
+  color: white;
+}
+
+.custom-pagination .ant-pagination-prev,
+.custom-pagination .ant-pagination-next {
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+}
+
+/* Descriptions styling */
+.ant-descriptions-bordered .ant-descriptions-item-label {
+  background-color: #f9fafb;
+  font-weight: 500;
+  color: #374151;
+}
+
+.ant-descriptions-bordered .ant-descriptions-item-content {
+  background-color: white;
+}
+
+/* Collapse styling */
+.ant-collapse {
+  border: none;
+  background: transparent;
+}
+
+.ant-collapse-item {
+  border: none;
+  background: transparent;
+}
+
+.ant-collapse-header {
+  padding: 12px 0;
+  font-weight: 500;
+  color: #374151;
+}
+
+.ant-collapse-content {
+  border: none;
+  background: transparent;
+}
+
+.ant-collapse-content-box {
+  padding: 16px 0;
+}
+
+/* Alert styling */
+.ant-alert {
+  border-radius: 8px;
+  border: none;
+}
+
+/* Avatar styling */
+.ant-avatar {
+  border: 2px solid #e5e7eb;
+}
+
+/* Space styling */
+.ant-space {
+  gap: 8px;
+}
+
+/* Divider styling */
+.ant-divider {
+  margin: 16px 0;
+  border-color: #e5e7eb;
+}
+
+/* Empty state styling */
+.ant-empty {
+  padding: 40px 0;
+}
+
+.ant-empty-description {
+  color: #6b7280;
+}
+
+/* Loading state styling */
+.ant-spin-dot-item {
+  background-color: #8b5cf6;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .batch-form-modal .ant-modal-content,
+  .batch-detail-modal .ant-modal-content,
+  .batch-delete-modal .ant-modal-content,
+  .student-detail-modal .ant-modal-content {
+    margin: 16px;
+    border-radius: 8px;
+  }
+
+  .batch-form-modal .ant-modal-body,
+  .batch-detail-modal .ant-modal-body,
+  .batch-delete-modal .ant-modal-body,
+  .student-detail-modal .ant-modal-body {
+    padding: 16px;
+  }
+
+  .ant-card-body {
+    padding: 16px;
+  }
+
+  .custom-table .ant-table-thead > tr > th,
+  .custom-table .ant-table-tbody > tr > td {
+    padding: 8px 12px;
+  }
+}
+
+/* Light theme only - removed dark mode support */

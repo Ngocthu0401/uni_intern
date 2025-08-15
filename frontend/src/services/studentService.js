@@ -97,6 +97,15 @@ const studentService = {
     return response.data;
   },
 
+  // Get students by batch
+  getStudentsByBatch: async (batchId) => {
+    const response = await axiosClient.get(`/students/batch/${batchId}`);
+    return {
+      data: response.data.content || response.data || [],
+      total: response.data.totalElements || response.data.length || 0
+    };
+  },
+
   // Get student statistics
   getStudentStatistics: async () => {
     const response = await axiosClient.get('/students/statistics');
