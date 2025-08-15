@@ -420,6 +420,25 @@ public class StudentService {
                 .collect(Collectors.toList());
     }
 
+    public List<StudentWithInternshipsDto> getStudentsByBatch(Long batchId) {
+        // Get students through internships in the specified batch
+        List<Internship> internships = internshipRepository.findByInternshipBatchId(batchId);
+
+        // Group internships by student
+        Map<Student, List<Internship>> studentInternshipsMap = internships.stream()
+                .filter(internship -> internship.getStudent() != null)
+                .collect(Collectors.groupingBy(Internship::getStudent));
+
+        // Create DTO list with internships attached
+        return studentInternshipsMap.entrySet().stream()
+                .map(entry -> {
+                    Student student = entry.getKey();
+                    List<Internship> studentInternships = entry.getValue();
+                    return createStudentDto(student, studentInternships);
+                })
+                .collect(Collectors.toList());
+    }
+
     private StudentWithInternshipsDto createStudentDto(Student student, List<Internship> studentInternships) {
         StudentWithInternshipsDto dto = new StudentWithInternshipsDto();
         dto.setId(student.getId());

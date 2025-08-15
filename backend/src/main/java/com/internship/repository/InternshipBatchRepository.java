@@ -14,25 +14,52 @@ import java.util.Optional;
 
 @Repository
 public interface InternshipBatchRepository extends JpaRepository<InternshipBatch, Long> {
-    
-    Optional<InternshipBatch> findByBatchCode(String batchCode);
-    
-    boolean existsByBatchCode(String batchCode);
-    
-    List<InternshipBatch> findByIsActive(Boolean isActive);
-    
-    @Query("SELECT ib FROM InternshipBatch ib WHERE " +
-           "ib.registrationStartDate <= :currentDate AND ib.registrationEndDate >= :currentDate AND ib.isActive = true")
-    List<InternshipBatch> findActiveRegistrationBatches(@Param("currentDate") LocalDate currentDate);
-    
-    @Query("SELECT ib FROM InternshipBatch ib WHERE " +
-           "ib.startDate <= :currentDate AND ib.endDate >= :currentDate AND ib.isActive = true")
-    List<InternshipBatch> findOngoingBatches(@Param("currentDate") LocalDate currentDate);
-    
-    @Query("SELECT ib FROM InternshipBatch ib WHERE " +
-           "LOWER(ib.batchName) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
-           "LOWER(ib.batchCode) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
-           "LOWER(ib.semester) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
-           "LOWER(ib.academicYear) LIKE LOWER(CONCAT('%', :keyword, '%'))")
-    Page<InternshipBatch> searchBatches(@Param("keyword") String keyword, Pageable pageable);
-} 
+
+       Optional<InternshipBatch> findByBatchCode(String batchCode);
+
+       boolean existsByBatchCode(String batchCode);
+
+       List<InternshipBatch> findByIsActive(Boolean isActive);
+
+       @Query("SELECT ib FROM InternshipBatch ib WHERE " +
+                     "ib.registrationStartDate <= :currentDate AND ib.registrationEndDate >= :currentDate AND ib.isActive = true")
+       List<InternshipBatch> findActiveRegistrationBatches(@Param("currentDate") LocalDate currentDate);
+
+       @Query("SELECT ib FROM InternshipBatch ib WHERE " +
+                     "ib.startDate <= :currentDate AND ib.endDate >= :currentDate AND ib.isActive = true")
+       List<InternshipBatch> findOngoingBatches(@Param("currentDate") LocalDate currentDate);
+
+       @Query("SELECT ib FROM InternshipBatch ib WHERE " +
+                     "LOWER(ib.batchName) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+                     "LOWER(ib.batchCode) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+                     "LOWER(ib.semester) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+                     "LOWER(ib.academicYear) LIKE LOWER(CONCAT('%', :keyword, '%'))")
+       Page<InternshipBatch> searchBatches(@Param("keyword") String keyword, Pageable pageable);
+
+       // Tìm kiếm theo company
+       List<InternshipBatch> findByCompanyId(Long companyId);
+
+       List<InternshipBatch> findByCompanyIdAndIsActive(Long companyId, Boolean isActive);
+
+       @Query("SELECT ib FROM InternshipBatch ib WHERE ib.company.id = :companyId AND " +
+                     "ib.registrationStartDate <= :currentDate AND ib.registrationEndDate >= :currentDate AND ib.isActive = true")
+       List<InternshipBatch> findActiveRegistrationBatchesByCompany(@Param("companyId") Long companyId,
+                     @Param("currentDate") LocalDate currentDate);
+
+       @Query("SELECT ib FROM InternshipBatch ib WHERE ib.company.id = :companyId AND " +
+                     "ib.startDate <= :currentDate AND ib.endDate >= :currentDate AND ib.isActive = true")
+       List<InternshipBatch> findOngoingBatchesByCompany(@Param("companyId") Long companyId,
+                     @Param("currentDate") LocalDate currentDate);
+
+       // Tìm kiếm nâng cao với company
+       @Query("SELECT ib FROM InternshipBatch ib WHERE " +
+                     "(:companyId IS NULL OR ib.company.id = :companyId) AND " +
+                     "(:isActive IS NULL OR ib.isActive = :isActive) AND " +
+                     "(:semester IS NULL OR ib.semester = :semester) AND " +
+                     "(:academicYear IS NULL OR ib.academicYear = :academicYear)")
+       Page<InternshipBatch> findBatchesWithFilters(@Param("companyId") Long companyId,
+                     @Param("isActive") Boolean isActive,
+                     @Param("semester") String semester,
+                     @Param("academicYear") String academicYear,
+                     Pageable pageable);
+}

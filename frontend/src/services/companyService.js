@@ -95,7 +95,7 @@ const companyService = {
 
   // Get all companies (for dropdowns)
   getAllCompanies: async () => {
-    const response = await axiosClient.get('/companies/all');
+    const response = await axiosClient.get('/companies/status/true');
     return {
       data: response.data.content || response.data || [],
       total: response.data.totalElements || response.data.length || 0

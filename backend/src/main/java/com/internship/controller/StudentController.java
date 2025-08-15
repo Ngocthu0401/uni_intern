@@ -251,4 +251,15 @@ public class StudentController {
             return ResponseEntity.badRequest().build();
         }
     }
+
+    @GetMapping("/batch/{batchId}")
+    @PreAuthorize("hasRole('DEPARTMENT') or hasRole('TEACHER')")
+    public ResponseEntity<List<StudentWithInternshipsDto>> getStudentsByBatch(@PathVariable Long batchId) {
+        try {
+            List<StudentWithInternshipsDto> students = studentService.getStudentsByBatch(batchId);
+            return ResponseEntity.ok(students);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
 }

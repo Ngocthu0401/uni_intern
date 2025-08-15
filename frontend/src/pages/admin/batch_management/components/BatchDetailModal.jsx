@@ -1,14 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Card, Descriptions, Tag, Table, Button, Space, Avatar, Divider, Spin, Empty } from 'antd';
-import {
-    EyeOutlined,
-    UserOutlined,
-    CalendarOutlined,
-    TeamOutlined,
-    BankOutlined,
-    ClockCircleOutlined,
-    FileTextOutlined
-} from '@ant-design/icons';
+import { EyeOutlined, UserOutlined, CalendarOutlined, TeamOutlined, BankOutlined, ClockCircleOutlined, FileTextOutlined } from '@ant-design/icons';
 import { studentService } from '../../../../services';
 import StudentDetailModal from './StudentDetailModal';
 
@@ -18,11 +10,6 @@ const BatchDetailModal = ({ batch, visible, onClose }) => {
     const [selectedStudent, setSelectedStudent] = useState(null);
     const [studentDetailVisible, setStudentDetailVisible] = useState(false);
 
-    useEffect(() => {
-        if (visible && batch) {
-            loadStudents();
-        }
-    }, [visible, batch]);
 
     const loadStudents = async () => {
         if (!batch) return;
@@ -30,7 +17,7 @@ const BatchDetailModal = ({ batch, visible, onClose }) => {
         try {
             setLoadingStudents(true);
             const response = await studentService.getStudentsByBatch(batch.id);
-            setStudents(response.data || []);
+            setStudents(response || []);
         } catch (error) {
             console.error('Error loading students:', error);
             setStudents([]);
@@ -55,7 +42,7 @@ const BatchDetailModal = ({ batch, visible, onClose }) => {
     const getStatusText = (status) => {
         switch (status) {
             case 'ACTIVE':
-                return 'Đang thực tập';
+                return 'Hoạt động';
             case 'PENDING':
                 return 'Chờ xác nhận';
             case 'COMPLETED':
@@ -73,8 +60,8 @@ const BatchDetailModal = ({ batch, visible, onClose }) => {
                 <Space>
                     <Avatar icon={<UserOutlined />} className="bg-blue-500" />
                     <div>
-                        <div className="font-medium text-gray-900">{record.fullName}</div>
-                        <div className="text-sm text-gray-500">{record.email}</div>
+                        <div className="font-medium text-gray-900">{record?.user?.fullName}</div>
+                        <div className="text-sm text-gray-500">{record?.user?.email}</div>
                     </div>
                 </Space>
             ),
@@ -83,26 +70,26 @@ const BatchDetailModal = ({ batch, visible, onClose }) => {
             title: 'Mã sinh viên',
             dataIndex: 'studentCode',
             key: 'studentCode',
-            className: 'text-gray-700',
+            className: '!text-gray-700',
         },
         {
             title: 'Lớp',
             dataIndex: 'className',
             key: 'className',
-            className: 'text-gray-700',
+            className: '!text-gray-700',
         },
-        {
-            title: 'Công ty',
-            key: 'company',
-            render: (_, record) => (
-                <Space>
-                    <BankOutlined className="text-gray-400" />
-                    <span className="text-gray-700">
-                        {record.companyName || 'Chưa phân công'}
-                    </span>
-                </Space>
-            ),
-        },
+        // {
+        //     title: 'Công ty',
+        //     key: 'company',
+        //     render: (_, record) => (
+        //         <Space>
+        //             <BankOutlined className="!text-gray-400" />
+        //             <span className="!text-gray-700">
+        //                 {record?.internships?.map(item => item?.company?.companyName).join(', ') || 'Chưa phân công'}
+        //             </span>
+        //         </Space>
+        //     ),
+        // },
         {
             title: 'Trạng thái',
             key: 'status',
@@ -131,46 +118,57 @@ const BatchDetailModal = ({ batch, visible, onClose }) => {
         },
     ];
 
+    useEffect(() => {
+        if (visible && batch) {
+            loadStudents();
+        }
+    }, [visible, batch]);
+
+
+    console.log('students', students);
+
     if (!visible || !batch) return null;
+
+
 
     return (
         <>
             <Modal
                 title={
-                    <div className="flex items-center space-x-2">
-                        <FileTextOutlined className="text-purple-600" />
-                        <span className="text-lg font-semibold">Chi tiết Đợt thực tập</span>
+                    <div className="!flex !items-center !space-x-2">
+                        <FileTextOutlined className="!text-purple-600" />
+                        <span className="!text-lg !font-semibold">Chi tiết Đợt thực tập</span>
                     </div>
                 }
                 open={visible}
                 onCancel={onClose}
                 footer={[
-                    <Button key="close" onClick={onClose} className="rounded-lg">
+                    <Button key="close" onClick={onClose} className="!rounded-lg">
                         Đóng
                     </Button>
                 ]}
                 width={1000}
-                className="batch-detail-modal"
+                className="!batch-detail-modal"
                 destroyOnClose
             >
-                <div className="space-y-6">
+                <div className="!space-y-6">
                     {/* Basic Information */}
                     <Card
                         title={
-                            <div className="flex items-center space-x-2">
-                                <CalendarOutlined className="text-blue-600" />
-                                <span>Thông tin đợt thực tập</span>
+                            <div className="!flex !items-center !space-x-2">
+                                <CalendarOutlined className="!text-blue-600" />
+                                <span className="!text-lg !font-semibold">Thông tin đợt thực tập</span>
                             </div>
                         }
-                        className="shadow-sm border-gray-200"
+                        className="!shadow-sm !border-gray-200"
                         size="small"
                     >
-                        <Descriptions column={2} bordered size="small">
+                        <Descriptions column={2} bordered size="small" className="!border-gray-200">
                             <Descriptions.Item label="Tên đợt thực tập" span={2}>
-                                <span className="font-medium text-gray-900">{batch.name}</span>
+                                <span className="!font-medium !text-gray-900">{batch.name}</span>
                             </Descriptions.Item>
                             <Descriptions.Item label="Mã đợt thực tập">
-                                <span className="font-mono text-gray-700">{batch.batchCode}</span>
+                                <span className="!font-mono !text-gray-700">{batch.batchCode}</span>
                             </Descriptions.Item>
                             <Descriptions.Item label="Trạng thái">
                                 <Tag color={batch.isActive() ? 'green' : 'orange'}>
@@ -178,23 +176,23 @@ const BatchDetailModal = ({ batch, visible, onClose }) => {
                                 </Tag>
                             </Descriptions.Item>
                             <Descriptions.Item label="Học kỳ">
-                                <span className="text-gray-700">{batch.getSemesterLabel()}</span>
+                                <span className="!text-gray-700">{batch.getSemesterLabel()}</span>
                             </Descriptions.Item>
                             <Descriptions.Item label="Năm học">
-                                <span className="text-gray-700">{batch.academicYear}</span>
+                                <span className="!text-gray-700">{batch.academicYear}</span>
                             </Descriptions.Item>
                             <Descriptions.Item label="Số lượng sinh viên">
                                 <Space>
-                                    <TeamOutlined className="text-gray-400" />
-                                    <span className="text-gray-700">
+                                    <TeamOutlined className="!text-gray-400" />
+                                    <span className="!text-gray-700">
                                         {batch.currentStudents}/{batch.maxStudents} sinh viên
                                     </span>
                                 </Space>
                             </Descriptions.Item>
                             <Descriptions.Item label="Thời lượng">
                                 <Space>
-                                    <ClockCircleOutlined className="text-gray-400" />
-                                    <span className="text-gray-700">
+                                    <ClockCircleOutlined className="!text-gray-400" />
+                                    <span className="!text-gray-700">
                                         {batch.getDurationInWeeks()} tuần
                                     </span>
                                 </Space>
@@ -205,19 +203,19 @@ const BatchDetailModal = ({ batch, visible, onClose }) => {
                     {/* Timeline Information */}
                     <Card
                         title={
-                            <div className="flex items-center space-x-2">
-                                <ClockCircleOutlined className="text-green-600" />
-                                <span>Thời gian</span>
+                            <div className="!flex !items-center !space-x-2">
+                                <ClockCircleOutlined className="!text-green-600" />
+                                <span className="!text-lg !font-semibold">Thời gian</span>
                             </div>
                         }
-                        className="shadow-sm border-gray-200"
+                        className="!shadow-sm !border-gray-200"
                         size="small"
                     >
-                        <Descriptions column={2} bordered size="small">
+                        <Descriptions column={2} bordered size="small" className="!border-gray-200">
                             <Descriptions.Item label="Thời gian đăng ký" span={2}>
                                 <Space>
-                                    <CalendarOutlined className="text-gray-400" />
-                                    <span className="text-gray-700">
+                                    <CalendarOutlined className="!text-gray-400" />
+                                    <span className="!text-gray-700">
                                         {batch.getFormattedRegistrationStartDate()} - {batch.getFormattedRegistrationEndDate()}
                                     </span>
                                     <Tag color={batch.isRegistrationOpen() ? 'green' : 'red'}>
@@ -227,8 +225,8 @@ const BatchDetailModal = ({ batch, visible, onClose }) => {
                             </Descriptions.Item>
                             <Descriptions.Item label="Thời gian thực tập" span={2}>
                                 <Space>
-                                    <CalendarOutlined className="text-gray-400" />
-                                    <span className="text-gray-700">
+                                    <CalendarOutlined className="!text-gray-400" />
+                                    <span className="!text-gray-700">
                                         {batch.getFormattedInternshipStartDate()} - {batch.getFormattedInternshipEndDate()}
                                     </span>
                                 </Space>
@@ -240,41 +238,41 @@ const BatchDetailModal = ({ batch, visible, onClose }) => {
                     {batch.description && (
                         <Card
                             title={
-                                <div className="flex items-center space-x-2">
-                                    <FileTextOutlined className="text-purple-600" />
-                                    <span>Mô tả</span>
+                                <div className="!flex !items-center !space-x-2">
+                                    <FileTextOutlined className="!text-purple-600" />
+                                    <span className="!text-lg !font-semibold">Mô tả</span>
                                 </div>
                             }
-                            className="shadow-sm border-gray-200"
+                            className="!shadow-sm !border-gray-200"
                             size="small"
                         >
-                            <p className="text-gray-700 leading-relaxed">{batch.description}</p>
+                            <p className="!text-gray-700 !leading-relaxed">{batch.description}</p>
                         </Card>
                     )}
 
                     {/* Students List */}
                     <Card
                         title={
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-center space-x-2">
-                                    <TeamOutlined className="text-blue-600" />
-                                    <span>Danh sách sinh viên đăng ký</span>
+                            <div className="!flex !items-center !justify-between">
+                                <div className="!flex !items-center !space-x-2">
+                                    <TeamOutlined className="!text-blue-600" />
+                                    <span className="!text-lg !font-semibold">Danh sách sinh viên đăng ký</span>
                                 </div>
                                 <Tag color="blue">{students.length} sinh viên</Tag>
                             </div>
                         }
-                        className="shadow-sm border-gray-200"
+                        className="!shadow-sm !border-gray-200"
                         size="small"
                     >
                         {loadingStudents ? (
-                            <div className="text-center py-8">
+                            <div className="!text-center !py-8">
                                 <Spin size="large" />
-                                <p className="mt-2 text-gray-500">Đang tải danh sách sinh viên...</p>
+                                <p className="!mt-2 !text-gray-500">Đang tải danh sách sinh viên...</p>
                             </div>
                         ) : students.length === 0 ? (
                             <Empty
                                 description="Chưa có sinh viên nào đăng ký đợt thực tập này"
-                                className="py-8"
+                                className="!py-8"
                             />
                         ) : (
                             <Table

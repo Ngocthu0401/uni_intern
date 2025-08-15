@@ -147,4 +147,34 @@ public class InternshipBatchService {
     public long getActiveBatchCount() {
         return batchRepository.findByIsActive(true).size();
     }
+    
+    // Methods for company-based operations
+    public List<InternshipBatch> getBatchesByCompanyId(Long companyId) {
+        return batchRepository.findByCompanyId(companyId);
+    }
+    
+    public List<InternshipBatch> getActiveBatchesByCompanyId(Long companyId) {
+        return batchRepository.findByCompanyIdAndIsActive(companyId, true);
+    }
+    
+    public List<InternshipBatch> getActiveRegistrationBatchesByCompany(Long companyId) {
+        return batchRepository.findActiveRegistrationBatchesByCompany(companyId, LocalDate.now());
+    }
+    
+    public List<InternshipBatch> getOngoingBatchesByCompany(Long companyId) {
+        return batchRepository.findOngoingBatchesByCompany(companyId, LocalDate.now());
+    }
+    
+    public Page<InternshipBatch> getBatchesWithFilters(Long companyId, Boolean isActive, 
+                                                      String semester, String academicYear, Pageable pageable) {
+        return batchRepository.findBatchesWithFilters(companyId, isActive, semester, academicYear, pageable);
+    }
+    
+    public long getBatchCountByCompany(Long companyId) {
+        return batchRepository.findByCompanyId(companyId).size();
+    }
+    
+    public long getActiveBatchCountByCompany(Long companyId) {
+        return batchRepository.findByCompanyIdAndIsActive(companyId, true).size();
+    }
 } 
