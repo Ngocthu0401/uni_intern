@@ -28,7 +28,7 @@ import EvaluationManagement from '../pages/teacher/evaluation/EvaluationManageme
 // import PaymentManagement from '../pages/admin/payment/PaymentManagement';
 import StatisticsPage from '../pages/teacher/StatisticsPage';
 import MentorDashboardPage from '../pages/mentor/MentorDashboardPage';
-import StudentEvaluationPage from '../pages/mentor/StudentEvaluationPage';
+import StudentEvaluationPage from '../pages/mentor/student_evaluation/StudentEvaluationPage';
 import StudentDetailPage from '../pages/mentor/StudentDetailPage';
 import MentorReportsPage from '../pages/mentor/ReportsPage';
 import InternshipTracking from '../pages/mentor/InternshipTracking';

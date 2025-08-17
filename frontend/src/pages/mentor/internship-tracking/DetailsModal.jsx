@@ -108,7 +108,7 @@ const DetailsModal = ({
             </div>
 
             <div className="flex justify-end gap-2 mt-6">
-                <Button onClick={onOpenEdit} type="primary">Chỉnh sửa</Button>
+                {/* <Button onClick={onOpenEdit} type="primary">Chỉnh sửa</Button> */}
                 <Button onClick={onClose}>Đóng</Button>
             </div>
         </Modal>
