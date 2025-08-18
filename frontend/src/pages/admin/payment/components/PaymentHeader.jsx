@@ -4,19 +4,13 @@ import { DollarOutlined, ReloadOutlined } from '@ant-design/icons';
 
 const { Title, Text } = Typography;
 
-/**
- * PaymentHeader component
- * @param {Object} props
- * @param {Function} props.onReload - Function to reload data
- * @param {boolean} [props.loading=false] - Loading state
- */
 const PaymentHeader = ({ onReload, loading = false }) => {
     return (
-        <div className="mb-8">
-            <div className="flex justify-between items-center">
+        <div className="!mb-8">
+            <div className="!flex !justify-between !items-center">
                 <div>
                     <Title level={2} className="!mb-2">
-                        <DollarOutlined className="text-blue-500 mr-3" />
+                        <DollarOutlined className="!text-blue-500 !mr-3" />
                         Quản lý Thanh toán
                     </Title>
                     <Text type="secondary">
@@ -27,6 +21,8 @@ const PaymentHeader = ({ onReload, loading = false }) => {
                     icon={<ReloadOutlined />}
                     onClick={onReload}
                     loading={loading}
+                    variant="outlined"
+                    color="primary"
                 >
                     Tải lại
                 </Button>

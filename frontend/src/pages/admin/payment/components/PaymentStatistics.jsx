@@ -1,27 +1,16 @@
 import React from 'react';
 import { Row, Col, Card, Statistic } from 'antd';
-import {
-    BankOutlined,
-    TeamOutlined,
-    DollarOutlined,
-    CalculatorOutlined
-} from '@ant-design/icons';
+import { BankOutlined, TeamOutlined, DollarOutlined, CalculatorOutlined } from '@ant-design/icons';
 import { formatCurrency } from '../utils/formatters';
 
-/**
- * PaymentStatistics component
- * @param {Object} props
- * @param {Array} props.paymentData - Payment data grouped by company
- * @param {number} props.totalAmount - Total payment amount
- * @param {number} props.totalStudents - Total number of students
- */
+
 const PaymentStatistics = ({ paymentData, totalAmount, totalStudents }) => {
     const averageAmount = paymentData.length > 0
         ? Math.round(totalAmount / paymentData.length)
         : 0;
 
     return (
-        <Row gutter={16} className="mb-6">
+        <Row gutter={16} className="!mb-6">
             <Col span={6}>
                 <Card>
                     <Statistic

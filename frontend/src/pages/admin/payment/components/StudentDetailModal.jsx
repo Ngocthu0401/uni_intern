@@ -18,13 +18,13 @@ const StudentDetailModal = ({ visible, internship, onClose }) => {
             dataIndex: 'user',
             key: 'user',
             render: (user) => (
-                <div className="flex items-center">
-                    <Avatar size="small" className="mr-2">
+                <div className="!flex !items-center">
+                    <Avatar size="small" className="!mr-2">
                         {user?.fullName?.charAt(0) || 'S'}
                     </Avatar>
                     <div>
-                        <div className="font-medium">{user?.fullName}</div>
-                        <div className="text-sm text-gray-500">{user?.email}</div>
+                        <div className="!font-medium">{user?.fullName}</div>
+                        <div className="!text-sm !text-gray-500">{user?.email}</div>
                     </div>
                 </div>
             ),
@@ -50,8 +50,8 @@ const StudentDetailModal = ({ visible, internship, onClose }) => {
     return (
         <Modal
             title={
-                <div className="flex items-center">
-                    <TeamOutlined className="mr-2" />
+                <div className="!flex !items-center">
+                    <TeamOutlined className="!mr-2" />
                     Danh sách sinh viên - {internship?.companyName}
                 </div>
             }
@@ -62,7 +62,7 @@ const StudentDetailModal = ({ visible, internship, onClose }) => {
         >
             {internship && (
                 <div>
-                    <div className="mb-4 p-4 bg-blue-50 rounded-lg">
+                    <div className="!mb-4 !p-4 !bg-blue-50 !rounded-lg">
                         <Row gutter={16}>
                             <Col span={12}>
                                 <Text strong>Đơn vị thực tập:</Text>
@@ -73,14 +73,14 @@ const StudentDetailModal = ({ visible, internship, onClose }) => {
                                 <div>{internship.teacher?.user?.fullName || 'Chưa phân công'}</div>
                             </Col>
                         </Row>
-                        <Row gutter={16} className="mt-2">
+                        <Row gutter={16} className="!mt-2">
                             <Col span={12}>
                                 <Text strong>Mentor:</Text>
                                 <div>{internship.mentor?.user?.fullName || 'Chưa phân công'}</div>
                             </Col>
                             <Col span={12}>
                                 <Text strong>Tổng sinh viên:</Text>
-                                <div className="font-bold text-blue-600">{internship.students?.length || 0}</div>
+                                <div className="!font-bold !text-blue-600">{internship.students?.length || 0}</div>
                             </Col>
                         </Row>
                     </div>

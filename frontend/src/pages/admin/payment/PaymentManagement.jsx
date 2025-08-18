@@ -1,13 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Spin, message } from 'antd';
 import { batchService, internshipService } from '../../../services';
-import {
-  PaymentHeader,
-  BatchSelection,
-  PaymentStatistics,
-  PaymentTable,
-  StudentDetailModal
-} from './components';
+import { PaymentHeader, BatchSelection, PaymentStatistics, PaymentTable, StudentDetailModal } from './components';
 
 const PaymentManagement = () => {
   const [loading, setLoading] = useState(false);
@@ -16,7 +10,7 @@ const PaymentManagement = () => {
   const [paymentData, setPaymentData] = useState([]);
   const [showStudentModal, setShowStudentModal] = useState(false);
   const [selectedInternship, setSelectedInternship] = useState(null);
-  const [unitPrice, setUnitPrice] = useState(500000);
+  const unitPrice = 280000;
 
   useEffect(() => {
     loadBatches();
@@ -91,17 +85,6 @@ const PaymentManagement = () => {
     setSelectedBatch(batchId);
   };
 
-  const handleUnitPriceChange = (value) => {
-    setUnitPrice(value);
-    if (paymentData.length > 0) {
-      const updatedPaymentData = paymentData.map(company => ({
-        ...company,
-        totalAmount: company.students.length * value
-      }));
-      setPaymentData(updatedPaymentData);
-    }
-  };
-
   const handleViewStudents = (internship) => {
     setSelectedInternship(internship);
     setShowStudentModal(true);
@@ -122,15 +105,15 @@ const PaymentManagement = () => {
 
   if (loading && !batches.length) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="!min-h-screen !bg-gray-50 !flex !items-center !justify-center">
         <Spin size="large" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="!min-h-screen !bg-gray-50 !py-8">
+      <div className="!max-w-7xl !mx-auto !px-4 !sm:!px-6 !lg:!px-8">
         <PaymentHeader
           onReload={loadBatches}
           loading={loading}
@@ -139,9 +122,7 @@ const PaymentManagement = () => {
         <BatchSelection
           batches={batches}
           selectedBatch={selectedBatch}
-          unitPrice={unitPrice}
           onBatchChange={handleBatchChange}
-          onUnitPriceChange={handleUnitPriceChange}
           loading={loading}
         />
 
