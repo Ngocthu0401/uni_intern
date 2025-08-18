@@ -1,63 +1,50 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Form, Input, Select, DatePicker, InputNumber, Button, Space, Tabs, Descriptions, Tag, Avatar, Divider, message, Spin, Row, Col } from 'antd';
-import {
-    SaveOutlined,
-    CloseOutlined,
-    CheckCircleOutlined,
-    CloseCircleOutlined,
-    UserOutlined,
-    BookOutlined,
-    DollarOutlined,
-    CalendarOutlined,
-    FileTextOutlined
-} from '@ant-design/icons';
-import {
-    internshipService,
-    companyService,
-    studentService,
-    teacherService,
-    mentorService,
-    batchService
-} from '../../../../services';
+import { Modal, Form, Input, Select, DatePicker, InputNumber, Button, Space, Tabs, Descriptions, Tag, Avatar, Divider, message, Spin, Row, Col, Card, Typography, Alert } from 'antd';
+import { SaveOutlined, CloseOutlined, CheckCircleOutlined, CloseCircleOutlined, UserOutlined, BookOutlined, DollarOutlined, CalendarOutlined, FileTextOutlined, TeamOutlined, BankOutlined, ClockCircleOutlined, TagOutlined, InfoCircleOutlined, EditOutlined, GiftOutlined } from '@ant-design/icons';
+import { internshipService, companyService, studentService, teacherService, mentorService, batchService } from '../../../../services';
 import dayjs from 'dayjs';
 import './InternshipModal.css';
 
 const { TextArea } = Input;
 const { RangePicker } = DatePicker;
 const { TabPane } = Tabs;
+const { Title, Text } = Typography;
 
 const InternshipModal = ({ visible, mode, internship, onClose, onSuccess }) => {
+
     const [form] = Form.useForm();
     const [loading, setLoading] = useState(false);
     const [assignmentData, setAssignmentData] = useState({
-        companyId: '',
         studentId: '',
-        mentorId: '',
-        teacherId: ''
+        mentorId: ''
     });
-    const [companies, setCompanies] = useState([]);
     const [students, setStudents] = useState([]);
-    const [mentors, setMentors] = useState([]);
-    const [teachers, setTeachers] = useState([]);
     const [availableMentors, setAvailableMentors] = useState([]);
     const [activeBatches, setActiveBatches] = useState([]);
 
-    console.log('activeBatches: ', activeBatches);
 
     // Load data for assignment
     const loadAssignmentData = async () => {
         try {
-            const [companyResponse, studentResponse, mentorResponse, teacherResponse] = await Promise.all([
-                companyService.getActiveCompanies(),
+            const [studentResponse, mentorResponse] = await Promise.all([
                 studentService.getAvailableStudents(),
-                mentorService.getMentors(),
-                teacherService.getTeachers()
+                mentorService.getMentors()
             ]);
 
-            setCompanies(companyResponse.data || companyResponse || []);
-            setStudents(studentResponse.data || studentResponse || []);
-            setMentors(mentorResponse.data || mentorResponse || []);
-            setTeachers(teacherResponse.data || teacherResponse || []);
+            // Handle different response structures
+            const studentsData = studentResponse?.data || studentResponse || [];
+            const mentorsData = mentorResponse?.data || mentorResponse?.content || [];
+
+            setStudents(studentsData);
+
+            // If internship has a company, load mentors for that company
+            if (internship?.company?.id !== null) {
+                const mentorsForCompany = mentorsData?.filter(mentor => mentor?.company?.id === internship.company.id);
+
+                setAvailableMentors(mentorsForCompany);
+            } else {
+                setAvailableMentors([]);
+            }
         } catch (error) {
             console.error('Error loading assignment data:', error);
             message.error('Không thể tải dữ liệu phân công');
@@ -73,27 +60,6 @@ const InternshipModal = ({ visible, mode, internship, onClose, onSuccess }) => {
             console.error('Error loading active batches:', error);
             message.error('Không thể tải danh sách đợt thực tập');
         }
-    };
-
-    // Load mentors for selected company
-    const loadMentorsForCompany = async (companyId) => {
-        if (!companyId) {
-            setAvailableMentors([]);
-            return;
-        }
-
-        try {
-            const mentorsForCompany = mentors?.content?.filter(mentor => mentor?.company?.id === companyId);
-            setAvailableMentors(mentorsForCompany);
-        } catch (error) {
-            console.error('Error loading mentors for company:', error);
-        }
-    };
-
-    // Handle company selection
-    const handleCompanyChange = (companyId) => {
-        setAssignmentData(prev => ({ ...prev, companyId, mentorId: '' }));
-        loadMentorsForCompany(companyId);
     };
 
     // Modal title based on mode
@@ -203,16 +169,11 @@ const InternshipModal = ({ visible, mode, internship, onClose, onSuccess }) => {
             setLoading(true);
 
             const cleanAssignmentData = {
-                companyId: assignmentData.companyId,
                 studentId: assignmentData.studentId
             };
 
             if (assignmentData.mentorId) {
                 cleanAssignmentData.mentorId = assignmentData.mentorId;
-            }
-
-            if (assignmentData.teacherId) {
-                cleanAssignmentData.teacherId = assignmentData.teacherId;
             }
 
             await internshipService.assignInternship(internship.id, cleanAssignmentData);
@@ -232,10 +193,8 @@ const InternshipModal = ({ visible, mode, internship, onClose, onSuccess }) => {
             loadAssignmentData();
             if (internship) {
                 setAssignmentData({
-                    companyId: internship.company?.id || '',
                     studentId: internship.student?.id || '',
-                    mentorId: internship.mentor?.id || '',
-                    teacherId: internship.teacher?.id || ''
+                    mentorId: internship.mentor?.id || ''
                 });
             }
         } else if (visible && (mode === 'create' || mode === 'edit')) {
@@ -273,25 +232,40 @@ const InternshipModal = ({ visible, mode, internship, onClose, onSuccess }) => {
 
             case 'delete':
                 return (
-                    <div className="!text-center">
-                        <p className="!mb-4">
+                    <div className="text-center py-6">
+                        <CloseCircleOutlined className="text-6xl text-red-500 mb-4" />
+                        <Title level={4} className="mb-4">
+                            Xác nhận xóa thực tập
+                        </Title>
+                        <Text className="text-gray-600 mb-4 block">
                             Bạn có chắc chắn muốn xóa thực tập{' '}
-                            <span className="!font-semibold">{internship?.jobTitle}</span>?
-                        </p>
-                        <p className="!text-red-500 !text-sm">
-                            Hành động này không thể hoàn tác.
-                        </p>
+                            <Text strong className="text-blue-600">{internship?.jobTitle}</Text>?
+                        </Text>
+                        <Alert
+                            message="Hành động này không thể hoàn tác"
+                            type="warning"
+                            showIcon
+                            className="max-w-md mx-auto"
+                        />
                     </div>
                 );
 
             case 'approve':
             case 'reject':
                 return (
-                    <div className="text-center">
-                        <p className="mb-4">
+                    <div className="text-center py-6">
+                        {mode === 'approve' ? (
+                            <CheckCircleOutlined className="text-6xl text-green-500 mb-4" />
+                        ) : (
+                            <CloseCircleOutlined className="text-6xl text-red-500 mb-4" />
+                        )}
+                        <Title level={4} className="mb-4">
+                            {mode === 'approve' ? 'Phê duyệt' : 'Từ chối'} thực tập
+                        </Title>
+                        <Text className="text-gray-600">
                             Bạn có chắc chắn muốn {mode === 'approve' ? 'phê duyệt' : 'từ chối'} thực tập{' '}
-                            <span className="font-semibold">{internship?.jobTitle}</span>?
-                        </p>
+                            <Text strong className="text-blue-600">{internship?.jobTitle}</Text>?
+                        </Text>
                     </div>
                 );
 
@@ -299,11 +273,8 @@ const InternshipModal = ({ visible, mode, internship, onClose, onSuccess }) => {
                 return <AssignmentForm
                     assignmentData={assignmentData}
                     setAssignmentData={setAssignmentData}
-                    companies={companies?.content}
                     students={students}
                     availableMentors={availableMentors}
-                    teachers={teachers?.content}
-                    onCompanyChange={handleCompanyChange}
                     internship={internship}
                 />;
 
@@ -317,7 +288,7 @@ const InternshipModal = ({ visible, mode, internship, onClose, onSuccess }) => {
         switch (mode) {
             case 'view':
                 return [
-                    <Button key="close" onClick={onClose}>
+                    <Button key="close" onClick={onClose} type="primary">
                         Đóng
                     </Button>
                 ];
@@ -332,6 +303,7 @@ const InternshipModal = ({ visible, mode, internship, onClose, onSuccess }) => {
                         danger
                         loading={loading}
                         onClick={handleDelete}
+                        icon={<CloseCircleOutlined />}
                     >
                         Xóa
                     </Button>
@@ -349,6 +321,7 @@ const InternshipModal = ({ visible, mode, internship, onClose, onSuccess }) => {
                         danger={mode === 'reject'}
                         loading={loading}
                         onClick={handleStatusChange}
+                        icon={mode === 'approve' ? <CheckCircleOutlined /> : <CloseCircleOutlined />}
                     >
                         {mode === 'approve' ? 'Phê duyệt' : 'Từ chối'}
                     </Button>
@@ -363,8 +336,10 @@ const InternshipModal = ({ visible, mode, internship, onClose, onSuccess }) => {
                         key="assign"
                         type="primary"
                         loading={loading}
-                        disabled={!assignmentData.companyId || !assignmentData.studentId}
+                        disabled={!assignmentData.studentId}
                         onClick={handleAssignment}
+                        className="!text-white"
+                        icon={<TeamOutlined />}
                     >
                         Phân công
                     </Button>
@@ -380,6 +355,7 @@ const InternshipModal = ({ visible, mode, internship, onClose, onSuccess }) => {
                         type="primary"
                         loading={loading}
                         onClick={() => form.submit()}
+                        icon={<SaveOutlined />}
                     >
                         {mode === 'create' ? 'Tạo' : 'Cập nhật'}
                     </Button>
@@ -393,8 +369,9 @@ const InternshipModal = ({ visible, mode, internship, onClose, onSuccess }) => {
             open={visible}
             onCancel={onClose}
             footer={renderModalFooter()}
-            width={800}
+            width={1000}
             destroyOnClose
+            className="internship-modal"
         >
             <Spin spinning={loading}>
                 {renderModalContent()}
@@ -404,7 +381,6 @@ const InternshipModal = ({ visible, mode, internship, onClose, onSuccess }) => {
 };
 
 // Internship Form Component
-// Lightweight selects using existing services (inline for simplicity)
 const CompanySelect = (props) => {
     const [options, setOptions] = React.useState([]);
     React.useEffect(() => {
@@ -419,7 +395,13 @@ const CompanySelect = (props) => {
         })();
     }, []);
     return (
-        <Select placeholder="-- Chọn công ty --" options={options} showSearch optionFilterProp="label" {...props} />
+        <Select
+            placeholder="-- Chọn công ty --"
+            options={options}
+            showSearch
+            optionFilterProp="label"
+            {...props}
+        />
     );
 };
 
@@ -437,253 +419,434 @@ const TeacherSelect = (props) => {
         })();
     }, []);
     return (
-        <Select placeholder="-- Chọn giảng viên --" options={options} showSearch optionFilterProp="label" {...props} />
+        <Select
+            placeholder="-- Chọn giảng viên --"
+            options={options}
+            showSearch
+            optionFilterProp="label"
+            {...props}
+        />
     );
 };
 
 const InternshipForm = ({ form, onSubmit, activeBatches = [], mode }) => {
     return (
-        <Form
-            form={form}
-            layout="vertical"
-            onFinish={onSubmit}
-        >
-            <Form.Item
-                name="batchId"
-                label="Đợt thực tập"
-                rules={[{ required: true, message: 'Vui lòng chọn đợt thực tập' }]}
+        <div className="p-6">
+            <Form
+                form={form}
+                layout="vertical"
+                onFinish={onSubmit}
+                className="space-y-6"
             >
-                <Select placeholder="-- Chọn đợt thực tập --"
-                    disabled={mode === 'edit'}
-                >
-                    {activeBatches.map(batch => (
-                        <Select.Option key={batch.id} value={batch.id}>
-                            {batch.batchName} - {batch.academicYear} ({batch.semester})
-                        </Select.Option>
-                    ))}
-                </Select>
-            </Form.Item>
+                <Card title="Thông tin cơ bản" className="mb-6">
+                    <Row gutter={16}>
+                        <Col span={12}>
+                            <Form.Item
+                                name="batchId"
+                                label={
+                                    <span>
+                                        <CalendarOutlined className="mr-2 text-blue-500" />
+                                        Đợt thực tập
+                                    </span>
+                                }
+                                rules={[{ required: true, message: 'Vui lòng chọn đợt thực tập' }]}
+                            >
+                                <Select
+                                    placeholder="-- Chọn đợt thực tập --"
+                                    disabled={mode === 'edit'}
+                                    showSearch
+                                    optionFilterProp="children"
+                                >
+                                    {activeBatches.map(batch => (
+                                        <Select.Option key={batch.id} value={batch.id}>
+                                            {batch.batchName} - {batch.academicYear} ({batch.semester})
+                                        </Select.Option>
+                                    ))}
+                                </Select>
+                            </Form.Item>
+                        </Col>
+                        <Col span={12}>
+                            <Form.Item
+                                name="title"
+                                label={
+                                    <span>
+                                        <FileTextOutlined className="mr-2 text-green-500" />
+                                        Tiêu đề
+                                    </span>
+                                }
+                                rules={[{ required: true, message: 'Vui lòng nhập tiêu đề' }]}
+                            >
+                                <Input placeholder="Thực tập sinh Phát triển phần mềm" />
+                            </Form.Item>
+                        </Col>
+                    </Row>
 
-            <Form.Item
-                name="title"
-                label="Tiêu đề"
-                rules={[{ required: true, message: 'Vui lòng nhập tiêu đề' }]}
-            >
-                <Input placeholder="Thực tập sinh Phát triển phần mềm" />
-            </Form.Item>
+                    <Row gutter={16}>
+                        <Col span={12}>
+                            <Form.Item
+                                name="companyId"
+                                label={
+                                    <span>
+                                        <BankOutlined className="mr-2 text-purple-500" />
+                                        Công ty
+                                    </span>
+                                }
+                                rules={[{ required: true, message: 'Vui lòng chọn công ty' }]}
+                            >
+                                <CompanySelect onChange={() => { }} allowClear />
+                            </Form.Item>
+                        </Col>
+                        <Col span={12}>
+                            <Form.Item
+                                name="teacherId"
+                                label={
+                                    <span>
+                                        <UserOutlined className="!mr-2 !text-orange-500" />
+                                        Giảng viên phụ trách
+                                    </span>
+                                }
+                            >
+                                <TeacherSelect onChange={() => { }} allowClear />
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                </Card>
 
-            <Row gutter={16}>
-                <Col span={12}>
+                <Card title="Thời gian và lương" className="mb-6">
+                    <Row gutter={16}>
+                        <Col span={24}>
+                            <Form.Item
+                                name="dateRange"
+                                label={
+                                    <span>
+                                        <CalendarOutlined className="mr-2 text-blue-500" />
+                                        Thời gian thực tập
+                                    </span>
+                                }
+                                rules={[{ required: true, message: 'Vui lòng chọn thời gian' }]}
+                            >
+                                <RangePicker
+                                    style={{ width: '100%' }}
+                                    format="DD/MM/YYYY"
+                                    placeholder={['Ngày bắt đầu', 'Ngày kết thúc']}
+                                />
+                            </Form.Item>
+                        </Col>
+                    </Row>
+
+                    <Row gutter={16}>
+                        <Col span={12}>
+                            <Form.Item
+                                name="salary"
+                                label={
+                                    <span>
+                                        <DollarOutlined className="mr-2 text-green-500" />
+                                        Mức lương (VND/tháng)
+                                    </span>
+                                }
+                            >
+                                <InputNumber
+                                    style={{ width: '100%' }}
+                                    placeholder="0"
+                                    min={0}
+                                    formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                    parser={value => value.replace(/\$\s?|(,*)/g, '')}
+                                />
+                            </Form.Item>
+                        </Col>
+                        <Col span={12}>
+                            <Form.Item
+                                name="workingHours"
+                                label={
+                                    <span>
+                                        <ClockCircleOutlined className="mr-2 text-orange-500" />
+                                        Giờ làm việc/tuần
+                                    </span>
+                                }
+                            >
+                                <InputNumber
+                                    style={{ width: '100%' }}
+                                    placeholder="40"
+                                    min={1}
+                                    max={60}
+                                />
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                </Card>
+
+                <Card title="Mô tả và yêu cầu" className="mb-6">
                     <Form.Item
-                        name="companyId"
-                        label="Công ty"
-                        rules={[{ required: true, message: 'Vui lòng chọn công ty' }]}
+                        name="description"
+                        label={
+                            <span>
+                                <FileTextOutlined className="mr-2 text-blue-500" />
+                                Mô tả công việc
+                            </span>
+                        }
+                        rules={[{ required: true, message: 'Vui lòng nhập mô tả' }]}
                     >
-                        <CompanySelect onChange={() => { /* ensures Form captures value */ }} allowClear />
-                    </Form.Item>
-                </Col>
-                <Col span={12}>
-                    <Form.Item
-                        name="teacherId"
-                        label="Giảng viên phụ trách"
-                    >
-                        <TeacherSelect onChange={() => { }} allowClear />
-                    </Form.Item>
-                </Col>
-            </Row>
-
-            <Form.Item
-                name="dateRange"
-                label="Thời gian thực tập"
-                rules={[{ required: true, message: 'Vui lòng chọn thời gian' }]}
-            >
-                <RangePicker
-                    style={{ width: '100%' }}
-                    format="DD/MM/YYYY"
-                />
-            </Form.Item>
-
-            <Row gutter={16}>
-                <Col span={12}>
-                    <Form.Item
-                        name="salary"
-                        label="Mức lương (VND/tháng)"
-                    >
-                        <InputNumber
-                            style={{ width: '100%' }}
-                            placeholder="0"
-                            min={0}
-                            formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                            parser={value => value.replace(/\$\s?|(,*)/g, '')}
+                        <TextArea
+                            rows={4}
+                            placeholder="Mô tả chi tiết về công việc, trách nhiệm và môi trường làm việc..."
                         />
                     </Form.Item>
-                </Col>
-                <Col span={12}>
+
                     <Form.Item
-                        name="workingHours"
-                        label="Giờ làm việc/tuần"
+                        name="requirements"
+                        label={
+                            <span>
+                                <CheckCircleOutlined className="mr-2 text-orange-500" />
+                                Yêu cầu
+                            </span>
+                        }
                     >
-                        <InputNumber
-                            style={{ width: '100%' }}
-                            placeholder="40"
-                            min={1}
-                            max={60}
+                        <TextArea
+                            rows={3}
+                            placeholder="Yêu cầu về kỹ năng, kinh nghiệm, bằng cấp..."
                         />
                     </Form.Item>
-                </Col>
-            </Row>
 
-            <Form.Item
-                name="description"
-                label="Mô tả công việc"
-                rules={[{ required: true, message: 'Vui lòng nhập mô tả' }]}
-            >
-                <TextArea
-                    rows={4}
-                    placeholder="Mô tả chi tiết về công việc, trách nhiệm và môi trường làm việc..."
-                />
-            </Form.Item>
+                    <Form.Item
+                        name="benefits"
+                        label={
+                            <span>
+                                <GiftOutlined className="mr-2 text-green-500" />
+                                Phúc lợi
+                            </span>
+                        }
+                    >
+                        <TextArea
+                            rows={3}
+                            placeholder="Các phúc lợi và quyền lợi cho thực tập sinh..."
+                        />
+                    </Form.Item>
 
-            <Form.Item
-                name="requirements"
-                label="Yêu cầu"
-            >
-                <TextArea
-                    rows={3}
-                    placeholder="Yêu cầu về kỹ năng, kinh nghiệm, bằng cấp..."
-                />
-            </Form.Item>
-
-            <Form.Item
-                name="benefits"
-                label="Phúc lợi"
-            >
-                <TextArea
-                    rows={3}
-                    placeholder="Các phúc lợi và quyền lợi cho thực tập sinh..."
-                />
-            </Form.Item>
-
-            <Form.Item
-                name="notes"
-                label="Ghi chú"
-            >
-                <TextArea
-                    rows={2}
-                    placeholder="Ghi chú bổ sung..."
-                />
-            </Form.Item>
-        </Form>
+                    <Form.Item
+                        name="notes"
+                        label={
+                            <span>
+                                <EditOutlined className="mr-2 text-gray-500" />
+                                Ghi chú
+                            </span>
+                        }
+                    >
+                        <TextArea
+                            rows={2}
+                            placeholder="Ghi chú bổ sung..."
+                        />
+                    </Form.Item>
+                </Card>
+            </Form>
+        </div>
     );
 };
 
 // Assignment Form Component
-const AssignmentForm = ({ assignmentData, setAssignmentData, companies, students, availableMentors, teachers, onCompanyChange, internship }) => {
+const AssignmentForm = ({ assignmentData, setAssignmentData, students, availableMentors, internship }) => {
     return (
-        <div className="space-y-6">
+        <div className="!p-6 !space-y-6">
             {/* Current internship info */}
-            <div className="current-internship-info">
-                <h4>Thông tin thực tập hiện tại</h4>
-                <div className="info-grid">
-                    <div className="info-item">
-                        <span className="info-label">Tiêu đề:</span> {internship?.jobTitle}
-                    </div>
-                    <div className="info-item">
-                        <span className="info-label">Mã:</span> {internship?.internshipCode}
-                    </div>
-                    <div className="info-item">
-                        <span className="info-label">Công ty hiện tại:</span> {internship?.company?.companyName || 'Chưa có'}
-                    </div>
-                    <div className="info-item">
-                        <span className="info-label">Sinh viên hiện tại:</span> {internship?.student?.user?.fullName || 'Chưa phân công'}
-                    </div>
-                    <div className="info-item">
-                        <span className="info-label">Giảng viên hiện tại:</span> {internship?.teacher?.user?.fullName || 'Chưa phân công'}
-                    </div>
-                    <div className="info-item">
-                        <span className="info-label">Mentor hiện tại:</span> {internship?.mentor?.user?.fullName || 'Chưa phân công'}
-                    </div>
-                </div>
-            </div>
+            <Card
+                title={
+                    <span>
+                        <InfoCircleOutlined className="!mr-2 !text-blue-50" />
+                        Thông tin thực tập hiện tại
+                    </span>
+                }
+                className="!bg-blue-50 !border-blue-200"
+            >
+                <Descriptions column={2} bordered size="small">
+                    <Descriptions.Item
+                        label={
+                            <span>
+                                <FileTextOutlined className="!mr-2 !text-blue-500" />
+                                Tiêu đề
+                            </span>
+                        }
+                    >
+                        <Text strong>{internship?.jobTitle}</Text>
+                    </Descriptions.Item>
+                    <Descriptions.Item
+                        label={
+                            <span>
+                                <TagOutlined className="!mr-2 !text-green-500" />
+                                Mã thực tập
+                            </span>
+                        }
+                    >
+                        <Tag color="blue" className="font-mono">{internship?.internshipCode}</Tag>
+                    </Descriptions.Item>
+                    <Descriptions.Item
+                        label={
+                            <span>
+                                <BankOutlined className="!mr-2 !text-purple-500" />
+                                Công ty
+                            </span>
+                        }
+                    >
+                        <div className="!flex !items-center">
+                            <BankOutlined className="!mr-2 !text-purple-500" />
+                            <span>{internship?.company?.companyName || 'Chưa có'}</span>
+                        </div>
+                    </Descriptions.Item>
+                    <Descriptions.Item
+                        label={
+                            <span>
+                                <UserOutlined className="!mr-2 !text-orange-500" />
+                                Giảng viên phụ trách
+                            </span>
+                        }
+                    >
+                        <div className="!flex !items-center">
+                            <UserOutlined className="!mr-2 !text-orange-500" />
+                            <span>{internship?.teacher?.user?.fullName || 'Chưa phân công'}</span>
+                        </div>
+                    </Descriptions.Item>
+                    <Descriptions.Item
+                        label={
+                            <span>
+                                <UserOutlined className="!mr-2 !text-green-500" />
+                                Sinh viên hiện tại
+                            </span>
+                        }
+                    >
+                        <div className="!flex !items-center">
+                            <UserOutlined className="!mr-2 !text-green-500" />
+                            <span>{internship?.student?.user?.fullName || 'Chưa phân công'}</span>
+                        </div>
+                    </Descriptions.Item>
+                    <Descriptions.Item
+                        label={
+                            <span>
+                                <UserOutlined className="!mr-2 !text-orange-500" />
+                                Mentor hiện tại
+                            </span>
+                        }
+                    >
+                        <div className="!flex !items-center">
+                            <UserOutlined className="!mr-2 !text-orange-500" />
+                            <span>{internship?.mentor?.user?.fullName || 'Chưa phân công'}</span>
+                        </div>
+                    </Descriptions.Item>
+                </Descriptions>
+            </Card>
 
             {/* Assignment form */}
-            <div className="assignment-form-grid">
-                <div className="form-field">
-                    <label>
-                        Chọn Công ty <span className="required">*</span>
-                    </label>
-                    <Select
-                        value={assignmentData?.companyId}
-                        onChange={(value) => {
-                            setAssignmentData(prev => ({ ...prev, companyId: value }));
-                            onCompanyChange(value);
-                        }}
-                        placeholder="-- Chọn công ty --"
-                        style={{ width: '100%' }}
-                    >
-                        {companies && companies?.length > 0 && companies?.map(company => (
-                            <Select.Option key={company?.id} value={company?.id}>
-                                {company?.companyName} ({company?.companyCode})
-                            </Select.Option>
-                        ))}
-                    </Select>
-                </div>
+            <Card
+                title={
+                    <span>
+                        <TeamOutlined className="!mr-2 !text-green-50" />
+                        Phân công thành viên
+                    </span>
+                }
+            >
+                <Alert
+                    message="Lưu ý phân công"
+                    description="Công ty và Giảng viên đã được chọn khi tạo thực tập. Bạn chỉ cần chọn Sinh viên và Mentor để hoàn tất việc phân công."
+                    type="info"
+                    showIcon
+                    className="!mb-4"
+                />
 
-                <div className="form-field">
-                    <label>
-                        Chọn Sinh viên <span className="required">*</span>
-                    </label>
-                    <Select
-                        value={assignmentData?.studentId}
-                        onChange={(value) => setAssignmentData(prev => ({ ...prev, studentId: value }))}
-                        placeholder="-- Chọn sinh viên --"
-                        style={{ width: '100%' }}
-                    >
-                        {students && students?.length > 0 && students?.map(student => (
-                            <Select.Option key={student?.id} value={student?.id}>
-                                {student?.user?.fullName} - {student?.studentCode}
-                            </Select.Option>
-                        ))}
-                    </Select>
-                </div>
+                <Row gutter={[24, 24]}>
+                    <Col span={12}>
+                        <Form.Item
+                            label={
+                                <span>
+                                    <UserOutlined className="!mr-2 !text-blue-500" />
+                                    Chọn Sinh viên <span className="!text-red-500">*</span>
+                                </span>
+                            }
+                            required
+                        >
+                            <Select
+                                value={assignmentData?.studentId}
+                                onChange={(value) => setAssignmentData(prev => ({ ...prev, studentId: value }))}
+                                placeholder="-- Chọn sinh viên --"
+                                style={{ width: '100%' }}
+                                showSearch
+                                optionFilterProp="children"
+                                filterOption={(input, option) =>
+                                    option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                }
+                            >
+                                {students && students?.length > 0 && students?.map(student => (
+                                    <Select.Option key={student?.id} value={student?.id}>
+                                        <div className="!flex !items-center !space-x-2">
+                                            <Avatar size="small" icon={<UserOutlined />} />
+                                            <span>{student?.user?.fullName} - {student?.studentCode}</span>
+                                        </div>
+                                    </Select.Option>
+                                ))}
+                            </Select>
+                        </Form.Item>
+                    </Col>
 
-                <div className="form-field">
-                    <label>
-                        Chọn Giảng viên phụ trách
-                    </label>
-                    <Select
-                        value={assignmentData?.teacherId}
-                        onChange={(value) => setAssignmentData(prev => ({ ...prev, teacherId: value }))}
-                        placeholder="-- Chọn giảng viên --"
-                        style={{ width: '100%' }}
-                    >
-                        {teachers && teachers?.length > 0 && teachers?.map(teacher => (
-                            <Select.Option key={teacher?.id} value={teacher?.id}>
-                                {teacher?.user?.fullName} - {teacher?.department}
-                            </Select.Option>
-                        ))}
-                    </Select>
-                </div>
+                    <Col span={12}>
+                        <Form.Item
+                            label={
+                                <span>
+                                    <UserOutlined className="!mr-2 !text-orange-500" />
+                                    Chọn Mentor
+                                </span>
+                            }
+                        >
+                            <Select
+                                value={assignmentData?.mentorId}
+                                onChange={(value) => setAssignmentData(prev => ({ ...prev, mentorId: value }))}
+                                placeholder="-- Chọn mentor --"
+                                style={{ width: '100%' }}
+                                showSearch
+                                optionFilterProp="children"
+                                filterOption={(input, option) =>
+                                    option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                }
+                                disabled={!availableMentors || availableMentors.length === 0}
+                            >
+                                {availableMentors && availableMentors?.length > 0 && availableMentors?.map(mentor => (
+                                    <Select.Option key={mentor?.id} value={mentor?.id}>
+                                        <div className="!flex !items-center !space-x-2">
+                                            <Avatar size="small" icon={<UserOutlined />} />
+                                            <span>{mentor?.user?.fullName} - {mentor?.company?.companyName}</span>
+                                        </div>
+                                    </Select.Option>
+                                ))}
+                            </Select>
+                            {(!availableMentors || availableMentors.length === 0) && (
+                                <Text type="secondary" className="!text-xs">
+                                    Không có mentor nào cho công ty này
+                                </Text>
+                            )}
+                        </Form.Item>
+                    </Col>
+                </Row>
 
-                <div className="form-field">
-                    <label>
-                        Chọn Mentor
-                    </label>
-                    <Select
-                        value={assignmentData?.mentorId}
-                        onChange={(value) => setAssignmentData(prev => ({ ...prev, mentorId: value }))}
-                        placeholder="-- Chọn mentor --"
-                        style={{ width: '100%' }}
-                        disabled={!assignmentData.companyId}
-                    >
-                        {availableMentors && availableMentors?.length > 0 && availableMentors?.map(mentor => (
-                            <Select.Option key={mentor?.id} value={mentor?.id}>
-                                {mentor?.user?.fullName} - {mentor?.company?.companyName}
-                            </Select.Option>
-                        ))}
-                    </Select>
-                </div>
-            </div>
+                {assignmentData.studentId && (
+                    <Alert
+                        message="Thông tin phân công"
+                        description={
+                            <div className="mt-2">
+                                <div className="!flex !items-center !space-x-2 !mb-1">
+                                    <UserOutlined className="!text-blue-500" />
+                                    <Text strong>Sinh viên:</Text>
+                                    <Text>{students.find(s => s.id === assignmentData.studentId)?.user?.fullName}</Text>
+                                </div>
+                                {assignmentData.mentorId && (
+                                    <div className="!flex !items-center !space-x-2">
+                                        <UserOutlined className="!text-orange-500" />
+                                        <Text strong>Mentor:</Text>
+                                        <Text>{availableMentors.find(m => m.id === assignmentData.mentorId)?.user?.fullName}</Text>
+                                    </div>
+                                )}
+                            </div>
+                        }
+                        type="info"
+                        showIcon
+                        className="mt-4"
+                    />
+                )}
+            </Card>
         </div>
     );
 };
@@ -717,16 +880,16 @@ const InternshipDetailView = ({ internship }) => {
     };
 
     return (
-        <div className="internship-detail-tabs">
-            <Tabs defaultActiveKey="basic">
+        <div className="p-6">
+            <Tabs defaultActiveKey="basic" className="internship-detail-tabs">
                 <TabPane tab="Thông tin cơ bản" key="basic">
-                    <div className="internship-detail-content">
+                    <Card>
                         <Descriptions column={2} bordered>
                             <Descriptions.Item label="Tiêu đề công việc" span={2}>
-                                {internship.jobTitle || 'Chưa có tiêu đề'}
+                                <Text strong>{internship.jobTitle || 'Chưa có tiêu đề'}</Text>
                             </Descriptions.Item>
                             <Descriptions.Item label="Mã thực tập">
-                                <code>{internship.internshipCode || 'Chưa có mã'}</code>
+                                <Tag color="blue" className="font-mono">{internship.internshipCode || 'Chưa có mã'}</Tag>
                             </Descriptions.Item>
                             <Descriptions.Item label="Trạng thái">
                                 <Tag color={getStatusColor(internship.status)} className="status-tag">
@@ -734,30 +897,34 @@ const InternshipDetailView = ({ internship }) => {
                                 </Tag>
                             </Descriptions.Item>
                             <Descriptions.Item label="Thời gian làm việc">
+                                <ClockCircleOutlined className="!mr-2 !text-orange-500" />
                                 {internship.workingHoursPerWeek || 40} giờ/tuần
                             </Descriptions.Item>
                             <Descriptions.Item label="Mức lương">
+                                <DollarOutlined className="!mr-2 !text-green-500" />
                                 {internship.salary ?
                                     new Intl.NumberFormat('vi-VN').format(internship.salary) + ' VND/tháng' :
                                     'Thỏa thuận'
                                 }
                             </Descriptions.Item>
                             <Descriptions.Item label="Ngày bắt đầu">
+                                <CalendarOutlined className="!mr-2 !text-blue-500" />
                                 {internship.startDate ? dayjs(internship.startDate).format('DD/MM/YYYY') : 'Chưa xác định'}
                             </Descriptions.Item>
                             <Descriptions.Item label="Ngày kết thúc">
+                                <CalendarOutlined className="!mr-2 !text-blue-500" />
                                 {internship.endDate ? dayjs(internship.endDate).format('DD/MM/YYYY') : 'Chưa xác định'}
                             </Descriptions.Item>
                         </Descriptions>
-                    </div>
+                    </Card>
                 </TabPane>
 
                 <TabPane tab="Thông tin phân công" key="assignment">
-                    <div className="internship-detail-content">
+                    <Card>
                         <Descriptions column={1} bordered>
                             <Descriptions.Item label="Công ty">
                                 <div className="!flex !items-center">
-                                    <BookOutlined className="!mr-2 !text-blue-500" />
+                                    <BankOutlined className="!mr-2 !text-purple-500" />
                                     <div>
                                         <div className="!font-medium">{internship.company?.companyName || 'Chưa phân công'}</div>
                                         <div className="!text-sm !text-gray-500">{internship.company?.address || 'Chưa có địa chỉ'}</div>
@@ -775,7 +942,7 @@ const InternshipDetailView = ({ internship }) => {
                             </Descriptions.Item>
                             <Descriptions.Item label="Giảng viên phụ trách">
                                 <div className="!flex !items-center">
-                                    <BookOutlined className="!mr-2 !text-purple-500" />
+                                    <UserOutlined className="!mr-2 !text-orange-500" />
                                     <div>
                                         <div className="!font-medium">{internship.teacher?.user?.fullName || 'Chưa phân công'}</div>
                                         <div className="!text-sm !text-gray-500">Khoa: {internship.teacher?.department || 'N/A'}</div>
@@ -792,46 +959,40 @@ const InternshipDetailView = ({ internship }) => {
                                 </div>
                             </Descriptions.Item>
                         </Descriptions>
-                    </div>
+                    </Card>
                 </TabPane>
 
                 <TabPane tab="Mô tả & Yêu cầu" key="details">
-                    <div className="internship-detail-content">
-                        <div className="space-y-4">
-                            <div className="detail-section">
-                                <h4 className="!text-lg !font-semibold">Mô tả công việc</h4>
-                                <div className="detail-content">
-                                    {internship.jobDescription || 'Chưa có mô tả công việc'}
-                                </div>
+                    <div className="space-y-6">
+                        <Card title="Mô tả công việc" className="mb-4">
+                            <div className="!bg-gray-50 !border !border-gray-200 !rounded-lg !p-4">
+                                {internship.jobDescription || 'Chưa có mô tả công việc'}
                             </div>
+                        </Card>
 
-                            {internship.requirements && (
-                                <div className="detail-section">
-                                    <h4 className="!text-lg !font-semibold">Yêu cầu</h4>
-                                    <div className="detail-content orange-bg">
-                                        {internship.requirements}
-                                    </div>
+                        {internship.requirements && (
+                            <Card title="Yêu cầu" className="mb-4">
+                                <div className="!bg-orange-50 !border !border-orange-200 !rounded-lg !p-4">
+                                    {internship.requirements}
                                 </div>
-                            )}
+                            </Card>
+                        )}
 
-                            {internship.benefits && (
-                                <div className="detail-section">
-                                    <h4 className="!text-lg !font-semibold">Phúc lợi</h4>
-                                    <div className="detail-content green-bg">
-                                        {internship.benefits}
-                                    </div>
+                        {internship.benefits && (
+                            <Card title="Phúc lợi" className="mb-4">
+                                <div className="!bg-green-50 !border !border-green-200 !rounded-lg !p-4">
+                                    {internship.benefits}
                                 </div>
-                            )}
+                            </Card>
+                        )}
 
-                            {internship.notes && (
-                                <div className="detail-section">
-                                    <h4 className="!text-lg !font-semibold">Ghi chú</h4>
-                                    <div className="detail-content yellow-bg">
-                                        {internship.notes}
-                                    </div>
+                        {internship.notes && (
+                            <Card title="Ghi chú" className="mb-4">
+                                <div className="!bg-yellow-50 !border !border-yellow-200 !rounded-lg !p-4">
+                                    {internship.notes}
                                 </div>
-                            )}
-                        </div>
+                            </Card>
+                        )}
                     </div>
                 </TabPane>
             </Tabs>

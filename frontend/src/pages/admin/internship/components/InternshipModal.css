@@ -1,199 +1,150 @@
 /* InternshipModal.css */
 .internship-modal {
-  max-width: 800px;
+  max-width: 1000px;
 }
 
-.internship-form {
-  padding: 20px;
+.internship-modal .ant-modal-body {
+  padding: 0;
 }
 
-.assignment-form {
-  padding: 20px;
-}
-
-.current-internship-info {
-  background-color: #f0f8ff;
-  border: 1px solid #b3d9ff;
+.internship-modal .ant-card {
   border-radius: 8px;
-  padding: 16px;
-  margin-bottom: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.current-internship-info h4 {
-  color: #1e40af;
-  margin-bottom: 12px;
+.internship-modal .ant-card-head {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 8px 8px 0 0;
+}
+
+.internship-modal .ant-card-head-title {
+  color: white;
   font-weight: 600;
 }
 
-.current-internship-info .info-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 12px;
-}
-
-.current-internship-info .info-item {
-  display: flex;
-  align-items: center;
-  font-size: 14px;
-}
-
-.current-internship-info .info-label {
-  color: #1e40af;
-  font-weight: 500;
-  margin-right: 8px;
-}
-
-.assignment-form-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 16px;
-}
-
-.form-field {
-  margin-bottom: 16px;
-}
-
-.form-field label {
-  display: block;
-  margin-bottom: 4px;
+.internship-modal .ant-form-item-label > label {
   font-weight: 500;
   color: #374151;
 }
 
-.form-field .required {
-  color: #ef4444;
-}
-
-.internship-detail-tabs {
-  margin-top: 16px;
-}
-
-.internship-detail-content {
-  padding: 20px 0;
-}
-
-.detail-section {
-  margin-bottom: 24px;
-}
-
-.detail-section h4 {
-  font-weight: 600;
-  margin-bottom: 12px;
-  color: #374151;
-}
-
-.detail-content {
-  background-color: #f9fafb;
-  border: 1px solid #e5e7eb;
+.internship-modal .ant-select {
   border-radius: 6px;
-  padding: 12px;
-  font-size: 14px;
-  line-height: 1.5;
 }
 
-.detail-content.orange-bg {
-  background-color: #fef3c7;
+.internship-modal .ant-input,
+.internship-modal .ant-input-number,
+.internship-modal .ant-picker {
+  border-radius: 6px;
+}
+
+.internship-modal .ant-btn {
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+.internship-modal .ant-btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+}
+
+.internship-modal .ant-btn-primary:hover {
+  background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.internship-modal .ant-tabs-tab {
+  font-weight: 500;
+}
+
+.internship-modal .ant-tabs-tab-active {
+  color: #667eea;
+}
+
+.internship-modal .ant-tabs-ink-bar {
+  background: #667eea;
+}
+
+.internship-modal .ant-descriptions-item-label {
+  font-weight: 600;
+  color: #374151;
+}
+
+.internship-modal .ant-descriptions-item-content {
+  color: #6b7280;
+}
+
+.internship-modal .ant-alert {
+  border-radius: 6px;
+}
+
+.internship-modal .ant-alert-info {
+  background: #eff6ff;
+  border-color: #3b82f6;
+}
+
+.internship-modal .ant-alert-warning {
+  background: #fffbeb;
   border-color: #f59e0b;
 }
 
-.detail-content.green-bg {
-  background-color: #d1fae5;
+.internship-modal .ant-alert-success {
+  background: #f0fdf4;
   border-color: #10b981;
 }
 
-.detail-content.yellow-bg {
-  background-color: #fef3c7;
-  border-color: #f59e0b;
+.internship-modal .ant-alert-error {
+  background: #fef2f2;
+  border-color: #ef4444;
 }
 
+/* Status tags */
 .status-tag {
   font-weight: 500;
+  border-radius: 4px;
 }
 
 .status-pending {
   background-color: #fef3c7;
   color: #92400e;
+  border-color: #f59e0b;
 }
 
 .status-approved {
   background-color: #dbeafe;
   color: #1e40af;
+  border-color: #3b82f6;
 }
 
 .status-rejected {
   background-color: #fee2e2;
   color: #991b1b;
+  border-color: #ef4444;
 }
 
 .status-assigned {
   background-color: #f3e8ff;
   color: #7c3aed;
+  border-color: #8b5cf6;
 }
 
 .status-in-progress {
   background-color: #d1fae5;
   color: #065f46;
+  border-color: #10b981;
 }
 
 .status-completed {
   background-color: #cffafe;
   color: #0e7490;
+  border-color: #06b6d4;
 }
 
 .status-cancelled {
   background-color: #f3f4f6;
   color: #374151;
-}
-
-/* Responsive design */
-@media (max-width: 768px) {
-  .assignment-form-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .current-internship-info .info-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .internship-modal {
-    max-width: 100%;
-    margin: 10px;
-  }
-}
-
-/* Loading states */
-.loading-overlay {
-  position: relative;
-}
-
-.loading-overlay::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(255, 255, 255, 0.8);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10;
-}
-
-/* Animation */
-.fade-in {
-  animation: fadeIn 0.3s ease-in-out;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  border-color: #9ca3af;
 }
 
 /* Custom scrollbar */
@@ -217,4 +168,120 @@
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
+}
+
+/* Animation */
+.fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .internship-modal {
+    max-width: 100%;
+    margin: 10px;
+  }
+
+  .internship-modal .ant-modal-body {
+    padding: 16px;
+  }
+
+  .internship-modal .ant-card {
+    margin-bottom: 16px;
+  }
+
+  .internship-modal .ant-row {
+    margin: 0 !important;
+  }
+
+  .internship-modal .ant-col {
+    padding: 0 !important;
+    margin-bottom: 16px;
+  }
+}
+
+/* Loading states */
+.loading-overlay {
+  position: relative;
+}
+
+.loading-overlay::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+/* Form field enhancements */
+.internship-modal .ant-form-item {
+  margin-bottom: 16px;
+}
+
+.internship-modal .ant-form-item-required::before {
+  color: #ef4444;
+}
+
+.internship-modal .ant-input:focus,
+.internship-modal .ant-input-number:focus,
+.internship-modal .ant-select:focus,
+.internship-modal .ant-picker:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
+}
+
+/* Card enhancements */
+.internship-modal .ant-card-body {
+  padding: 20px;
+}
+
+.internship-modal .bg-blue-50 {
+  background-color: #eff6ff;
+}
+
+.internship-modal .border-blue-200 {
+  border-color: #bfdbfe;
+}
+
+/* Text enhancements */
+.internship-modal .text-gray-700 {
+  color: #374151;
+}
+
+.internship-modal .text-gray-500 {
+  color: #6b7280;
+}
+
+.internship-modal .font-mono {
+  font-family: "Monaco", "Menlo", "Ubuntu Mono", monospace;
+}
+
+/* Space utilities */
+.internship-modal .space-x-2 > * + * {
+  margin-left: 0.5rem;
+}
+
+.internship-modal .space-y-2 > * + * {
+  margin-top: 0.5rem;
+}
+
+.internship-modal .space-y-6 > * + * {
+  margin-top: 1.5rem;
 }
