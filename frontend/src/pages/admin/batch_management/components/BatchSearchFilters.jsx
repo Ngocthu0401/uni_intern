@@ -21,9 +21,9 @@ const BatchSearchFilters = ({
     showFilters,
     onToggleFilters
 }) => {
-    const statusOptions = Object.values(BatchStatus).map(status => ({
+    const statusOptions = Object?.values(BatchStatus)?.map(status => ({
         value: status,
-        label: new Batch({ status }).getStatusLabel()
+        label: new Batch({ status })?.getStatusLabel()
     }));
 
     const semesterOptions = Object.values(Semester).map(semester => ({

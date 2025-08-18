@@ -11,11 +11,11 @@ const batchService = {
   // Search batches with criteria and pagination
   searchBatches: async (searchCriteria = {}, pagination = new PaginationOptions()) => {
     // Use PaginationOptions class for safe pagination handling
-    const paginationOptions = pagination instanceof PaginationOptions ? 
+    const paginationOptions = pagination instanceof PaginationOptions ?
       pagination : new PaginationOptions(pagination);
-    
+
     const apiParams = paginationOptions.toApiParams();
-    
+
     try {
       // If we have a keyword, use search endpoint
       if (searchCriteria.keyword && searchCriteria.keyword.trim()) {
@@ -23,7 +23,7 @@ const batchService = {
           ...apiParams,
           keyword: searchCriteria.keyword.trim()
         };
-        
+
         const response = await axiosClient.get('/batches/search', { params: searchParams });
         return {
           data: response.data.content || response.data,
@@ -73,7 +73,7 @@ const batchService = {
   createBatch: async (batchData) => {
     // Use toApiPayload method if available, otherwise manual mapping
     const payload = batchData.toApiPayload ? batchData.toApiPayload() : {
-      batchName: batchData.name || batchData.batchName,
+      name: batchData.name || batchData.batchName,
       batchCode: batchData.batchCode || `BATCH_${Date.now()}`,
       description: batchData.description || '',
       academicYear: batchData.academicYear,
@@ -83,6 +83,7 @@ const batchService = {
       startDate: batchData.startDate || batchData.internshipStartDate,
       endDate: batchData.endDate || batchData.internshipEndDate,
       maxStudents: batchData.maxStudents || 100,
+      companyId: batchData.companyId || null,
       isActive: true
     };
 
@@ -105,6 +106,7 @@ const batchService = {
       startDate: batchData.startDate || batchData.internshipStartDate,
       endDate: batchData.endDate || batchData.internshipEndDate,
       maxStudents: batchData.maxStudents || 100,
+      companyId: batchData.companyId || null,
       isActive: batchData.isActive !== undefined ? batchData.isActive : true
     };
 
@@ -158,9 +160,9 @@ const batchService = {
 
   // Export batches
   exportBatches: async (searchCriteria = {}) => {
-    const params = searchCriteria.toSearchParams ? 
+    const params = searchCriteria.toSearchParams ?
       searchCriteria.toSearchParams() : searchCriteria;
-    
+
     const response = await axiosClient.get('/batches/export', {
       params: params,
       responseType: 'blob'

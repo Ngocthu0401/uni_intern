@@ -62,4 +62,8 @@ public interface InternshipBatchRepository extends JpaRepository<InternshipBatch
                      @Param("semester") String semester,
                      @Param("academicYear") String academicYear,
                      Pageable pageable);
+       
+       // Đếm số lượng sinh viên đăng ký trong một batch
+       @Query("SELECT COUNT(i) FROM Internship i WHERE i.internshipBatch.id = :batchId")
+       Long countStudentsByBatchId(@Param("batchId") Long batchId);
 }

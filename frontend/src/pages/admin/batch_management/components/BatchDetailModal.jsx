@@ -187,6 +187,9 @@ const BatchDetailModal = ({ batch, visible, onClose }) => {
                                     <span className="!text-gray-700">
                                         {batch.currentStudents}/{batch.maxStudents} sinh viên
                                     </span>
+                                    <Tag color="blue">
+                                        {batch.getEnrollmentProgress()}% đã đăng ký
+                                    </Tag>
                                 </Space>
                             </Descriptions.Item>
                             <Descriptions.Item label="Thời lượng">
@@ -196,6 +199,20 @@ const BatchDetailModal = ({ batch, visible, onClose }) => {
                                         {batch.getDurationInWeeks()} tuần
                                     </span>
                                 </Space>
+                            </Descriptions.Item>
+                            <Descriptions.Item label="Công ty" span={2}>
+                                {batch.company ? (
+                                    <Space>
+                                        <BankOutlined className="!text-blue-600" />
+                                        <div>
+                                            <div className="!font-medium !text-gray-900">{batch.company.companyName}</div>
+                                            <div className="!text-sm !text-gray-500">{batch.company.industry}</div>
+                                            <div className="!text-xs !text-gray-400">{batch.company.address}</div>
+                                        </div>
+                                    </Space>
+                                ) : (
+                                    <span className="!text-gray-400">Không có công ty</span>
+                                )}
                             </Descriptions.Item>
                         </Descriptions>
                     </Card>
@@ -258,7 +275,7 @@ const BatchDetailModal = ({ batch, visible, onClose }) => {
                                     <TeamOutlined className="!text-blue-600" />
                                     <span className="!text-lg !font-semibold">Danh sách sinh viên đăng ký</span>
                                 </div>
-                                <Tag color="blue">{students.length} sinh viên</Tag>
+                                <Tag color="blue">{batch.currentStudents} sinh viên</Tag>
                             </div>
                         }
                         className="!shadow-sm !border-gray-200"

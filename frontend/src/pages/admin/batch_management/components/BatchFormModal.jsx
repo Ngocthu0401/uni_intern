@@ -38,9 +38,18 @@ const BatchFormModal = ({
                         dayjs(batch.endDate)
                     ] : null,
                     description: batch.description,
-                    companies: batch.companies || []
+                    maxStudents: batch.maxStudents,
+                    companies: batch.company ? [batch.company.id] : []
                 });
-                setSelectedCompanies(batch.companies || []);
+                // Nếu có công ty, set selected company với quota từ maxStudents
+                if (batch.company) {
+                    setSelectedCompanies([{
+                        ...batch.company,
+                        quota: batch.maxStudents
+                    }]);
+                } else {
+                    setSelectedCompanies([]);
+                }
             } else {
                 form.resetFields();
                 setSelectedCompanies([]);
@@ -64,20 +73,63 @@ const BatchFormModal = ({
     const handleSubmit = async (values) => {
         try {
             setSubmitLoading(true);
-            const formData = {
-                name: values.name,
-                semester: values.semester,
-                academicYear: values.academicYear,
-                registrationStartDate: values.registrationDateRange?.[0]?.toISOString().split('T')[0],
-                registrationEndDate: values.registrationDateRange?.[1]?.toISOString().split('T')[0],
-                startDate: values.internshipDateRange?.[0]?.toISOString().split('T')[0],
-                endDate: values.internshipDateRange?.[1]?.toISOString().split('T')[0],
-                description: values.description,
-                companies: selectedCompanies
-            };
 
-            await onSubmit(formData);
-            message.success(mode === 'create' ? 'Tạo đợt thực tập thành công' : 'Cập nhật đợt thực tập thành công');
+            if (mode === 'create' && selectedCompanies.length > 0) {
+                // Tạo batch cho từng công ty
+                for (const company of selectedCompanies) {
+                    const batchData = {
+                        batchName: `${values.name} - ${company.companyName}`,
+                        semester: values.semester,
+                        academicYear: values.academicYear,
+                        registrationStartDate: values.registrationDateRange?.[0]?.toISOString().split('T')[0],
+                        registrationEndDate: values.registrationDateRange?.[1]?.toISOString().split('T')[0],
+                        startDate: values.internshipDateRange?.[0]?.toISOString().split('T')[0],
+                        endDate: values.internshipDateRange?.[1]?.toISOString().split('T')[0],
+                        description: values.description,
+                        companyId: company.id,
+                        maxStudents: company.quota || 1
+                    };
+                    await onSubmit(batchData);
+                }
+                message.success(`Tạo thành công ${selectedCompanies.length} đợt thực tập cho các công ty`);
+            } else if (mode === 'edit') {
+                // Cập nhật batch
+                const formData = {
+                    id: batch.id,
+                    batchName: values.name,
+                    batchCode: batch.batchCode,
+                    semester: values.semester,
+                    academicYear: values.academicYear,
+                    registrationStartDate: values.registrationDateRange?.[0]?.toISOString().split('T')[0],
+                    registrationEndDate: values.registrationDateRange?.[1]?.toISOString().split('T')[0],
+                    startDate: values.internshipDateRange?.[0]?.toISOString().split('T')[0],
+                    endDate: values.internshipDateRange?.[1]?.toISOString().split('T')[0],
+                    description: values.description,
+                    maxStudents: values.maxStudents,
+                    companyId: batch.company?.id || null,
+                    isActive: batch.isActive
+                };
+
+                await onSubmit(formData);
+                message.success('Cập nhật đợt thực tập thành công');
+            } else {
+                // Tạo batch không có công ty
+                const formData = {
+                    name: values.name,
+                    semester: values.semester,
+                    academicYear: values.academicYear,
+                    registrationStartDate: values.registrationDateRange?.[0]?.toISOString().split('T')[0],
+                    registrationEndDate: values.registrationDateRange?.[1]?.toISOString().split('T')[0],
+                    startDate: values.internshipDateRange?.[0]?.toISOString().split('T')[0],
+                    endDate: values.internshipDateRange?.[1]?.toISOString().split('T')[0],
+                    description: values.description,
+                    companies: selectedCompanies
+                };
+
+                await onSubmit(formData);
+                message.success('Tạo đợt thực tập thành công');
+            }
+
             onClose();
         } catch (error) {
             console.error('Error submitting form:', error);
@@ -204,8 +256,9 @@ const BatchFormModal = ({
                                     const internshipEnd = internshipRange[1];
 
                                     if (registrationStart && registrationEnd && internshipStart && internshipEnd) {
-                                        if (internshipStart.isBefore(registrationStart) || internshipEnd.isAfter(registrationEnd)) {
-                                            return Promise.reject(new Error('Thời gian đăng ký phải bao gồm thời gian thực tập'));
+                                        // Thời gian đăng ký phải trước thời gian thực tập
+                                        if (registrationEnd.isAfter(internshipStart)) {
+                                            return Promise.reject(new Error('Thời gian đăng ký phải kết thúc trước khi thực tập bắt đầu'));
                                         }
                                     }
 
@@ -239,8 +292,9 @@ const BatchFormModal = ({
                                     const registrationEnd = registrationRange[1];
 
                                     if (internshipStart && internshipEnd && registrationStart && registrationEnd) {
-                                        if (internshipStart.isBefore(registrationStart) || internshipEnd.isAfter(registrationEnd)) {
-                                            return Promise.reject(new Error('Thời gian thực tập phải nằm trong khoảng thời gian đăng ký'));
+                                        // Thời gian thực tập phải sau thời gian đăng ký
+                                        if (internshipStart.isBefore(registrationEnd)) {
+                                            return Promise.reject(new Error('Thời gian thực tập phải bắt đầu sau khi đăng ký kết thúc'));
                                         }
                                     }
 
@@ -274,11 +328,42 @@ const BatchFormModal = ({
                         }
                         value={selectedCompanies.map(company => company.id)}
                         className="!rounded-lg"
+                        disabled={mode === 'edit'} // Disable trong edit mode
                     />
                 </Form.Item>
 
+                {/* Hiển thị thông tin công ty trong edit mode */}
+                {mode === 'edit' && batch?.company && (
+                    <div className="!mt-4 !p-3 !bg-blue-50 !rounded-lg !border !border-blue-200">
+                        <div className="!flex !items-center !space-x-2 !mb-2">
+                            <BankOutlined className="!text-blue-600" />
+                            <span className="!text-sm !font-medium !text-blue-800">Công ty hiện tại</span>
+                        </div>
+                        <div className="!text-sm !text-blue-700">
+                            <div className="!font-medium">{batch.company.companyName}</div>
+                            <div className="!text-xs !text-blue-600">{batch.company.industry}</div>
+                        </div>
+                    </div>
+                )}
+
+                {/* Trường maxStudents cho edit mode */}
+                {mode === 'edit' && (
+                    <Form.Item
+                        name="maxStudents"
+                        label="Số lượng sinh viên tối đa"
+                        rules={[{ required: true, message: 'Vui lòng nhập số lượng sinh viên tối đa' }]}
+                    >
+                        <Input
+                            type="number"
+                            min="1"
+                            placeholder="Nhập số lượng sinh viên tối đa"
+                            className="!rounded-lg"
+                        />
+                    </Form.Item>
+                )}
+
                 {/* Selected Companies List */}
-                {selectedCompanies.length > 0 && (
+                {selectedCompanies.length > 0 && mode === 'create' && (
                     <div className="!mt-4">
                         <Divider orientation="left">Số lượng tuyển của từng công ty</Divider>
                         <div className="!space-y-3">

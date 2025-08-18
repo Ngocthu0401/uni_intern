@@ -1,22 +1,9 @@
 import React from 'react';
 import { Table, Tag, Button, Space, Avatar, Progress, Tooltip } from 'antd';
-import {
-    CalendarOutlined,
-    EyeOutlined,
-    EditOutlined,
-    DeleteOutlined,
-    UserOutlined,
-    ClockCircleOutlined,
-    TeamOutlined
-} from '@ant-design/icons';
+import { CalendarOutlined, EyeOutlined, EditOutlined, DeleteOutlined, TeamOutlined, BankOutlined } from '@ant-design/icons';
 
-const BatchTable = ({
-    batches,
-    loading,
-    onViewBatch,
-    onEditBatch,
-    onDeleteBatch
-}) => {
+const BatchTable = ({ batches, loading, onViewBatch, onEditBatch, onDeleteBatch }) => {
+
     const getStatusColor = (batch) => {
         if (!batch.isActive()) return 'default';
         if (batch.isCompleted()) return 'blue';
@@ -41,16 +28,9 @@ const BatchTable = ({
             title: 'Đợt thực tập',
             key: 'batch',
             render: (_, record) => (
-                <div className="flex items-center space-x-3">
-                    <Avatar
-                        icon={<CalendarOutlined />}
-                        className="bg-purple-500"
-                        size="large"
-                    />
-                    <div>
-                        <div className="font-medium text-gray-900">{record.name}</div>
-                        <div className="text-sm text-gray-500">{record.description || 'Không có mô tả'}</div>
-                    </div>
+                <div className="!flex !flex-col !items-start !space-x-3">
+                    <div className="!font-medium !text-gray-900">{record.name}</div>
+                    <div className="!text-sm !text-gray-500">{record.description || 'Không có mô tả'}</div>
                 </div>
             ),
             width: 250,
@@ -59,22 +39,43 @@ const BatchTable = ({
             title: 'Học kỳ / Năm học',
             key: 'academic',
             render: (_, record) => (
-                <div className="text-center">
-                    <div className="font-medium text-gray-900">{record.getSemesterLabel()}</div>
-                    <div className="text-sm text-gray-500">{record.academicYear}</div>
+                <div className="!text-center">
+                    <div className="!font-medium !text-gray-900">{record.getSemesterLabel()}</div>
+                    <div className="!text-sm !text-gray-500">{record.academicYear}</div>
                 </div>
             ),
             width: 150,
+        },
+        {
+            title: 'Công ty',
+            key: 'company',
+            render: (_, record) => (
+                <div>
+                    {console.log('record: ', record)}
+                    {record?.company ? (
+                        <div className="!flex !items-center !space-x-2">
+                            <BankOutlined className="!text-blue-600" />
+                            <div>
+                                <div className="!font-medium !text-gray-900">{record.company.companyName}</div>
+                                <div className="!text-xs !text-gray-500">{record.company.industry}</div>
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="!text-gray-400 !text-sm">Không có công ty</div>
+                    )}
+                </div>
+            ),
+            width: 200,
         },
         {
             title: 'Thời gian đăng ký',
             key: 'registration',
             render: (_, record) => (
                 <div>
-                    <div className="text-sm text-gray-900">
+                    <div className="!text-sm !text-gray-900">
                         {record.getFormattedRegistrationStartDate()}
                     </div>
-                    <div className="text-sm text-gray-500">
+                    <div className="!text-sm !text-gray-500">
                         đến {record.getFormattedRegistrationEndDate()}
                     </div>
                     <Tag color={getRegistrationStatusColor(record)} className="mt-1">
@@ -89,13 +90,13 @@ const BatchTable = ({
             key: 'internship',
             render: (_, record) => (
                 <div>
-                    <div className="text-sm text-gray-900">
+                    <div className="!text-sm !text-gray-900">
                         {record.getFormattedInternshipStartDate()}
                     </div>
-                    <div className="text-sm text-gray-500">
+                    <div className="!text-sm !text-gray-500">
                         đến {record.getFormattedInternshipEndDate()}
                     </div>
-                    <div className="text-xs text-gray-400 mt-1">
+                    <div className="!text-xs !text-gray-400 !mt-1">
                         ({record.getDurationInWeeks()} tuần)
                     </div>
                 </div>
@@ -107,9 +108,9 @@ const BatchTable = ({
             key: 'students',
             render: (_, record) => (
                 <div>
-                    <div className="flex items-center space-x-2 mb-2">
-                        <TeamOutlined className="text-gray-400" />
-                        <span className="text-sm text-gray-900">
+                    <div className="!flex !items-center !space-x-2 !mb-2">
+                        <TeamOutlined className="!text-gray-400" />
+                        <span className="!text-sm !text-gray-900">
                             {record.currentStudents}/{record.maxStudents}
                         </span>
                     </div>
@@ -119,7 +120,7 @@ const BatchTable = ({
                         showInfo={false}
                         strokeColor="#8b5cf6"
                     />
-                    <div className="text-xs text-gray-500 mt-1">
+                    <div className="!text-xs !text-gray-500 !mt-1">
                         {record.getEnrollmentProgress()}% đã đăng ký
                     </div>
                 </div>
@@ -130,7 +131,7 @@ const BatchTable = ({
             title: 'Trạng thái',
             key: 'status',
             render: (_, record) => (
-                <Tag color={getStatusColor(record)} className="font-medium">
+                <Tag color={getStatusColor(record)} className="!font-medium">
                     {getStatusText(record)}
                 </Tag>
             ),
@@ -146,7 +147,7 @@ const BatchTable = ({
                             type="text"
                             icon={<EyeOutlined />}
                             onClick={() => onViewBatch(record)}
-                            className="text-purple-600 hover:text-purple-800"
+                            className="!text-purple-600 !hover:!text-purple-800"
                         />
                     </Tooltip>
                     <Tooltip title="Chỉnh sửa">
@@ -154,7 +155,7 @@ const BatchTable = ({
                             type="text"
                             icon={<EditOutlined />}
                             onClick={() => onEditBatch(record)}
-                            className="text-yellow-600 hover:text-yellow-800"
+                            className="!text-yellow-600 !hover:!text-yellow-800"
                         />
                     </Tooltip>
                     <Tooltip title="Xóa">
@@ -162,7 +163,7 @@ const BatchTable = ({
                             type="text"
                             icon={<DeleteOutlined />}
                             onClick={() => onDeleteBatch(record)}
-                            className="text-red-600 hover:text-red-800"
+                            className="!text-red-600 !hover:!text-red-800"
                         />
                     </Tooltip>
                 </Space>
@@ -173,7 +174,7 @@ const BatchTable = ({
     ];
 
     return (
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+        <div className="!bg-white !rounded-lg !shadow-sm !border !border-gray-200 !overflow-hidden">
             <Table
                 columns={columns}
                 dataSource={batches}
@@ -182,13 +183,13 @@ const BatchTable = ({
                 pagination={false}
                 scroll={{ x: 1200 }}
                 className="custom-table"
-                rowClassName="hover:bg-gray-50 transition-colors"
+                rowClassName="!hover:!bg-gray-50 !transition-colors"
                 locale={{
                     emptyText: (
-                        <div className="py-12 text-center">
-                            <CalendarOutlined className="text-4xl text-gray-300 mb-4" />
-                            <p className="text-gray-500 text-lg">Không tìm thấy đợt thực tập nào</p>
-                            <p className="text-gray-400 text-sm">Hãy thử thay đổi bộ lọc hoặc tạo đợt thực tập mới</p>
+                        <div className="!py-12 !text-center">
+                            <CalendarOutlined className="!text-4xl !text-gray-300 !mb-4" />
+                            <p className="!text-gray-500 !text-lg">Không tìm thấy đợt thực tập nào</p>
+                            <p className="!text-gray-400 !text-sm">Hãy thử thay đổi bộ lọc hoặc tạo đợt thực tập mới</p>
                         </div>
                     )
                 }}

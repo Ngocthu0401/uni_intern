@@ -36,6 +36,8 @@ export class Batch {
     // Capacity & Enrollment
     maxStudents = 100,
     currentStudentsCount = 0,
+    currentStudents = 0, // New field from backend
+    enrollmentProgress = 0, // New field from backend
 
     // Status - handle both isActive and active from backend
     isActive = true,
@@ -43,6 +45,7 @@ export class Batch {
 
     // Relations
     internships = [],
+    company = null,
 
     // Timestamps
     createdAt = null,
@@ -62,12 +65,16 @@ export class Batch {
     this.endDate = endDate;
 
     this.maxStudents = maxStudents;
-    this.currentStudentsCount = currentStudentsCount;
+    // Use currentStudents from backend if available, otherwise fallback to currentStudentsCount
+    this.currentStudentsCount = currentStudents || currentStudentsCount;
+    this.enrollmentProgress = enrollmentProgress || 0;
 
     // Handle both isActive and active from backend
     this._isActive = active !== null ? active : isActive;
 
     this.internships = Array.isArray(internships) ? internships : [];
+
+    this.company = company;
 
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
@@ -122,21 +129,28 @@ export class Batch {
   }
 
   canRegister() {
-    const hasCapacity = this.currentStudentsCount < this.maxStudents;
+    const studentCount = this.currentStudents || this.currentStudentsCount;
+    const hasCapacity = studentCount < this.maxStudents;
     return this.isRegistrationOpen() && hasCapacity && this._isActive;
   }
 
   // Capacity methods
   getAvailableStudentSlots() {
-    return Math.max(0, this.maxStudents - this.currentStudentsCount);
+    const studentCount = this.currentStudents || this.currentStudentsCount;
+    return Math.max(0, this.maxStudents - studentCount);
   }
 
   getEnrollmentPercentage() {
     if (this.maxStudents === 0) return 0;
-    return Math.round((this.currentStudentsCount / this.maxStudents) * 100);
+    const studentCount = this.currentStudents || this.currentStudentsCount;
+    return Math.round((studentCount / this.maxStudents) * 100);
   }
 
   getEnrollmentProgress() {
+    // Use enrollmentProgress from backend if available, otherwise calculate
+    if (this.enrollmentProgress !== undefined && this.enrollmentProgress !== null) {
+      return this.enrollmentProgress;
+    }
     return this.getEnrollmentPercentage();
   }
 
@@ -239,6 +253,8 @@ export class Batch {
       endDate: this.endDate,
       maxStudents: this.maxStudents,
       currentStudentsCount: this.currentStudentsCount,
+      currentStudents: this.currentStudents,
+      enrollmentProgress: this.enrollmentProgress,
       isActive: this._isActive,
       internships: this.internships,
       createdAt: this.createdAt,

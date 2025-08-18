@@ -2,10 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { message } from 'antd';
 import { batchService } from '../../../services';
 import { Batch, BatchSearchCriteria, PaginationOptions } from '../../../models';
-import {
-  BatchHeader, BatchSearchFilters, BatchTable, BatchPagination,
-  BatchDetailModal, BatchFormModal, BatchDeleteModal
-} from './components';
+import { BatchHeader, BatchSearchFilters, BatchTable, BatchPagination, BatchDetailModal, BatchFormModal, BatchDeleteModal } from './components';
 import './BatchManagement.css';
 
 const BatchManagement = () => {
@@ -121,8 +118,14 @@ const BatchManagement = () => {
   const handleFormSubmit = async (formData) => {
     try {
       if (modalMode === 'create') {
-        await batchService.createBatch(formData);
-        message.success('Tạo đợt thực tập thành công');
+        // Kiểm tra xem có phải tạo batch cho từng công ty không
+        if (formData.companyId) {
+          // Tạo batch cho một công ty cụ thể
+          await batchService.createBatch(formData);
+        } else {
+          // Tạo batch thông thường
+          await batchService.createBatch(formData);
+        }
       } else {
         await batchService.updateBatch(selectedBatch.id, formData);
         message.success('Cập nhật đợt thực tập thành công');
@@ -151,7 +154,7 @@ const BatchManagement = () => {
   };
 
   return (
-    <div className="space-y-6 p-6 bg-gray-50 min-h-screen">
+    <div className="!space-y-6 !p-6 !bg-gray-50 !min-h-screen">
       <BatchHeader onCreateBatch={handleCreateBatch} />
 
       <BatchSearchFilters
@@ -164,8 +167,8 @@ const BatchManagement = () => {
       />
 
       {error && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-          <p className="text-red-800">{error}</p>
+        <div className="!bg-red-50 !border !border-red-200 !rounded-lg !p-4">
+          <p className="!text-red-800">{error}</p>
         </div>
       )}
 

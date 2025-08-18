@@ -4,10 +4,9 @@ import com.internship.entity.*;
 import com.internship.enums.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 public class TestDataBuilder {
-    
+
     public static User createTestUser(String username, String email, RoleType role) {
         User user = new User();
         user.setUsername(username);
@@ -19,7 +18,7 @@ public class TestDataBuilder {
         user.setIsActive(true);
         return user;
     }
-    
+
     public static Student createTestStudent(User user) {
         Student student = new Student();
         student.setUser(user);
@@ -29,7 +28,7 @@ public class TestDataBuilder {
         student.setGpa(3.5);
         return student;
     }
-    
+
     public static Teacher createTestTeacher(User user) {
         Teacher teacher = new Teacher();
         teacher.setUser(user);
@@ -39,7 +38,7 @@ public class TestDataBuilder {
         teacher.setDegree("PhD");
         return teacher;
     }
-    
+
     public static Company createTestCompany() {
         Company company = new Company();
         company.setCompanyName("Test Company Ltd");
@@ -53,7 +52,7 @@ public class TestDataBuilder {
         company.setIsActive(true);
         return company;
     }
-    
+
     public static Mentor createTestMentor(User user, Company company) {
         Mentor mentor = new Mentor();
         mentor.setUser(user);
@@ -63,7 +62,7 @@ public class TestDataBuilder {
         mentor.setDepartment("IT Department");
         return mentor;
     }
-    
+
     public static InternshipBatch createTestBatch() {
         InternshipBatch batch = new InternshipBatch();
         batch.setBatchName("Test Batch 2024");
@@ -75,8 +74,9 @@ public class TestDataBuilder {
         batch.setIsActive(true);
         return batch;
     }
-    
-    public static Internship createTestInternship(Student student, Company company, Teacher teacher, Mentor mentor, InternshipBatch batch) {
+
+    public static Internship createTestInternship(Student student, Company company, Teacher teacher, Mentor mentor,
+            InternshipBatch batch) {
         Internship internship = new Internship();
         internship.setStudent(student);
         internship.setCompany(company);
@@ -89,7 +89,7 @@ public class TestDataBuilder {
         internship.setJobDescription("Test internship description");
         return internship;
     }
-    
+
     public static Report createTestReport(Internship internship) {
         Report report = new Report();
         report.setInternship(internship);
@@ -105,23 +105,24 @@ public class TestDataBuilder {
         report.setIsApprovedByMentor(false);
         return report;
     }
-    
+
     public static Evaluation createTestEvaluation(Internship internship, User evaluator, RoleType evaluatorType) {
         Evaluation evaluation = new Evaluation();
         evaluation.setInternship(internship);
         evaluation.setEvaluator(evaluator);
         evaluation.setEvaluatorType(evaluatorType);
         evaluation.setEvaluationDate(LocalDate.now());
-        evaluation.setTechnicalScore(8.0);
-        evaluation.setSoftSkillScore(7.5);
-        evaluation.setAttitudeScore(9.0);
-        evaluation.setCommunicationScore(8.5);
+        // Use existing fields in Evaluation entity
+        evaluation.setJobRequirementsFulfillment(2.0);
+        evaluation.setLearningSpirit(1.0);
+        evaluation.setCommunicationAttitude(1.0);
+        evaluation.setUnderstandingOrganization(1.0);
         evaluation.setOverallScore(8.25);
         evaluation.setComments("Good performance");
         evaluation.setIsFinalEvaluation(false);
         return evaluation;
     }
-    
+
     public static Contract createTestContract(Internship internship) {
         Contract contract = new Contract();
         contract.setInternship(internship);
@@ -133,4 +134,4 @@ public class TestDataBuilder {
         contract.setStatus(ContractStatus.DRAFT);
         return contract;
     }
-} 
+}
