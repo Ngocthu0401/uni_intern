@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.2
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Aug 06, 2025 at 02:16 PM
--- Server version: 8.0.30
--- PHP Version: 8.1.10
+-- Generation Time: Aug 20, 2025 at 10:05 AM
+-- Server version: 8.4.3
+-- PHP Version: 8.3.16
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -31,22 +31,22 @@ CREATE TABLE `companies` (
   `id` bigint NOT NULL,
   `created_at` datetime(6) DEFAULT NULL,
   `updated_at` datetime(6) DEFAULT NULL,
-  `abbreviated_name` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `address` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `company_code` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `company_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `company_size` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `company_type` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `contact_email` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `contact_person` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `contact_phone` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `contact_position` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `description` text COLLATE utf8mb4_general_ci,
-  `email` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `industry` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `abbreviated_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `address` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `company_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `company_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `company_size` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `company_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `contact_email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `contact_person` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `contact_phone` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `contact_position` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `industry` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `is_active` bit(1) DEFAULT NULL,
-  `phone_number` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `website` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL
+  `phone_number` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `website` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -72,27 +72,27 @@ CREATE TABLE `contracts` (
   `created_at` datetime(6) DEFAULT NULL,
   `updated_at` datetime(6) DEFAULT NULL,
   `approval_date` date DEFAULT NULL,
-  `approval_status` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `approved_by` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `company_signature` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `content` text COLLATE utf8mb4_general_ci,
-  `contract_code` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `contract_file_url` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `contract_type` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `department_signature` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `approval_status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `approved_by` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `company_signature` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `contract_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `contract_file_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `contract_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `department_signature` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `end_date` date DEFAULT NULL,
-  `notes` text COLLATE utf8mb4_general_ci,
+  `notes` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
   `payment_date` date DEFAULT NULL,
-  `payment_status` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `payment_terms` text COLLATE utf8mb4_general_ci,
+  `payment_status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `payment_terms` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
   `signed_date` date DEFAULT NULL,
   `start_date` date DEFAULT NULL,
-  `status` enum('DRAFT','PENDING','SENT','SIGNED','ACTIVE','PAID','REJECTED','EXPIRED','TERMINATED') COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `student_signature` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `status` enum('DRAFT','PENDING','SENT','SIGNED','ACTIVE','PAID','REJECTED','EXPIRED','TERMINATED') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `student_signature` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `support_amount` double DEFAULT NULL,
-  `template_id` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `terms_and_conditions` text COLLATE utf8mb4_general_ci,
-  `title` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `template_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `terms_and_conditions` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `created_by_teacher_id` bigint DEFAULT NULL,
   `internship_id` bigint DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -103,7 +103,6 @@ CREATE TABLE `contracts` (
 
 INSERT INTO `contracts` (`id`, `created_at`, `updated_at`, `approval_date`, `approval_status`, `approved_by`, `company_signature`, `content`, `contract_code`, `contract_file_url`, `contract_type`, `department_signature`, `end_date`, `notes`, `payment_date`, `payment_status`, `payment_terms`, `signed_date`, `start_date`, `status`, `student_signature`, `support_amount`, `template_id`, `terms_and_conditions`, `title`, `created_by_teacher_id`, `internship_id`) VALUES
 (1, '2025-08-06 11:36:18.000000', '2025-08-06 11:36:18.000000', '2024-08-20', 'APPROVED', 'TS. Nguyễn Văn A', 'FPT Corporation - 26/08/2024', 'CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nĐộc lập - Tự do - Hạnh phúc\n\nHỢP ĐỒNG HỖ TRỢ THỰC TẬP SINH\n\nBên A: Trường Đại học Công nghệ Thông tin\nBên B: Công ty Cổ phần FPT\nBên C: Sinh viên Nguyễn Minh Khoa - MSSV: 19520001\n\nĐIỀU 1: ĐỐI TƯỢNG HỖ TRỢ\n- Sinh viên đang thực tập tại FPT theo chương trình của trường\n- Có thái độ học tập tích cực và kết quả tốt\n\nĐIỀU 2: MỨC HỖ TRỢ\n- Mức hỗ trợ: 3.000.000 VNĐ/tháng\n- Thời gian hỗ trợ: từ 01/09/2024 đến 15/12/2024\n\nĐIỀU 3: ĐIỀU KIỆN HỖ TRỢ\n- Tham gia đầy đủ các hoạt động thực tập\n- Nộp báo cáo định kỳ theo quy định\n- Có đánh giá tích cực từ doanh nghiệp\n\nĐIỀU 4: THANH TOÁN\n- Thanh toán theo tháng vào ngày 15 hàng tháng\n- Chuyển khoản vào tài khoản sinh viên đăng ký', 'HT_FPT_001_2024', '/contracts/HT_FPT_001_2024.pdf', 'SUPPORT', 'UIT - 27/08/2024', '2024-12-15', 'Hợp đồng đã được ký kết đầy đủ và đang thực hiện', '2024-09-15', 'PAID', 'Thanh toán hàng tháng vào ngày 15. Chuyển khoản qua tài khoản ngân hàng của sinh viên.', '2024-08-25', '2024-09-01', 'SIGNED', 'Nguyễn Minh Khoa - 25/08/2024', 3000000, 'TEMPLATE_SUPPORT_001', '1. Sinh viên cam kết hoàn thành đầy đủ chương trình thực tập\n2. Bảo mật thông tin của công ty\n3. Tuân thủ nội quy và quy định của công ty\n4. Công ty cam kết tạo điều kiện tốt nhất cho sinh viên học tập', 'Hợp đồng hỗ trợ thực tập sinh - Nguyễn Minh Khoa', 1, 1),
-(2, '2025-08-06 11:36:18.000000', '2025-08-06 11:36:18.000000', '2024-08-20', 'APPROVED', 'TS. Nguyễn Văn A', 'FPT Corporation - 26/08/2024', 'CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nĐộc lập - Tự do - Hạnh phúc\n\nHỢP ĐỒNG HỖ TRỢ THỰC TẬP SINH\n\nBên A: Trường Đại học Công nghệ Thông tin\nBên B: Công ty Cổ phần FPT\nBên C: Sinh viên Trần Thị Lan - MSSV: 19520002\n\nVới mức hỗ trợ đặc biệt cho research project AI/ML: 3.500.000 VNĐ/tháng', 'HT_FPT_002_2024', '/contracts/HT_FPT_002_2024.pdf', 'SUPPORT', 'UIT - 27/08/2024', '2024-12-15', 'Hợp đồng có mức hỗ trợ cao do tham gia research project', '2024-09-15', 'PAID', 'Thanh toán hàng tháng vào ngày 15 với bonus cho research output.', '2024-08-25', '2024-09-01', 'SIGNED', 'Trần Thị Lan - 25/08/2024', 3500000, 'TEMPLATE_SUPPORT_001', 'Các điều khoản tương tự hợp đồng chuẩn với bổ sung về intellectual property cho research project', 'Hợp đồng hỗ trợ thực tập sinh - Trần Thị Lan', 1, 2),
 (3, '2025-08-06 11:36:18.000000', '2025-08-06 11:36:18.000000', '2024-08-25', 'APPROVED', 'ThS. Trần Thị B', 'VNG Corporation - 29/08/2024', 'Hợp đồng hỗ trợ thực tập sinh tại VNG Corporation với focus vào frontend development', 'HT_VNG_001_2024', '/contracts/HT_VNG_001_2024.pdf', 'SUPPORT', 'UIT - 30/08/2024', '2024-12-15', 'Hợp đồng thực hiện tốt, payment on schedule', '2024-09-15', 'PAID', 'Monthly payment với game credits bonus', '2024-08-28', '2024-09-01', 'ACTIVE', 'Lê Văn Hùng - 28/08/2024', 3200000, 'TEMPLATE_SUPPORT_001', 'Điều khoản bảo mật đặc biệt về game content và user data', 'Hợp đồng hỗ trợ thực tập sinh - Lê Văn Hùng', 2, 3);
 
 -- --------------------------------------------------------
@@ -117,30 +116,39 @@ CREATE TABLE `evaluations` (
   `created_at` datetime(6) DEFAULT NULL,
   `updated_at` datetime(6) DEFAULT NULL,
   `attitude_score` double DEFAULT NULL,
-  `comments` text COLLATE utf8mb4_general_ci,
+  `comments` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
   `communication_score` double DEFAULT NULL,
   `evaluation_date` date DEFAULT NULL,
-  `evaluator_type` enum('DEPARTMENT','TEACHER','STUDENT','MENTOR') COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `evaluator_type` enum('DEPARTMENT','TEACHER','STUDENT','MENTOR') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `is_final_evaluation` bit(1) DEFAULT NULL,
   `overall_score` double DEFAULT NULL,
-  `recommendations` text COLLATE utf8mb4_general_ci,
+  `recommendations` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
   `soft_skill_score` double DEFAULT NULL,
-  `strengths` text COLLATE utf8mb4_general_ci,
+  `strengths` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
   `technical_score` double DEFAULT NULL,
-  `weaknesses` text COLLATE utf8mb4_general_ci,
+  `weaknesses` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
   `evaluator_id` bigint DEFAULT NULL,
-  `internship_id` bigint DEFAULT NULL
+  `internship_id` bigint DEFAULT NULL,
+  `communication_attitude` double DEFAULT NULL,
+  `discipline_score` double DEFAULT NULL,
+  `following_rules` double DEFAULT NULL,
+  `initiative_creativity` double DEFAULT NULL,
+  `job_requirements_fulfillment` double DEFAULT NULL,
+  `learning_spirit` double DEFAULT NULL,
+  `professional_score` double DEFAULT NULL,
+  `property_protection` double DEFAULT NULL,
+  `understanding_organization` double DEFAULT NULL,
+  `work_enthusiasm` double DEFAULT NULL,
+  `work_schedule_compliance` double DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `evaluations`
 --
 
-INSERT INTO `evaluations` (`id`, `created_at`, `updated_at`, `attitude_score`, `comments`, `communication_score`, `evaluation_date`, `evaluator_type`, `is_final_evaluation`, `overall_score`, `recommendations`, `soft_skill_score`, `strengths`, `technical_score`, `weaknesses`, `evaluator_id`, `internship_id`) VALUES
-(1, '2025-08-06 11:36:18.000000', '2025-08-06 11:36:18.000000', 9, 'Sinh viên có tiến bộ rõ rệt trong suốt quá trình thực tập', 8.5, '2024-10-15', 'TEACHER', b'0', 8.5, 'Nên tham gia thêm các project complex để nâng cao kinh nghiệm', 8, 'Kỹ năng lập trình Java tốt, hiểu sâu về Spring Boot, có thái độ học hỏi tích cực', 8.5, 'Cần cải thiện kỹ năng debug và performance tuning', 3, 1),
-(2, '2025-08-06 11:36:18.000000', '2025-08-06 11:36:18.000000', 9, 'Rất hài lòng với performance của intern', 8, '2024-10-15', 'MENTOR', b'0', 8.3, 'Khuyến khích tham gia code review nhiều hơn và học thêm về testing', 8.5, 'Code quality tốt, follow coding standards nghiêm túc, teamwork skills tốt', 8, 'Thời gian estimate task chưa chính xác, cần cải thiện time management', 15, 1),
-(3, '2025-08-06 11:36:18.000000', '2025-08-06 11:36:18.000000', 9, 'Sinh viên có potential cao trong lĩnh vực AI', 8.5, '2024-10-15', 'TEACHER', b'0', 8.8, 'Nên tìm hiểu thêm về MLOps và model monitoring', 8.5, 'Kiến thức AI/ML vững chắc, có khả năng research tốt, presentation skills ấn tượng', 9, 'Cần cải thiện deployment skills và production mindset', 3, 2),
-(4, '2025-08-06 11:36:18.000000', '2025-08-06 11:36:18.000000', 8.5, 'Một trong những intern xuất sắc nhất năm', 8.5, '2024-10-15', 'MENTOR', b'0', 8.6, 'Recommend full-time offer sau khi tốt nghiệp', 8, 'Algorithm thinking mạnh, code Python clean và efficient', 9, 'Cần học thêm về software engineering best practices', 16, 2);
+INSERT INTO `evaluations` (`id`, `created_at`, `updated_at`, `attitude_score`, `comments`, `communication_score`, `evaluation_date`, `evaluator_type`, `is_final_evaluation`, `overall_score`, `recommendations`, `soft_skill_score`, `strengths`, `technical_score`, `weaknesses`, `evaluator_id`, `internship_id`, `communication_attitude`, `discipline_score`, `following_rules`, `initiative_creativity`, `job_requirements_fulfillment`, `learning_spirit`, `professional_score`, `property_protection`, `understanding_organization`, `work_enthusiasm`, `work_schedule_compliance`) VALUES
+(1, '2025-08-06 11:36:18.000000', '2025-08-20 06:10:07.758980', 9, 'Sinh viên có tiến bộ rõ rệt trong suốt quá trình thực tập', 8.5, '2024-10-15', 'TEACHER', b'0', 8.6, 'Nên tham gia thêm các project complex để nâng cao kinh nghiệm', 8, 'Kỹ năng lập trình Java tốt, hiểu sâu về Spring Boot, có thái độ học hỏi tích cực', 8.5, 'Cần cải thiện kỹ năng debug và performance tuning', 3, 1, 0.7, 5.7, 1, 1, 1, 0.9, 2.9, 1, 1, 1, 1),
+(2, '2025-08-06 11:36:18.000000', '2025-08-20 09:39:51.417401', 9, 'Rất hài lòng với performance của intern', 8, '2024-10-15', 'MENTOR', b'0', 6.1, 'Rất hài lòng với performance của intern', 8.5, 'Rất hài lòng với performance của intern', 8, 'Rất hài lòng với performance của intern', 15, 1, 0.6, 4.3, 0.7, 1, 0.3, 0.5, 1.8, 0.3, 1, 0.7, 1);
 
 -- --------------------------------------------------------
 
@@ -152,20 +160,20 @@ CREATE TABLE `internships` (
   `id` bigint NOT NULL,
   `created_at` datetime(6) DEFAULT NULL,
   `updated_at` datetime(6) DEFAULT NULL,
-  `benefits` text COLLATE utf8mb4_general_ci,
+  `benefits` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
   `end_date` date DEFAULT NULL,
   `final_score` double DEFAULT NULL,
-  `internship_code` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `job_description` text COLLATE utf8mb4_general_ci,
-  `job_title` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `mentor_comment` text COLLATE utf8mb4_general_ci,
+  `internship_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `job_description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `job_title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `mentor_comment` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
   `mentor_score` double DEFAULT NULL,
-  `notes` text COLLATE utf8mb4_general_ci,
-  `requirements` text COLLATE utf8mb4_general_ci,
+  `notes` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `requirements` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
   `salary` double DEFAULT NULL,
   `start_date` date DEFAULT NULL,
-  `status` enum('PENDING','APPROVED','REJECTED','ASSIGNED','IN_PROGRESS','COMPLETED','CANCELLED') COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `teacher_comment` text COLLATE utf8mb4_general_ci,
+  `status` enum('PENDING','APPROVED','REJECTED','ASSIGNED','IN_PROGRESS','COMPLETED','CANCELLED') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `teacher_comment` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
   `teacher_score` double DEFAULT NULL,
   `working_hours_per_week` int DEFAULT NULL,
   `company_id` bigint DEFAULT NULL,
@@ -181,12 +189,12 @@ CREATE TABLE `internships` (
 
 INSERT INTO `internships` (`id`, `created_at`, `updated_at`, `benefits`, `end_date`, `final_score`, `internship_code`, `job_description`, `job_title`, `mentor_comment`, `mentor_score`, `notes`, `requirements`, `salary`, `start_date`, `status`, `teacher_comment`, `teacher_score`, `working_hours_per_week`, `company_id`, `batch_id`, `mentor_id`, `student_id`, `teacher_id`) VALUES
 (1, '2025-08-06 11:36:18.000000', '2025-08-06 11:36:18.000000', 'Hỗ trợ ăn trưa, xe đưa đón, bảo hiểm y tế', '2024-12-15', 8.5, 'INT_FPT_001', 'Phát triển các API REST sử dụng Spring Boot, tham gia vào dự án thực tế của công ty, học hỏi về kiến trúc microservices và best practices trong phát triển phần mềm.', 'Java Backend Developer Intern', 'Thái độ làm việc tích cực, code clean và có tư duy tốt', 8.3, 'Sinh viên phù hợp với môi trường làm việc chuyên nghiệp', 'Kiến thức cơ bản về Java, OOP, SQL. Có thể làm việc nhóm và ham học hỏi.', 3000000, '2024-09-01', 'IN_PROGRESS', 'Sinh viên có tiến bộ tốt, hiểu biết sâu về Spring Boot', 8.7, 40, 1, 1, 1, 1, 1),
-(2, '2025-08-06 11:36:18.000000', '2025-08-06 11:36:18.000000', 'Hỗ trợ ăn trưa, xe đưa đón, khóa học AI online', '2024-12-15', 8.8, 'INT_FPT_002', 'Nghiên cứu và phát triển các mô hình machine learning, xử lý dữ liệu lớn, tham gia dự án AI chatbot cho khách hàng doanh nghiệp.', 'AI/ML Research Intern', 'Có khả năng research tốt và tư duy logic mạnh', 8.6, 'Tiềm năng để trở thành AI Engineer trong tương lai', 'Kiến thức về Python, toán học, thống kê. Có kinh nghiệm với thư viện ML như scikit-learn, pandas.', 3500000, '2024-09-01', 'IN_PROGRESS', 'Sinh viên có năng lực xuất sắc trong AI/ML', 9, 40, 1, 1, 2, 1, 1),
 (3, '2025-08-06 11:36:18.000000', '2025-08-06 11:36:18.000000', 'Lunch allowance, game credits, team building', '2024-12-15', 8.2, 'INT_VNG_001', 'Phát triển giao diện web cho game portal, sử dụng ReactJS và modern frontend technologies. Tham gia vào team phát triển game web.', 'Frontend Developer Intern', 'Code quality tốt, responsive design skills cần trau dồi', 8.4, 'Có tiềm năng phát triển thành full-stack developer', 'Kiến thức HTML, CSS, JavaScript. Có kinh nghiệm với ReactJS hoặc Vue.js là một lợi thế.', 3200000, '2024-09-01', 'IN_PROGRESS', 'Kỹ năng frontend tốt, cần cải thiện về UX/UI', 8, 40, 2, 1, 3, 3, 2),
 (4, '2025-08-06 11:36:18.000000', '2025-08-06 11:36:18.000000', 'Health insurance, English class, certification support', '2024-12-15', 8.6, 'INT_TMA_001', 'Phát triển ứng dụng enterprise sử dụng .NET Core, Entity Framework, và Azure cloud services. Tham gia dự án outsourcing cho khách hàng quốc tế.', '.NET Developer Intern', 'Delivery đúng deadline, quality code cao', 8.7, 'Phù hợp với môi trường outsourcing quốc tế', 'Kiến thức C#, OOP, SQL Server. Tiếng Anh giao tiếp cơ bản.', 3300000, '2024-09-01', 'IN_PROGRESS', 'Kỹ năng .NET vững chắc, giao tiếp tiếng Anh tốt', 8.5, 40, 3, 1, 4, 4, 3),
 (5, '2025-08-06 11:36:18.000000', '2025-08-06 11:36:18.000000', 'Meal allowance, lab access, research publication opportunity', '2024-12-15', 8, 'INT_STU_001', 'Nghiên cứu và phát triển các giải pháp IoT cho smart campus, lập trình embedded systems, phát triển mobile app điều khiển thiết bị IoT.', 'IoT Research Assistant', 'Tính sáng tạo cao, giải quyết vấn đề tốt', 8.2, 'Tiềm năng theo hướng nghiên cứu và phát triển sản phẩm', 'Kiến thức về lập trình C/C++, Arduino/Raspberry Pi. Có kinh nghiệm với mobile development là lợi thế.', 2800000, '2024-09-01', 'IN_PROGRESS', 'Có năng lực research, cần cải thiện kỹ năng thuyết trình', 7.8, 35, 4, 1, 5, 5, 2),
 (6, '2025-08-06 11:36:18.000000', '2025-08-06 11:36:18.000000', 'Security training, certification sponsorship, health insurance', '2024-12-15', 8.7, 'INT_BKAV_001', 'Tham gia team phát triển các công cụ bảo mật, thực hiện penetration testing, nghiên cứu các lỗ hổng bảo mật mới và phát triển giải pháp phòng chống.', 'Cybersecurity Intern', 'Kỹ năng penetration testing xuất sắc', 8.5, 'Có tiềm năng trở thành security expert', 'Kiến thức về network security, ethical hacking. Có certificate về cybersecurity là lợi thế.', 3400000, '2024-09-01', 'IN_PROGRESS', 'Kiến thức security vững, có tư duy phân tích tốt', 8.9, 40, 5, 1, 6, 6, 4),
-(9, '2025-08-06 04:49:52.292077', '2025-08-06 04:50:12.211620', 'sdfsdfsdf', '2025-09-06', NULL, 'INT1754455792289', 'sd sdc', 'dfdsfsdf', NULL, NULL, '', 'sdfsdffs', 3334, '2025-08-17', 'ASSIGNED', NULL, NULL, 40, 2, NULL, 5, 5, 4);
+(9, '2025-08-06 04:49:52.292077', '2025-08-06 04:50:12.211620', 'sdfsdfsdf', '2025-09-06', NULL, 'INT1754455792289', 'sd sdc', 'dfdsfsdf', NULL, NULL, '', 'sdfsdffs', 3334, '2025-08-17', 'ASSIGNED', NULL, NULL, 40, 2, NULL, 5, 5, 4),
+(10, '2025-08-18 09:02:59.824791', '2025-08-18 13:07:22.855065', 'ádasdas', '2025-09-29', NULL, 'INT1755507779811', 'ưqwdsdsdsd', 'aaaaaa', NULL, NULL, 'ádasd', 'ưqwdsdsdsdqwsdqwdqwdqwe', 22222, '2025-08-18', 'ASSIGNED', NULL, NULL, 60, 1, 1, 2, 2, 3);
 
 -- --------------------------------------------------------
 
@@ -198,27 +206,30 @@ CREATE TABLE `internship_batches` (
   `id` bigint NOT NULL,
   `created_at` datetime(6) DEFAULT NULL,
   `updated_at` datetime(6) DEFAULT NULL,
-  `academic_year` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `batch_code` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `batch_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `description` text COLLATE utf8mb4_general_ci,
+  `academic_year` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `batch_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `batch_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
   `end_date` date DEFAULT NULL,
   `is_active` bit(1) DEFAULT NULL,
   `max_students` int DEFAULT NULL,
   `registration_end_date` date DEFAULT NULL,
   `registration_start_date` date DEFAULT NULL,
-  `semester` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `start_date` date DEFAULT NULL
+  `semester` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `start_date` date DEFAULT NULL,
+  `company_id` bigint DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `internship_batches`
 --
 
-INSERT INTO `internship_batches` (`id`, `created_at`, `updated_at`, `academic_year`, `batch_code`, `batch_name`, `description`, `end_date`, `is_active`, `max_students`, `registration_end_date`, `registration_start_date`, `semester`, `start_date`) VALUES
-(1, '2025-08-06 11:36:18.000000', '2025-08-06 11:36:18.000000', '2024-2025', 'TT_HK1_2024', 'Thực tập Học kỳ 1 năm học 2024-2025', 'Đợt thực tập chính thức cho sinh viên năm cuối trong học kỳ 1 năm học 2024-2025', '2024-12-15', b'1', 200, '2024-08-15', '2024-06-01', 'Học kỳ 1', '2024-09-01'),
-(2, '2025-08-06 11:36:18.000000', '2025-08-06 11:36:18.000000', '2024', 'TT_HE_2024', 'Thực tập Hè 2024', 'Đợt thực tập hè cho sinh viên muốn tích lũy kinh nghiệm sớm', '2024-08-30', b'1', 150, '2024-05-31', '2024-04-01', 'Hè', '2024-06-15'),
-(3, '2025-08-06 11:36:18.000000', '2025-08-06 11:36:18.000000', '2023-2024', 'TT_HK2_2023', 'Thực tập Học kỳ 2 năm học 2023-2024', 'Đợt thực tập học kỳ 2 vừa kết thúc', '2024-05-31', b'0', 180, '2024-01-15', '2023-12-01', 'Học kỳ 2', '2024-02-01');
+INSERT INTO `internship_batches` (`id`, `created_at`, `updated_at`, `academic_year`, `batch_code`, `batch_name`, `description`, `end_date`, `is_active`, `max_students`, `registration_end_date`, `registration_start_date`, `semester`, `start_date`, `company_id`) VALUES
+(1, '2025-08-06 11:36:18.000000', '2025-08-06 11:36:18.000000', '2024-2025', 'TT_HK1_2024', 'Thực tập Học kỳ 1 năm học 2024-2025', 'Đợt thực tập chính thức cho sinh viên năm cuối trong học kỳ 1 năm học 2024-2025', '2024-12-15', b'1', 200, '2024-08-15', '2024-06-01', 'Học kỳ 1', '2024-09-01', NULL),
+(2, '2025-08-06 11:36:18.000000', '2025-08-06 11:36:18.000000', '2024', 'TT_HE_2024', 'Thực tập Hè 2024', 'Đợt thực tập hè cho sinh viên muốn tích lũy kinh nghiệm sớm', '2024-08-30', b'1', 150, '2024-05-31', '2024-04-01', 'Hè', '2024-06-15', NULL),
+(3, '2025-08-06 11:36:18.000000', '2025-08-06 11:36:18.000000', '2023-2024', 'TT_HK2_2023', 'Thực tập Học kỳ 2 năm học 2023-2024', 'Đợt thực tập học kỳ 2 vừa kết thúc', '2024-05-31', b'0', 180, '2024-01-15', '2023-12-01', 'Học kỳ 2', '2024-02-01', NULL),
+(8, '2025-08-18 14:49:40.897205', '2025-08-18 15:17:20.914916', '2024-2025', 'BATCH_1755528580778', 'name_en - Công ty TNHH VNG', 'bbbbbb', '2025-09-28', b'1', 108, '2025-08-07', '2025-07-30', 'SPRING', '2025-08-07', 2),
+(9, '2025-08-18 14:49:41.015838', '2025-08-18 15:16:59.200718', '2024-2025', 'BATCH_1755528580987', 'name_en - Công ty TNHH TMA Solutions', 'aaaaaaa', '2025-09-28', b'1', 25, '2025-08-07', '2025-07-30', 'SPRING', '2025-08-07', 3);
 
 -- --------------------------------------------------------
 
@@ -228,20 +239,20 @@ INSERT INTO `internship_batches` (`id`, `created_at`, `updated_at`, `academic_ye
 
 CREATE TABLE `internship_progress` (
   `id` bigint NOT NULL,
-  `achievements` text COLLATE utf8mb4_general_ci,
-  `challenges` text COLLATE utf8mb4_general_ci,
+  `achievements` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `challenges` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
   `completed_tasks` int DEFAULT NULL,
   `created_at` datetime(6) NOT NULL,
   `current_week` int NOT NULL,
-  `mentor_feedback` text COLLATE utf8mb4_general_ci,
+  `mentor_feedback` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
   `overall_progress` double DEFAULT NULL,
-  `student_reflection` text COLLATE utf8mb4_general_ci,
+  `student_reflection` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
   `total_tasks` int DEFAULT NULL,
   `total_weeks` int NOT NULL,
   `updated_at` datetime(6) DEFAULT NULL,
   `week_end_date` date DEFAULT NULL,
   `week_start_date` date DEFAULT NULL,
-  `weekly_goals` text COLLATE utf8mb4_general_ci,
+  `weekly_goals` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
   `internship_id` bigint NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -253,8 +264,6 @@ INSERT INTO `internship_progress` (`id`, `achievements`, `challenges`, `complete
 (1, 'Hoàn thành setup environment thành công, hiểu được project structure', 'Gặp khó khăn ban đầu với Spring Boot configuration', 1, '2025-08-06 11:36:18.000000', 1, 'Student shows good technical aptitude, quick learner', 25, 'Môi trường FPT rất chuyên nghiệp, mentor support tốt', 4, 16, '2025-08-06 11:36:18.000000', '2024-09-07', '2024-09-01', 'Setup development environment và làm quen với codebase hiện tại', 1),
 (2, 'Successfully implemented registration endpoint với proper validation', 'Password encryption và email verification integration', 2, '2025-08-06 11:36:18.000000', 2, 'Good progress, code quality improving', 50, 'Hiểu rõ hơn về REST API design patterns', 4, 16, '2025-08-06 11:36:18.000000', '2024-09-14', '2024-09-08', 'Hoàn thành User Registration API với validation', 1),
 (3, 'Setup JWT library và understand token-based auth flow', 'Token refresh mechanism và security best practices', 2, '2025-08-06 11:36:18.000000', 3, 'On track with timeline, good problem-solving skills', 62.5, 'JWT concept khá phức tạp nhưng thú vị', 4, 16, '2025-08-06 11:36:18.000000', '2024-09-21', '2024-09-15', 'Bắt đầu implement JWT authentication system', 1),
-(4, 'Successfully processed 10K+ chat logs, clean dataset ready', 'Data quality issues và text normalization challenges', 1, '2025-08-06 11:36:18.000000', 1, 'Excellent data science skills, thorough preprocessing', 33.3, 'Học được nhiều về NLP preprocessing techniques', 3, 16, '2025-08-06 11:36:18.000000', '2024-09-07', '2024-09-01', 'Data collection và preprocessing cho chatbot project', 2),
-(5, 'BERT model achieving 92% accuracy on intent classification', 'Overfitting issues và computational resource management', 1, '2025-08-06 11:36:18.000000', 2, 'Outstanding ML engineering skills, good experimentation', 50, 'Hiểu sâu hơn về transformer models và fine-tuning', 3, 16, '2025-08-06 11:36:18.000000', '2024-09-14', '2024-09-08', 'Model training và hyperparameter tuning', 2),
 (6, 'Homepage component hoàn thành với responsive design', 'CSS styling và component architecture decisions', 1, '2025-08-06 11:36:18.000000', 1, 'Good React knowledge, clean component structure', 33.3, 'VNG culture rất dynamic, team work tốt', 3, 16, '2025-08-06 11:36:18.000000', '2024-09-07', '2024-09-01', 'Setup React environment và implement homepage', 3),
 (7, 'Game carousel working smoothly, user dashboard implemented', 'State management complexity và API integration', 2, '2025-08-06 11:36:18.000000', 2, 'UI skills improving rapidly, good attention to detail', 66.7, 'Học được nhiều về modern React patterns', 3, 16, '2025-08-06 11:36:18.000000', '2024-09-14', '2024-09-08', 'Hoàn thiện homepage và bắt đầu authentication', 3);
 
@@ -268,11 +277,11 @@ CREATE TABLE `mentors` (
   `id` bigint NOT NULL,
   `created_at` datetime(6) DEFAULT NULL,
   `updated_at` datetime(6) DEFAULT NULL,
-  `department` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `expertise_level` enum('JUNIOR','INTERMEDIATE','SENIOR','EXPERT','LEAD') COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `office_location` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `position` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `specialization` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `department` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `expertise_level` enum('JUNIOR','INTERMEDIATE','SENIOR','EXPERT','LEAD') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `office_location` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `position` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `specialization` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `years_of_experience` int DEFAULT NULL,
   `company_id` bigint DEFAULT NULL,
   `user_id` bigint DEFAULT NULL
@@ -300,27 +309,27 @@ CREATE TABLE `reports` (
   `id` bigint NOT NULL,
   `created_at` datetime(6) DEFAULT NULL,
   `updated_at` datetime(6) DEFAULT NULL,
-  `achievements` text COLLATE utf8mb4_general_ci,
+  `achievements` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
   `approved_at` date DEFAULT NULL,
-  `challenges` text COLLATE utf8mb4_general_ci,
-  `content` text COLLATE utf8mb4_general_ci,
-  `feedback` text COLLATE utf8mb4_general_ci,
+  `challenges` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `feedback` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
   `grade` double DEFAULT NULL,
   `is_approved_by_mentor` bit(1) DEFAULT NULL,
   `is_approved_by_teacher` bit(1) DEFAULT NULL,
-  `mentor_comment` text COLLATE utf8mb4_general_ci,
+  `mentor_comment` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
   `mentor_score` double DEFAULT NULL,
-  `next_week_plan` text COLLATE utf8mb4_general_ci,
-  `notes` text COLLATE utf8mb4_general_ci,
+  `next_week_plan` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `notes` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
   `report_date` date DEFAULT NULL,
-  `report_period` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `report_period` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `reviewed_at` datetime(6) DEFAULT NULL,
-  `status` enum('PENDING','APPROVED','REJECTED','DRAFT') COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `status` enum('PENDING','APPROVED','REJECTED','DRAFT') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `submitted_at` datetime(6) DEFAULT NULL,
-  `teacher_comment` text COLLATE utf8mb4_general_ci,
+  `teacher_comment` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
   `teacher_score` double DEFAULT NULL,
-  `title` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `type` enum('WEEKLY','MONTHLY','FINAL') COLLATE utf8mb4_general_ci NOT NULL,
+  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `type` enum('WEEKLY','MONTHLY','FINAL') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `week_number` int DEFAULT NULL,
   `internship_id` bigint NOT NULL,
   `reviewer_id` bigint DEFAULT NULL,
@@ -333,8 +342,7 @@ CREATE TABLE `reports` (
 
 INSERT INTO `reports` (`id`, `created_at`, `updated_at`, `achievements`, `approved_at`, `challenges`, `content`, `feedback`, `grade`, `is_approved_by_mentor`, `is_approved_by_teacher`, `mentor_comment`, `mentor_score`, `next_week_plan`, `notes`, `report_date`, `report_period`, `reviewed_at`, `status`, `submitted_at`, `teacher_comment`, `teacher_score`, `title`, `type`, `week_number`, `internship_id`, `reviewer_id`, `student_id`) VALUES
 (1, '2025-08-06 11:36:18.000000', '2025-08-06 11:36:18.000000', NULL, NULL, NULL, 'Tuần đầu tiên tại FPT, em đã được orientation về quy trình làm việc, coding standards và tools sử dụng. Em đã setup development environment và làm quen với codebase hiện tại. Mentor hướng dẫn em về Spring Boot architecture và database design patterns.', NULL, 8.5, NULL, NULL, NULL, NULL, NULL, NULL, '2024-09-07', 'Tuần 1 (01/09 - 07/09/2024)', '2024-09-08 09:15:00.000000', 'APPROVED', '2024-09-07 17:30:00.000000', NULL, NULL, 'Báo cáo tuần 1 - Làm quen môi trường làm việc', 'WEEKLY', 1, 1, 1, 1),
-(2, '2025-08-06 11:36:18.000000', '2025-08-06 11:36:18.000000', NULL, NULL, NULL, 'Tuần này em đã bắt đầu phát triển module User Management API. Em học được cách implement authentication với JWT, validation với Bean Validation và error handling. Gặp khó khăn trong việc hiểu về dependency injection nhưng đã được mentor giải đáp.', NULL, 8.7, NULL, NULL, NULL, NULL, NULL, NULL, '2024-09-14', 'Tuần 2 (08/09 - 14/09/2024)', '2024-09-15 08:30:00.000000', 'APPROVED', '2024-09-14 17:00:00.000000', NULL, NULL, 'Báo cáo tuần 2 - Phát triển REST API đầu tiên', 'WEEKLY', 2, 1, 1, 1),
-(3, '2025-08-06 11:36:18.000000', '2025-08-06 11:36:18.000000', NULL, NULL, NULL, 'Em bắt đầu nghiên cứu về Natural Language Processing cho chatbot project. Đã tìm hiểu về BERT, GPT models và các preprocessing techniques. Setup Jupyter notebook environment và làm quen với dataset của công ty.', NULL, 9, NULL, NULL, NULL, NULL, NULL, NULL, '2024-09-07', 'Tuần 1 (01/09 - 07/09/2024)', '2024-09-08 10:00:00.000000', 'APPROVED', '2024-09-07 18:00:00.000000', NULL, NULL, 'Báo cáo tuần 1 - Nghiên cứu ML Models', 'WEEKLY', 1, 2, 1, 2);
+(2, '2025-08-06 11:36:18.000000', '2025-08-06 11:36:18.000000', NULL, NULL, NULL, 'Tuần này em đã bắt đầu phát triển module User Management API. Em học được cách implement authentication với JWT, validation với Bean Validation và error handling. Gặp khó khăn trong việc hiểu về dependency injection nhưng đã được mentor giải đáp.', NULL, 8.7, NULL, NULL, NULL, NULL, NULL, NULL, '2024-09-14', 'Tuần 2 (08/09 - 14/09/2024)', '2024-09-15 08:30:00.000000', 'APPROVED', '2024-09-14 17:00:00.000000', NULL, NULL, 'Báo cáo tuần 2 - Phát triển REST API đầu tiên', 'WEEKLY', 2, 1, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -344,7 +352,7 @@ INSERT INTO `reports` (`id`, `created_at`, `updated_at`, `achievements`, `approv
 
 CREATE TABLE `report_attachments` (
   `report_id` bigint NOT NULL,
-  `file_path` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL
+  `file_path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -357,16 +365,16 @@ CREATE TABLE `students` (
   `id` bigint NOT NULL,
   `created_at` datetime(6) DEFAULT NULL,
   `updated_at` datetime(6) DEFAULT NULL,
-  `academic_year` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `address` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `class_name` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `academic_year` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `address` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `class_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `date_of_birth` date DEFAULT NULL,
   `gpa` double DEFAULT NULL,
-  `major` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `parent_name` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `parent_phone` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `status` enum('ACTIVE','INACTIVE','GRADUATED','SUSPENDED') COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `student_code` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `major` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `parent_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `parent_phone` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `status` enum('ACTIVE','INACTIVE','GRADUATED','SUSPENDED') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `student_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `user_id` bigint NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -375,7 +383,7 @@ CREATE TABLE `students` (
 --
 
 INSERT INTO `students` (`id`, `created_at`, `updated_at`, `academic_year`, `address`, `class_name`, `date_of_birth`, `gpa`, `major`, `parent_name`, `parent_phone`, `status`, `student_code`, `user_id`) VALUES
-(1, '2025-08-06 11:36:18.000000', '2025-08-06 11:36:18.000000', '2019-2023', '123 Nguyễn Văn Cừ, Q.5, TP.HCM', 'CNTT-K19', '2001-03-15', 3.75, 'Công nghệ Thông tin', 'Nguyễn Văn Hải', '0908123456', 'ACTIVE', '19520001', 7),
+(1, '2025-08-06 11:36:18.000000', '2025-08-20 10:01:47.621118', '2019-2023', NULL, 'CNTT-K19', NULL, 3.8, 'Công nghệ Thông tin', NULL, NULL, 'ACTIVE', '19520001', 7),
 (2, '2025-08-06 11:36:18.000000', '2025-08-06 11:36:18.000000', '2019-2023', '456 Lê Lợi, Q.1, TP.HCM', 'CNTT-K19', '2001-07-22', 3.82, 'Công nghệ Thông tin', 'Trần Minh Tâm', '0908123457', 'ACTIVE', '19520002', 8),
 (3, '2025-08-06 11:36:18.000000', '2025-08-06 11:36:18.000000', '2019-2023', '789 Nguyễn Huệ, Q.1, TP.HCM', 'KTPM-K19', '2001-12-08', 3.65, 'Kỹ thuật Phần mềm', 'Lê Thị Nga', '0908123458', 'ACTIVE', '19520003', 9),
 (4, '2025-08-06 11:36:18.000000', '2025-08-06 11:36:18.000000', '2019-2023', '321 Võ Văn Tần, Q.3, TP.HCM', 'KTPM-K19', '2001-05-10', 3.9, 'Kỹ thuật Phần mềm', 'Phạm Văn Bình', '0908123459', 'ACTIVE', '19520004', 10),
@@ -392,13 +400,13 @@ CREATE TABLE `tasks` (
   `id` bigint NOT NULL,
   `actual_hours` int DEFAULT NULL,
   `created_at` datetime(6) NOT NULL,
-  `description` text COLLATE utf8mb4_general_ci,
+  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
   `due_date` date DEFAULT NULL,
   `estimated_hours` int DEFAULT NULL,
-  `notes` text COLLATE utf8mb4_general_ci,
-  `priority` enum('LOW','MEDIUM','HIGH','URGENT') COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `status` enum('PENDING','IN_PROGRESS','COMPLETED','CANCELLED','OVERDUE') COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `title` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `notes` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `priority` enum('LOW','MEDIUM','HIGH','URGENT') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `status` enum('PENDING','IN_PROGRESS','COMPLETED','CANCELLED','OVERDUE') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `updated_at` datetime(6) DEFAULT NULL,
   `internship_id` bigint NOT NULL,
   `mentor_id` bigint DEFAULT NULL,
@@ -414,9 +422,6 @@ INSERT INTO `tasks` (`id`, `actual_hours`, `created_at`, `description`, `due_dat
 (2, 18, '2025-08-06 11:36:18.000000', 'Phát triển REST API cho đăng ký người dùng với validation, password encryption, và email verification.', '2024-09-10', 16, 'Good implementation, minor feedback on validation messages', 'HIGH', 'COMPLETED', 'Implement User Registration API', '2025-08-06 11:36:18.000000', 1, 1, 1),
 (3, 15, '2025-08-06 11:36:18.000000', 'Implement JWT-based authentication system với login/logout functionality và middleware protection.', '2024-09-20', 20, 'Currently working on token refresh mechanism', 'HIGH', 'IN_PROGRESS', 'Add JWT Authentication', '2025-08-06 11:36:18.000000', 1, 1, 1),
 (4, NULL, '2025-08-06 11:36:18.000000', 'Viết unit tests cho User service với coverage >= 80% sử dụng JUnit và Mockito.', '2024-09-25', 12, 'Waiting for JWT implementation completion', 'MEDIUM', 'PENDING', 'Write Unit Tests', '2025-08-06 11:36:18.000000', 1, 1, 1),
-(5, 22, '2025-08-06 11:36:18.000000', 'Thu thập và tiền xử lý dữ liệu chat logs cho chatbot training. Clean data và prepare training dataset.', '2024-09-08', 24, 'Excellent data quality, good preprocessing pipeline', 'HIGH', 'COMPLETED', 'Data Collection and Preprocessing', '2025-08-06 11:36:18.000000', 2, 2, 2),
-(6, 28, '2025-08-06 11:36:18.000000', 'Training mô hình phân loại intent sử dụng BERT model với dataset đã chuẩn bị.', '2024-09-18', 32, 'Model accuracy reached 92%, fine-tuning hyperparameters', 'HIGH', 'IN_PROGRESS', 'Train Intent Classification Model', '2025-08-06 11:36:18.000000', 2, 2, 2),
-(7, NULL, '2025-08-06 11:36:18.000000', 'Phát triển REST API cho chatbot service với real-time response và logging.', '2024-09-30', 20, 'Dependent on model training completion', 'HIGH', 'PENDING', 'Build Chatbot API', '2025-08-06 11:36:18.000000', 2, 2, 2),
 (8, 4, '2025-08-06 11:36:18.000000', 'Cài đặt Node.js, npm, create-react-app, và các development tools. Setup ESLint và Prettier.', '2024-09-03', 6, 'Quick setup, familiar with React ecosystem', 'HIGH', 'COMPLETED', 'Setup React Development Environment', '2025-08-06 11:36:18.000000', 3, 3, 3),
 (9, 26, '2025-08-06 11:36:18.000000', 'Phát triển trang chủ game portal với responsive design, game carousel, và user dashboard.', '2024-09-15', 24, 'Good UI implementation, minor responsiveness issues fixed', 'HIGH', 'COMPLETED', 'Implement Game Portal Homepage', '2025-08-06 11:36:18.000000', 3, 3, 3),
 (10, 12, '2025-08-06 11:36:18.000000', 'Implement login/register pages với form validation và state management.', '2024-09-22', 16, 'Working on social login integration', 'HIGH', 'IN_PROGRESS', 'Add User Authentication Flow', '2025-08-06 11:36:18.000000', 3, 3, 3);
@@ -431,12 +436,12 @@ CREATE TABLE `teachers` (
   `id` bigint NOT NULL,
   `created_at` datetime(6) DEFAULT NULL,
   `updated_at` datetime(6) DEFAULT NULL,
-  `degree` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `department` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `office_location` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `position` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `specialization` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `teacher_code` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `degree` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `department` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `office_location` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `position` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `specialization` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `teacher_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `user_id` bigint NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -460,14 +465,14 @@ CREATE TABLE `users` (
   `id` bigint NOT NULL,
   `created_at` datetime(6) DEFAULT NULL,
   `updated_at` datetime(6) DEFAULT NULL,
-  `avatar_url` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `email` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `full_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `avatar_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `full_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `is_active` bit(1) DEFAULT NULL,
-  `password` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `phone_number` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `role` enum('DEPARTMENT','TEACHER','STUDENT','MENTOR') COLLATE utf8mb4_general_ci NOT NULL,
-  `username` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
+  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `phone_number` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `role` enum('DEPARTMENT','TEACHER','STUDENT','MENTOR') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `username` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -541,7 +546,8 @@ ALTER TABLE `internships`
 --
 ALTER TABLE `internship_batches`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `UK_hmsciamj5gyk5j2a7px15aqct` (`batch_code`);
+  ADD UNIQUE KEY `UK_hmsciamj5gyk5j2a7px15aqct` (`batch_code`),
+  ADD KEY `FKqqesgp9wc1psjhce24xjrcvdh` (`company_id`);
 
 --
 -- Indexes for table `internship_progress`
@@ -632,13 +638,13 @@ ALTER TABLE `evaluations`
 -- AUTO_INCREMENT for table `internships`
 --
 ALTER TABLE `internships`
-  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `internship_batches`
 --
 ALTER TABLE `internship_batches`
-  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `internship_progress`
@@ -709,6 +715,12 @@ ALTER TABLE `internships`
   ADD CONSTRAINT `FKkmqhv1l86m6qrqgfftoy92vy6` FOREIGN KEY (`student_id`) REFERENCES `students` (`id`),
   ADD CONSTRAINT `FKkw009ia6w9ui3095scywptogh` FOREIGN KEY (`company_id`) REFERENCES `companies` (`id`),
   ADD CONSTRAINT `FKry0qawpn34wc9jr9rr11jrqy3` FOREIGN KEY (`batch_id`) REFERENCES `internship_batches` (`id`);
+
+--
+-- Constraints for table `internship_batches`
+--
+ALTER TABLE `internship_batches`
+  ADD CONSTRAINT `FKqqesgp9wc1psjhce24xjrcvdh` FOREIGN KEY (`company_id`) REFERENCES `companies` (`id`);
 
 --
 -- Constraints for table `internship_progress`
