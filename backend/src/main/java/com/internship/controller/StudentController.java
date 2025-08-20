@@ -232,9 +232,13 @@ public class StudentController {
 
     @GetMapping("/teacher/{teacherId}")
     @PreAuthorize("hasRole('DEPARTMENT') or hasRole('TEACHER')")
-    public ResponseEntity<List<StudentWithInternshipsDto>> getStudentsByTeacherId(@PathVariable Long teacherId) {
+    public ResponseEntity<List<StudentWithInternshipsDto>> getStudentsByTeacherId(
+            @PathVariable Long teacherId,
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) String status) {
         try {
-            List<StudentWithInternshipsDto> students = studentService.getStudentsByTeacherId(teacherId);
+            List<StudentWithInternshipsDto> students = studentService.getStudentsByTeacherId(teacherId, keyword,
+                    status);
             return ResponseEntity.ok(students);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().build();

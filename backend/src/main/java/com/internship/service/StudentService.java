@@ -22,6 +22,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.Collections;
 
 @Service
 @Transactional(readOnly = true)
@@ -401,7 +402,7 @@ public class StudentService {
                 .collect(Collectors.toList());
     }
 
-    public List<StudentWithInternshipsDto> getStudentsByTeacherId(Long teacherId) {
+    public List<StudentWithInternshipsDto> getStudentsByTeacherId(Long teacherId, String keyword, String status) {
         // Get students through internships supervised by the teacher
         List<Internship> internships = internshipRepository.findByTeacherId(teacherId);
 
@@ -411,13 +412,66 @@ public class StudentService {
                 .collect(Collectors.groupingBy(Internship::getStudent));
 
         // Create DTO list with internships attached
-        return studentInternshipsMap.entrySet().stream()
+        List<StudentWithInternshipsDto> students = studentInternshipsMap.entrySet().stream()
                 .map(entry -> {
                     Student student = entry.getKey();
                     List<Internship> studentInternships = entry.getValue();
                     return createStudentDto(student, studentInternships);
                 })
                 .collect(Collectors.toList());
+
+        // Apply keyword search filter
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            String searchTerm = keyword.toLowerCase().trim();
+            students = students.stream()
+                    .filter(student -> (student.getUser() != null && student.getUser().getFullName() != null &&
+                            student.getUser().getFullName().toLowerCase().contains(searchTerm)) ||
+                            (student.getStudentCode() != null &&
+                                    student.getStudentCode().toLowerCase().contains(searchTerm))
+                            ||
+                            (student.getUser() != null && student.getUser().getEmail() != null &&
+                                    student.getUser().getEmail().toLowerCase().contains(searchTerm)))
+                    .collect(Collectors.toList());
+        }
+
+        // Apply status filter
+        if (status != null && !status.trim().isEmpty() && !"all".equals(status)) {
+            students = students.stream()
+                    .filter(student -> {
+                        // Get current internship status
+                        if (student.getInternships() != null && !student.getInternships().isEmpty()) {
+                            // Sort internships by priority and get the most recent one
+                            InternshipForStudentDto currentInternship = student.getInternships().stream()
+                                    .sorted((a, b) -> {
+                                        Map<String, Integer> priorityOrder = new HashMap<>();
+                                        priorityOrder.put("IN_PROGRESS", 5);
+                                        priorityOrder.put("ASSIGNED", 4);
+                                        priorityOrder.put("ACTIVE", 3);
+                                        priorityOrder.put("PENDING", 2);
+                                        priorityOrder.put("COMPLETED", 1);
+                                        priorityOrder.put("TERMINATED", 0);
+                                        priorityOrder.put("CANCELLED", 0);
+
+                                        int aPriority = priorityOrder.getOrDefault(a.getStatus(), 0);
+                                        int bPriority = priorityOrder.getOrDefault(b.getStatus(), 0);
+
+                                        if (aPriority != bPriority) {
+                                            return bPriority - aPriority;
+                                        }
+
+                                        return b.getUpdatedAt().compareTo(a.getUpdatedAt());
+                                    })
+                                    .findFirst()
+                                    .orElse(null);
+
+                            return currentInternship != null && status.equals(currentInternship.getStatus());
+                        }
+                        return false;
+                    })
+                    .collect(Collectors.toList());
+        }
+
+        return students;
     }
 
     public List<StudentWithInternshipsDto> getStudentsByBatch(Long batchId) {
