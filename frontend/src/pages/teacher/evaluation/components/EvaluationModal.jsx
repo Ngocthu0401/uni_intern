@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Modal, Form, Select, InputNumber, Input, Row, Col, Divider, Typography } from 'antd';
+import { Modal, Form, Select, InputNumber, Input, Row, Col, Divider, Typography, Alert } from 'antd';
 
 const { TextArea } = Input;
 const { Title } = Typography;
@@ -21,19 +21,39 @@ const professionalFields = [
     { key: 'initiativeCreativity', label: 'Có đề xuất, sáng kiến, năng động trong công việc', maxScore: 1.0 }
 ];
 
-const EvaluationModal = ({
-    open,
-    mode = 'create',
-    onCancel,
-    onSubmit,
-    students = [],
-    internships = [],
-    initialValues = {},
-    loading = false,
-}) => {
+const EvaluationModal = ({ open, mode = 'create', onCancel, onSubmit, students = [], internships = [], existingEvaluations = [], initialValues = {}, loading = false, }) => {
     const [form] = Form.useForm();
 
     const isView = mode === 'view';
+
+    // Lọc sinh viên chưa được đánh giá khi ở chế độ tạo mới
+    const availableStudents = useMemo(() => {
+        if (mode === 'create') {
+            // Lấy danh sách ID của sinh viên đã được đánh giá
+            const evaluatedStudentIds = existingEvaluations.map(evaluation =>
+                evaluation.internship?.student?.id || evaluation.studentId
+            );
+
+            // Lọc ra những sinh viên chưa được đánh giá
+            return students.filter(student => !evaluatedStudentIds.includes(student.id));
+        }
+        return students;
+    }, [students, existingEvaluations, mode]);
+
+    // Lọc thực tập tương ứng với sinh viên có sẵn
+    const availableInternships = useMemo(() => {
+        if (mode === 'create') {
+            const availableStudentIds = availableStudents.map(s => s.id);
+            return internships.filter(internship =>
+                availableStudentIds.includes(internship.student?.id)
+            );
+        }
+        return internships;
+    }, [internships, availableStudents, mode]);
+
+    // Kiểm tra xem có sinh viên nào chưa được đánh giá không
+    const hasAvailableStudents = availableStudents.length > 0;
+    const allStudentsEvaluated = mode === 'create' && students.length > 0 && !hasAvailableStudents;
 
     const scores = useMemo(() => {
         const values = form.getFieldsValue();
@@ -65,7 +85,7 @@ const EvaluationModal = ({
             title={mode === 'create' ? 'Tạo đánh giá mới' : mode === 'edit' ? 'Chỉnh sửa đánh giá' : 'Chi tiết đánh giá'}
             onCancel={onCancel}
             onOk={() => form.submit()}
-            okButtonProps={{ loading, disabled: isView }}
+            okButtonProps={{ loading, disabled: isView || (mode === 'create' && !hasAvailableStudents) }}
             cancelButtonProps={{ disabled: loading }}
             okText={mode === 'create' ? 'Tạo đánh giá' : 'Cập nhật'}
             width={1000}
@@ -76,30 +96,44 @@ const EvaluationModal = ({
                 form={form}
                 initialValues={initialValues}
                 onFinish={onSubmit}
-                disabled={isView}
+                disabled={isView || (mode === 'create' && !hasAvailableStudents)}
             >
+                {/* Alert khi tất cả sinh viên đã được đánh giá */}
+                {allStudentsEvaluated && (
+                    <Alert
+                        message="Thông báo"
+                        description="Tất cả các sinh viên do giảng viên này hướng dẫn đã được đánh giá hết. Không thể tạo thêm đánh giá mới."
+                        type="info"
+                        showIcon
+                        className="mb-4"
+                    />
+                )}
+
                 <Row gutter={16}>
-                    <Col xs={24} md={12}>
+                    <Col xs={24} md={8}>
                         <Form.Item name="studentId" label="Sinh viên" rules={[{ required: true, message: 'Vui lòng chọn sinh viên' }]}>
                             <Select
                                 showSearch
-                                placeholder="Chọn sinh viên"
+                                placeholder={mode === 'create' ? "Chọn sinh viên chưa được đánh giá" : "Chọn sinh viên"}
                                 filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
-                                options={students.map(s => ({ value: s.id, label: `${s.user?.fullName} - ${s.studentCode}` }))}
+                                options={availableStudents.map(s => ({ value: s.id, label: `${s.user?.fullName} - ${s.studentCode}` }))}
+                                notFoundContent={mode === 'create' ? "Không có sinh viên nào chưa được đánh giá" : "Không tìm thấy sinh viên"}
+                                disabled={mode === 'create' && !hasAvailableStudents}
                             />
                         </Form.Item>
                     </Col>
-                    <Col xs={24} md={12}>
+                    <Col xs={24} md={16}>
                         <Form.Item name="internshipId" label="Thực tập" rules={[{ required: true, message: 'Vui lòng chọn thực tập' }]}>
                             <Select
                                 showSearch
                                 placeholder="Chọn thực tập"
                                 filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
-                                options={internships.map(i => ({ value: i.id, label: `${i.student?.user?.fullName} - ${i.company?.companyName} (${i.jobTitle})` }))}
+                                options={availableInternships.map(i => ({ value: i.id, label: `${i.student?.user?.fullName} - ${i.company?.companyName} (${i.jobTitle})` }))}
+                                disabled={mode === 'create' && !hasAvailableStudents}
                             />
                         </Form.Item>
                     </Col>
-                    <Col xs={24} md={8}>
+                    {/* <Col xs={24} md={8}>
                         <Form.Item name="semester" label="Học kỳ" rules={[{ required: true, message: 'Vui lòng nhập học kỳ' }]}>
                             <Input placeholder="VD: 1, 2, 3" />
                         </Form.Item>
@@ -108,7 +142,7 @@ const EvaluationModal = ({
                         <Form.Item name="academicYear" label="Năm học" rules={[{ required: true, message: 'Vui lòng nhập năm học' }]}>
                             <Input placeholder="VD: 2023-2024" />
                         </Form.Item>
-                    </Col>
+                    </Col> */}
                 </Row>
 
                 {/* Part I: Tinh thần kỷ luật, thái độ */}

@@ -3,12 +3,7 @@ import { useAuth } from '../../../context/AuthContext';
 import { Button, Typography, Alert } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { EvaluationHeader, EvaluationFilters, EvaluationTable, EvaluationModal } from './components';
-import {
-    evaluationService,
-    studentService,
-    teacherService,
-    internshipService
-} from '../../../services';
+import { evaluationService, studentService, teacherService, internshipService } from '../../../services';
 import { Student, Internship, PaginationOptions } from '../../../models';
 
 const EvaluationManagement = () => {
@@ -83,7 +78,7 @@ const EvaluationManagement = () => {
             try {
                 const teacherResponse = await teacherService.getTeacherByUserId(user.id);
                 teacherId = teacherResponse.id;
-            } catch (err) {
+            } catch {
                 setError('Không tìm thấy thông tin giảng viên. Vui lòng liên hệ quản trị viên.');
                 return;
             }
@@ -96,8 +91,9 @@ const EvaluationManagement = () => {
                 page: pagination.page,
                 size: pagination.size
             });
+
             setEvaluations(
-                evaluationsResponse.data.map(e => ({
+                evaluationsResponse?.data?.filter(item => item?.evaluatorType === "TEACHER").map(e => ({
                     ...e,
                     totalScore: e.overallScore || 0,
                     student: e.internship?.student,
@@ -117,7 +113,7 @@ const EvaluationManagement = () => {
             // Stats
             const statsResponse = await evaluationService.getEvaluationStats(teacherId);
             setStats(statsResponse.data);
-        } catch (err) {
+        } catch {
             setError('Không thể tải dữ liệu đánh giá. Vui lòng thử lại.');
         } finally {
             setLoading(false);
@@ -139,9 +135,12 @@ const EvaluationManagement = () => {
         setSelectedEvaluation(null);
     };
 
+    console.log("selectedEvaluation: ", selectedEvaluation);
+
+
     return (
-        <div className="space-y-6">
-            <div className="flex items-center justify-between">
+        <div className="!space-y-6">
+            <div className="!flex !items-center !justify-between">
                 <div>
                     <Typography.Title level={3} className="!mb-0">Quản lý Đánh giá</Typography.Title>
                     <Typography.Text type="secondary">Tạo và quản lý đánh giá cho sinh viên thực tập</Typography.Text>
@@ -153,7 +152,7 @@ const EvaluationManagement = () => {
 
             {error && <Alert type="error" message={error} showIcon />}
 
-            <EvaluationHeader stats={stats} />
+            {/* <EvaluationHeader stats={stats} /> */}
 
             <EvaluationFilters
                 keyword={searchKeyword}
@@ -165,8 +164,8 @@ const EvaluationManagement = () => {
                 onReset={() => { setSearchKeyword(''); setStatusFilter('ALL'); setSemesterFilter('ALL'); }}
             />
 
-            <div className="bg-white rounded-lg shadow p-4">
-                <div className="flex items-center justify-between mb-3">
+            <div className="!bg-white !rounded-lg !shadow !p-4">
+                <div className="!flex !items-center !justify-between !mb-3">
                     <Typography.Title level={5} className="!mb-0">Danh sách Đánh giá ({totalEvaluations})</Typography.Title>
                 </div>
                 <EvaluationTable
@@ -225,6 +224,7 @@ const EvaluationManagement = () => {
                 }}
                 students={students}
                 internships={internships}
+                existingEvaluations={evaluations}
                 initialValues={modalMode === 'create' ? {
                     studentId: '',
                     internshipId: '',

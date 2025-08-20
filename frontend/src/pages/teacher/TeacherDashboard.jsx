@@ -27,12 +27,10 @@ import {
 
 const TeacherDashboard = () => {
   const { user } = useAuth();
-  const [activeTab, setActiveTab] = useState('overview');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [teacherInfo, setTeacherInfo] = useState(null);
   const [dashboardStats, setDashboardStats] = useState(null);
-  const [recentActivities, setRecentActivities] = useState([]);
   const [pendingReports, setPendingReports] = useState([]);
   const [supervisedStudents, setSupervisedStudents] = useState([]);
 
@@ -192,12 +190,6 @@ const TeacherDashboard = () => {
       'TERMINATED': 'Đã kết thúc'
     };
     return statusMap[status] || status;
-  };
-
-  const getProgressColor = (progress) => {
-    if (progress >= 80) return 'text-green-600';
-    if (progress >= 60) return 'text-yellow-600';
-    return 'text-red-600';
   };
 
   if (loading) {
@@ -396,6 +388,7 @@ const TeacherDashboard = () => {
                         // Find the student's internship from the teacher's internships
                         const studentInternships = student.internships || [];
                         const currentInternship = getCurrentInternship(studentInternships);
+
 
                         return (
                           <tr key={student.id} className="hover:bg-gray-50">

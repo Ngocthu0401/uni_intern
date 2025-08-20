@@ -16,7 +16,7 @@ const EvaluationFilters = ({
     return (
         <div className="bg-white rounded-lg shadow p-4">
             <Row align="middle" justify="space-between" gutter={[12, 12]}>
-                <Col flex="auto">
+                {/* <Col flex="auto">
                     <Space wrap>
                         <Input
                             allowClear
@@ -31,10 +31,10 @@ const EvaluationFilters = ({
                             Xóa bộ lọc
                         </Button>
                     </Space>
-                </Col>
+                </Col> */}
                 <Col>
                     <Space wrap>
-                        <Select
+                        {/* <Select
                             value={status}
                             onChange={onStatusChange}
                             style={{ width: 180 }}
@@ -43,8 +43,8 @@ const EvaluationFilters = ({
                             <Option value="DRAFT">Bản nháp</Option>
                             <Option value="COMPLETED">Hoàn thành</Option>
                             <Option value="APPROVED">Đã phê duyệt</Option>
-                        </Select>
-                        <Select
+                        </Select> */}
+                        {/* <Select
                             value={semester}
                             onChange={onSemesterChange}
                             style={{ width: 160 }}
@@ -53,9 +53,9 @@ const EvaluationFilters = ({
                             <Option value="1">Học kỳ 1</Option>
                             <Option value="2">Học kỳ 2</Option>
                             <Option value="3">Học kỳ 3</Option>
-                        </Select>
+                        </Select> */}
                         <Button icon={<ReloadOutlined />} onClick={onReset}>
-                            Đặt lại
+                            Tải lại
                         </Button>
                     </Space>
                 </Col>
