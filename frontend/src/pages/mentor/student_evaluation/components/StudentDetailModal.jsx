@@ -131,18 +131,18 @@ const StudentDetailModal = ({
                         <Descriptions.Item label="Thời gian thực tập">
                             {new Date(student.startDate).toLocaleDateString('vi-VN')} - {new Date(student.endDate).toLocaleDateString('vi-VN')}
                         </Descriptions.Item>
-                        <Descriptions.Item label="Điểm mentor">
-                            {student.mentorScore ? (
+                        {/* <Descriptions.Item label="Điểm mentor">
+                            {student.averageScore ? (
                                 <div className="!flex !items-center">
                                     <TrophyOutlined className="mr-1" style={{ color: '#52c41a' }} />
                                     <Text strong style={{ color: '#52c41a' }}>
-                                        {student.mentorScore}/10
+                                        {student.averageScore}/10
                                     </Text>
                                 </div>
                             ) : (
                                 <Text type="secondary">Chưa có điểm</Text>
                             )}
-                        </Descriptions.Item>
+                        </Descriptions.Item> */}
                     </Descriptions>
                 </Card>
 
@@ -154,7 +154,7 @@ const StudentDetailModal = ({
                                 <div className="text-2xl font-bold" style={{ color: getScoreColor(student.averageScore) }}>
                                     {student.averageScore > 0 ? student.averageScore.toFixed(1) : 'N/A'}
                                 </div>
-                                <Text type="secondary">Điểm trung bình</Text>
+                                <Text type="secondary">Điểm Mentor chấm</Text>
                                 {student.averageScore > 0 && (
                                     <div className="mt-2">
                                         {renderScoreStars(student.averageScore)}
@@ -185,43 +185,227 @@ const StudentDetailModal = ({
                 {student.evaluations.length > 0 && (
                     <Card title="Đánh giá gần nhất" size="small">
                         <Row gutter={16}>
-                            <Col span={6}>
+                            <Col span={8}>
                                 <div className="!text-center !p-2 !bg-blue-50 !rounded">
-                                    <Text strong style={{ color: '#1890ff' }}>Kỹ thuật</Text>
-                                    <div className="!text-lg !font-bold" style={{ color: getScoreColor(student.evaluations[0].technicalScore) }}>
-                                        {student.evaluations[0].technicalScore}/10
+                                    <Text strong style={{ color: '#1890ff' }}>Kỷ luật</Text>
+                                    <div className="!text-lg !font-bold" style={{ color: getScoreColor(student.evaluations[0].disciplineScore) }}>
+                                        {student.evaluations[0].disciplineScore?.toFixed(1) || '0.0'}/6.0
                                     </div>
                                 </div>
                             </Col>
-                            <Col span={6}>
+                            <Col span={8}>
                                 <div className="!text-center !p-2 !bg-green-50 !rounded">
-                                    <Text strong style={{ color: '#52c41a' }}>Kỹ năng mềm</Text>
-                                    <div className="!text-lg !font-bold" style={{ color: getScoreColor(student.evaluations[0].softSkillScore) }}>
-                                        {student.evaluations[0].softSkillScore}/10
+                                    <Text strong style={{ color: '#52c41a' }}>Chuyên môn</Text>
+                                    <div className="!text-lg !font-bold" style={{ color: getScoreColor(student.evaluations[0].professionalScore) }}>
+                                        {student.evaluations[0].professionalScore?.toFixed(1) || '0.0'}/4.0
                                     </div>
                                 </div>
                             </Col>
-                            <Col span={6}>
+                            <Col span={8}>
                                 <div className="!text-center !p-2 !bg-purple-50 !rounded">
-                                    <Text strong style={{ color: '#722ed1' }}>Thái độ</Text>
-                                    <div className="!text-lg !font-bold" style={{ color: getScoreColor(student.evaluations[0].attitudeScore) }}>
-                                        {student.evaluations[0].attitudeScore}/10
-                                    </div>
-                                </div>
-                            </Col>
-                            <Col span={6}>
-                                <div className="!text-center !p-2 !bg-orange-50 !rounded">
-                                    <Text strong style={{ color: '#fa8c16' }}>Giao tiếp</Text>
-                                    <div className="!text-lg !font-bold" style={{ color: getScoreColor(student.evaluations[0].communicationScore) }}>
-                                        {student.evaluations[0].communicationScore}/10
+                                    <Text strong style={{ color: '#722ed1' }}>Tổng điểm</Text>
+                                    <div className="!text-lg !font-bold" style={{ color: getScoreColor(student.evaluations[0].overallScore) }}>
+                                        {student.evaluations[0].overallScore?.toFixed(1) || '0.0'}/10.0
                                     </div>
                                 </div>
                             </Col>
                         </Row>
+
+                        {/* Detailed Scores */}
+                        <div className="!mt-6">
+                            <div className="!mb-4">
+                                <div className="!flex !items-center !mb-3">
+                                    <div className="!w-3 !h-6 !bg-blue-500 !rounded !mr-3"></div>
+                                    <h4 className="!text-lg !font-semibold !text-blue-700 !m-0">I. Tinh thần kỷ luật, thái độ</h4>
+                                    <div className="!ml-auto !px-3 !py-1 !bg-blue-100 !text-blue-700 !rounded-full !text-sm !font-medium">
+                                        {student.evaluations[0].disciplineScore?.toFixed(1) || '0.0'}/6.0 điểm
+                                    </div>
+                                </div>
+                            </div>
+                            <Row gutter={[12, 8]}>
+                                <Col span={12}>
+                                    <div className="!p-3 !bg-gradient-to-r !from-blue-50 !to-blue-100 !rounded-lg !border !border-blue-200">
+                                        <div className="!flex !justify-between !items-center !mb-1">
+                                            <div className="!text-xs !text-gray-700 !font-medium">Hiểu biết về cơ quan</div>
+                                            <div className="!text-sm !font-bold !text-blue-600">
+                                                {student.evaluations[0].understandingOrganization?.toFixed(1) || '0.0'}/1.0
+                                            </div>
+                                        </div>
+                                        <div className="!w-full !bg-blue-200 !rounded-full !h-1.5">
+                                            <div
+                                                className="!bg-blue-500 !h-1.5 !rounded-full"
+                                                style={{
+                                                    width: `${((student.evaluations[0].understandingOrganization || 0) / 1.0) * 100}%`
+                                                }}
+                                            ></div>
+                                        </div>
+                                    </div>
+                                </Col>
+                                <Col span={12}>
+                                    <div className="!p-3 !bg-gradient-to-r !from-blue-50 !to-blue-100 !rounded-lg !border !border-blue-200">
+                                        <div className="!flex !justify-between !items-center !mb-1">
+                                            <div className="!text-xs !text-gray-700 !font-medium">Thực hiện nội quy</div>
+                                            <div className="!text-sm !font-bold !text-blue-600">
+                                                {student.evaluations[0].followingRules?.toFixed(1) || '0.0'}/1.0
+                                            </div>
+                                        </div>
+                                        <div className="!w-full !bg-blue-200 !rounded-full !h-1.5">
+                                            <div
+                                                className="!bg-blue-500 !h-1.5 !rounded-full"
+                                                style={{
+                                                    width: `${((student.evaluations[0].followingRules || 0) / 1.0) * 100}%`
+                                                }}
+                                            ></div>
+                                        </div>
+                                    </div>
+                                </Col>
+                                <Col span={12}>
+                                    <div className="!p-3 !bg-gradient-to-r !from-blue-50 !to-blue-100 !rounded-lg !border !border-blue-200">
+                                        <div className="!flex !justify-between !items-center !mb-1">
+                                            <div className="!text-xs !text-gray-700 !font-medium">Chấp hành giờ giấc</div>
+                                            <div className="!text-sm !font-bold !text-blue-600">
+                                                {student.evaluations[0].workScheduleCompliance?.toFixed(1) || '0.0'}/1.0
+                                            </div>
+                                        </div>
+                                        <div className="!w-full !bg-blue-200 !rounded-full !h-1.5">
+                                            <div
+                                                className="!bg-blue-500 !h-1.5 !rounded-full"
+                                                style={{
+                                                    width: `${((student.evaluations[0].workScheduleCompliance || 0) / 1.0) * 100}%`
+                                                }}
+                                            ></div>
+                                        </div>
+                                    </div>
+                                </Col>
+                                <Col span={12}>
+                                    <div className="!p-3 !bg-gradient-to-r !from-blue-50 !to-blue-100 !rounded-lg !border !border-blue-200">
+                                        <div className="!flex !justify-between !items-center !mb-1">
+                                            <div className="!text-xs !text-gray-700 !font-medium">Thái độ giao tiếp</div>
+                                            <div className="!text-sm !font-bold !text-blue-600">
+                                                {student.evaluations[0].communicationAttitude?.toFixed(1) || '0.0'}/1.0
+                                            </div>
+                                        </div>
+                                        <div className="!w-full !bg-blue-200 !rounded-full !h-1.5">
+                                            <div
+                                                className="!bg-blue-500 !h-1.5 !rounded-full"
+                                                style={{
+                                                    width: `${((student.evaluations[0].communicationAttitude || 0) / 1.0) * 100}%`
+                                                }}
+                                            ></div>
+                                        </div>
+                                    </div>
+                                </Col>
+                                <Col span={12}>
+                                    <div className="!p-3 !bg-gradient-to-r !from-blue-50 !to-blue-100 !rounded-lg !border !border-blue-200">
+                                        <div className="!flex !justify-between !items-center !mb-1">
+                                            <div className="!text-xs !text-gray-700 !font-medium">Ý thức bảo vệ của công</div>
+                                            <div className="!text-sm !font-bold !text-blue-600">
+                                                {student.evaluations[0].propertyProtection?.toFixed(1) || '0.0'}/1.0
+                                            </div>
+                                        </div>
+                                        <div className="!w-full !bg-blue-200 !rounded-full !h-1.5">
+                                            <div
+                                                className="!bg-blue-500 !h-1.5 !rounded-full"
+                                                style={{
+                                                    width: `${((student.evaluations[0].propertyProtection || 0) / 1.0) * 100}%`
+                                                }}
+                                            ></div>
+                                        </div>
+                                    </div>
+                                </Col>
+                                <Col span={12}>
+                                    <div className="!p-3 !bg-gradient-to-r !from-blue-50 !to-blue-100 !rounded-lg !border !border-blue-200">
+                                        <div className="!flex !justify-between !items-center !mb-1">
+                                            <div className="!text-xs !text-gray-700 !font-medium">Tích cực trong công việc</div>
+                                            <div className="!text-sm !font-bold !text-blue-600">
+                                                {student.evaluations[0].workEnthusiasm?.toFixed(1) || '0.0'}/1.0
+                                            </div>
+                                        </div>
+                                        <div className="!w-full !bg-blue-200 !rounded-full !h-1.5">
+                                            <div
+                                                className="!bg-blue-500 !h-1.5 !rounded-full"
+                                                style={{
+                                                    width: `${((student.evaluations[0].workEnthusiasm || 0) / 1.0) * 100}%`
+                                                }}
+                                            ></div>
+                                        </div>
+                                    </div>
+                                </Col>
+                            </Row>
+                        </div>
+
+                        <div className="!mt-6">
+                            <div className="!mb-4">
+                                <div className="!flex !items-center !mb-3">
+                                    <div className="!w-3 !h-6 !bg-green-500 !rounded !mr-3"></div>
+                                    <h4 className="!text-lg !font-semibold !text-green-700 !m-0">II. Khả năng chuyên môn, nghiệp vụ</h4>
+                                    <div className="!ml-auto !px-3 !py-1 !bg-green-100 !text-green-700 !rounded-full !text-sm !font-medium">
+                                        {student.evaluations[0].professionalScore?.toFixed(1) || '0.0'}/4.0 điểm
+                                    </div>
+                                </div>
+                            </div>
+                            <Row gutter={[12, 8]}>
+                                <Col span={12}>
+                                    <div className="!p-3 !bg-gradient-to-r !from-green-50 !to-green-100 !rounded-lg !border !border-green-200">
+                                        <div className="!flex !justify-between !items-center !mb-1">
+                                            <div className="!text-xs !text-gray-700 !font-medium">Đáp ứng yêu cầu công việc</div>
+                                            <div className="!text-sm !font-bold !text-green-600">
+                                                {student.evaluations[0].jobRequirementsFulfillment?.toFixed(1) || '0.0'}/2.0
+                                            </div>
+                                        </div>
+                                        <div className="!w-full !bg-green-200 !rounded-full !h-1.5">
+                                            <div
+                                                className="!bg-green-500 !h-1.5 !rounded-full"
+                                                style={{
+                                                    width: `${((student.evaluations[0].jobRequirementsFulfillment || 0) / 2.0) * 100}%`
+                                                }}
+                                            ></div>
+                                        </div>
+                                    </div>
+                                </Col>
+                                <Col span={12}>
+                                    <div className="!p-3 !bg-gradient-to-r !from-green-50 !to-green-100 !rounded-lg !border !border-green-200">
+                                        <div className="!flex !justify-between !items-center !mb-1">
+                                            <div className="!text-xs !text-gray-700 !font-medium">Tinh thần học hỏi</div>
+                                            <div className="!text-sm !font-bold !text-green-600">
+                                                {student.evaluations[0].learningSpirit?.toFixed(1) || '0.0'}/1.0
+                                            </div>
+                                        </div>
+                                        <div className="!w-full !bg-green-200 !rounded-full !h-1.5">
+                                            <div
+                                                className="!bg-green-500 !h-1.5 !rounded-full"
+                                                style={{
+                                                    width: `${((student.evaluations[0].learningSpirit || 0) / 1.0) * 100}%`
+                                                }}
+                                            ></div>
+                                        </div>
+                                    </div>
+                                </Col>
+                                <Col span={12}>
+                                    <div className="!p-3 !bg-gradient-to-r !from-green-50 !to-green-100 !rounded-lg !border !border-green-200">
+                                        <div className="!flex !justify-between !items-center !mb-1">
+                                            <div className="!text-xs !text-gray-700 !font-medium">Đề xuất, sáng kiến</div>
+                                            <div className="!text-sm !font-bold !text-green-600">
+                                                {student.evaluations[0].initiativeCreativity?.toFixed(1) || '0.0'}/1.0
+                                            </div>
+                                        </div>
+                                        <div className="!w-full !bg-green-200 !rounded-full !h-1.5">
+                                            <div
+                                                className="!bg-green-500 !h-1.5 !rounded-full"
+                                                style={{
+                                                    width: `${((student.evaluations[0].initiativeCreativity || 0) / 1.0) * 100}%`
+                                                }}
+                                            ></div>
+                                        </div>
+                                    </div>
+                                </Col>
+                            </Row>
+                        </div>
+
                         {student.evaluations[0].comments && (
                             <div className="!mt-4 !p-3 !bg-gray-50 !rounded">
                                 <Text strong>Nhận xét:</Text>
-                                <div className="!mt-1">{student.evaluations[0].comments}</div>
+                                <div className="!mt-1 !whitespace-pre-wrap">{student.evaluations[0].comments}</div>
                             </div>
                         )}
                     </Card>

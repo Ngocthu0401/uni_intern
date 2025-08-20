@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Button, Spin, Empty, message, Typography, Space, Alert, Card } from 'antd';
 import { PlusOutlined, ReloadOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import { useAuth } from '../../../context/AuthContext';
@@ -21,18 +21,14 @@ const StudentEvaluationPage = () => {
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [evaluationModalMode, setEvaluationModalMode] = useState('create');
   const [evaluationLoading, setEvaluationLoading] = useState(false);
+  const [evaluationInitialValues, setEvaluationInitialValues] = useState({});
 
   // Filter states
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
 
-  useEffect(() => {
-    if (user?.id) {
-      loadStudentsData();
-    }
-  }, [user]);
 
-  const loadStudentsData = async () => {
+  const loadStudentsData = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -53,7 +49,7 @@ const StudentEvaluationPage = () => {
       // Transform data to students with evaluation history
       const studentsData = internshipsData.map(internship => {
         const studentEvaluations = evaluations.filter(evaluation =>
-          evaluation.internship?.id === internship.id
+          evaluation.internship?.id === internship.id && evaluation.evaluatorType === 'MENTOR'
         );
 
         // Calculate average score
@@ -77,10 +73,18 @@ const StudentEvaluationPage = () => {
           evaluations: studentEvaluations.map(evaluation => ({
             id: evaluation.id,
             date: evaluation.evaluationDate,
-            technicalScore: evaluation.technicalScore || 0,
-            softSkillScore: evaluation.softSkillScore || 0,
-            attitudeScore: evaluation.attitudeScore || 0,
-            communicationScore: evaluation.communicationScore || 0,
+            // New scoring structure
+            understandingOrganization: evaluation.understandingOrganization || 0,
+            followingRules: evaluation.followingRules || 0,
+            workScheduleCompliance: evaluation.workScheduleCompliance || 0,
+            communicationAttitude: evaluation.communicationAttitude || 0,
+            propertyProtection: evaluation.propertyProtection || 0,
+            workEnthusiasm: evaluation.workEnthusiasm || 0,
+            jobRequirementsFulfillment: evaluation.jobRequirementsFulfillment || 0,
+            learningSpirit: evaluation.learningSpirit || 0,
+            initiativeCreativity: evaluation.initiativeCreativity || 0,
+            disciplineScore: evaluation.disciplineScore || 0,
+            professionalScore: evaluation.professionalScore || 0,
             overallScore: evaluation.overallScore || 0,
             comments: evaluation.comments || '',
             strengths: evaluation.strengths || '',
@@ -102,6 +106,12 @@ const StudentEvaluationPage = () => {
     } finally {
       setLoading(false);
     }
+  }, [user]);
+
+  // Check if all students have been evaluated
+  const checkAllStudentsEvaluated = () => {
+    if (students.length === 0) return false;
+    return students.every(student => student.evaluations.length > 0);
   };
 
   const handleCreateEvaluation = async (values) => {
@@ -124,21 +134,44 @@ const StudentEvaluationPage = () => {
       const evaluationData = {
         internshipId: values.internshipId.toString(),
         teacherId: null, // Mentor evaluation, not teacher
-        technicalSkills: disciplineScore,
-        softSkills: professionalScore,
-        workAttitude: disciplineScore,
-        communication: professionalScore,
-        totalScore: totalScore,
-        strengths: [values.comments || ''],
-        weaknesses: [values.comments || ''],
+        evaluationDate: new Date().toISOString().split('T')[0], // Current date
+
+        // Part I: Tinh thần kỷ luật, thái độ (6.0 điểm tối đa)
+        understandingOrganization: values.understandingOrganization || 0,
+        followingRules: values.followingRules || 0,
+        workScheduleCompliance: values.workScheduleCompliance || 0,
+        communicationAttitude: values.communicationAttitude || 0,
+        propertyProtection: values.propertyProtection || 0,
+        workEnthusiasm: values.workEnthusiasm || 0,
+
+        // Part II: Khả năng chuyên môn, nghiệp vụ (4.0 điểm tối đa)
+        jobRequirementsFulfillment: values.jobRequirementsFulfillment || 0,
+        learningSpirit: values.learningSpirit || 0,
+        initiativeCreativity: values.initiativeCreativity || 0,
+
+        // Calculated scores
+        disciplineScore: disciplineScore,
+        professionalScore: professionalScore,
+        overallScore: totalScore,
+
+        // Comments and feedback
+        strengths: values.comments || '',
+        weaknesses: values.comments || '',
         recommendations: values.comments || '',
         comments: values.comments || '',
         isFinalEvaluation: false // Default to false for mentor evaluations
       };
 
-      await evaluationService.createEvaluation(evaluationData);
-
-      message.success('Tạo đánh giá thành công!');
+      if (evaluationModalMode === 'edit' && selectedStudent?.evaluations?.length > 0) {
+        // Update existing evaluation
+        const latestEvaluation = selectedStudent.evaluations[0]; // Get the latest evaluation
+        await evaluationService.updateEvaluation(latestEvaluation.id, evaluationData);
+        message.success('Cập nhật đánh giá thành công!');
+      } else {
+        // Create new evaluation
+        await evaluationService.createEvaluation(evaluationData);
+        message.success('Tạo đánh giá thành công!');
+      }
 
       // Reload data and close modal
       await loadStudentsData();
@@ -146,8 +179,8 @@ const StudentEvaluationPage = () => {
       setSelectedStudent(null);
 
     } catch (err) {
-      console.error('Error creating evaluation:', err);
-      message.error('Không thể tạo đánh giá. Vui lòng thử lại.');
+      console.error('Error creating/updating evaluation:', err);
+      message.error('Không thể tạo/cập nhật đánh giá. Vui lòng thử lại.');
     } finally {
       setEvaluationLoading(false);
     }
@@ -155,7 +188,35 @@ const StudentEvaluationPage = () => {
 
   const openEvaluationModal = (student = null) => {
     setSelectedStudent(student);
-    setEvaluationModalMode('create');
+
+    // Determine if this is an edit or create operation
+    if (student && student.evaluations && student.evaluations.length > 0) {
+      setEvaluationModalMode('edit');
+      // Load the latest evaluation data as initial values
+      const latestEvaluation = student.evaluations[0];
+
+      // Transform evaluation data to match form fields
+      const initialValues = {
+        studentId: student.id,
+        internshipId: student.internshipId,
+        understandingOrganization: latestEvaluation.understandingOrganization || 0,
+        followingRules: latestEvaluation.followingRules || 0,
+        workScheduleCompliance: latestEvaluation.workScheduleCompliance || 0,
+        communicationAttitude: latestEvaluation.communicationAttitude || 0,
+        propertyProtection: latestEvaluation.propertyProtection || 0,
+        workEnthusiasm: latestEvaluation.workEnthusiasm || 0,
+        jobRequirementsFulfillment: latestEvaluation.jobRequirementsFulfillment || 0,
+        learningSpirit: latestEvaluation.learningSpirit || 0,
+        initiativeCreativity: latestEvaluation.initiativeCreativity || 0,
+        comments: latestEvaluation.comments || ''
+      };
+
+      setEvaluationInitialValues(initialValues);
+    } else {
+      setEvaluationModalMode('create');
+      setEvaluationInitialValues({});
+    }
+
     setShowEvaluationModal(true);
   };
 
@@ -168,6 +229,13 @@ const StudentEvaluationPage = () => {
     setShowDetailModal(false);
     openEvaluationModal(student);
   };
+
+
+  useEffect(() => {
+    if (user?.id) {
+      loadStudentsData();
+    }
+  }, [user, loadStudentsData]);
 
   const filteredStudents = students.filter(student => {
     const matchesSearch = student.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -208,6 +276,8 @@ const StudentEvaluationPage = () => {
     );
   }
 
+  console.log('students: ', students);
+
   return (
     <div className="!min-h-screen !bg-gray-50">
       {/* Header */}
@@ -233,6 +303,7 @@ const StudentEvaluationPage = () => {
                   type="primary"
                   icon={<PlusOutlined />}
                   onClick={() => openEvaluationModal()}
+                  disabled={checkAllStudentsEvaluated()}
                 >
                   Tạo đánh giá mới
                 </Button>
@@ -245,6 +316,17 @@ const StudentEvaluationPage = () => {
       <div className="!max-w-7xl !mx-auto !px-4 !sm:px-6 !lg:px-8 !py-8 !space-y-4">
         {/* Statistics */}
         <StatisticsCard students={students} />
+
+        {/* Alert when all students are evaluated */}
+        {checkAllStudentsEvaluated() && students.length > 0 && (
+          <Alert
+            message="Hoàn thành đánh giá"
+            description="Tất cả sinh viên mà bạn hướng dẫn đã được đánh giá. Bạn có thể xem lại hoặc cập nhật đánh giá từ danh sách sinh viên bên dưới."
+            type="success"
+            showIcon
+            closable
+          />
+        )}
 
         {/* Search and Filter */}
         <SearchFilters
@@ -281,12 +363,15 @@ const StudentEvaluationPage = () => {
         onCancel={() => {
           setShowEvaluationModal(false);
           setSelectedStudent(null);
+          setEvaluationInitialValues({});
         }}
         onSubmit={handleCreateEvaluation}
         students={students}
         internships={internships}
         selectedStudent={selectedStudent}
+        initialValues={evaluationInitialValues}
         loading={evaluationLoading}
+        allStudentsEvaluated={checkAllStudentsEvaluated()}
       />
 
       {/* Student Detail Modal */}

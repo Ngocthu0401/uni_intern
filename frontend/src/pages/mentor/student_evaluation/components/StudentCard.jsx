@@ -102,7 +102,7 @@ const StudentCard = ({ student, onViewDetails, onCreateEvaluation }) => {
                         <div className="!text-2xl !font-bold" style={{ color: getScoreColor(student.averageScore) }}>
                             {student.averageScore > 0 ? student.averageScore.toFixed(1) : 'N/A'}
                         </div>
-                        <Text type="secondary" style={{ fontSize: '12px' }}>Điểm TB</Text>
+                        <Text type="secondary" style={{ fontSize: '12px' }}>Điểm Mentor</Text>
                         {student.averageScore > 0 && (
                             <div className="!mt-1">
                                 {renderScoreStars(student.averageScore)}
@@ -113,13 +113,13 @@ const StudentCard = ({ student, onViewDetails, onCreateEvaluation }) => {
 
                 <Col xs={24} md={6}>
                     <div className="!space-y-2">
-                        {student.mentorScore && (
+                        {/* {student.mentorScore && (
                             <div className="!text-center !p-2 !bg-green-50 !rounded">
                                 <Text strong style={{ color: '#52c41a' }}>
                                     Điểm mentor: {student.mentorScore}/10
                                 </Text>
                             </div>
-                        )}
+                        )} */}
                         <div className="!text-center">
                             <Text type="secondary" style={{ fontSize: '12px' }}>
                                 {student.evaluations.length} đánh giá
@@ -149,7 +149,7 @@ const StudentCard = ({ student, onViewDetails, onCreateEvaluation }) => {
                             icon={<EditOutlined />}
                             onClick={() => onCreateEvaluation(student)}
                         >
-                            Đánh giá sinh viên
+                            {student.evaluations.length > 0 ? 'Cập nhật đánh giá' : 'Đánh giá sinh viên'}
                         </Button>
                     </div>
                 </Col>
@@ -161,33 +161,35 @@ const StudentCard = ({ student, onViewDetails, onCreateEvaluation }) => {
                     <Row gutter={16}>
                         <Col xs={12} md={6}>
                             <div className="!text-center !p-2 !bg-blue-50 !rounded">
-                                <Text strong style={{ color: '#1890ff' }}>Kỹ thuật</Text>
-                                <div className="!text-lg !font-bold" style={{ color: getScoreColor(student.evaluations[0].technicalScore) }}>
-                                    {student.evaluations[0].technicalScore}/10
+                                <Text strong style={{ color: '#1890ff' }}>Kỷ luật</Text>
+                                <div className="!text-lg !font-bold" style={{ color: getScoreColor(student.evaluations[0].disciplineScore) }}>
+                                    {student.evaluations[0].disciplineScore}/6.0
                                 </div>
                             </div>
                         </Col>
                         <Col xs={12} md={6}>
                             <div className="!text-center !p-2 !bg-green-50 !rounded">
-                                <Text strong style={{ color: '#52c41a' }}>Kỹ năng mềm</Text>
-                                <div className="!text-lg !font-bold" style={{ color: getScoreColor(student.evaluations[0].softSkillScore) }}>
-                                    {student.evaluations[0].softSkillScore}/10
+                                <Text strong style={{ color: '#52c41a' }}>Chuyên môn</Text>
+                                <div className="!text-lg !font-bold" style={{ color: getScoreColor(student.evaluations[0].professionalScore) }}>
+                                    {student.evaluations[0].professionalScore}/4.0
                                 </div>
                             </div>
                         </Col>
                         <Col xs={12} md={6}>
                             <div className="!text-center !p-2 !bg-purple-50 !rounded">
-                                <Text strong style={{ color: '#722ed1' }}>Thái độ</Text>
-                                <div className="!text-lg !font-bold" style={{ color: getScoreColor(student.evaluations[0].attitudeScore) }}>
-                                    {student.evaluations[0].attitudeScore}/10
+                                <Text strong style={{ color: '#722ed1' }}>Tổng điểm</Text>
+                                <div className="!text-lg !font-bold" style={{ color: getScoreColor(student.evaluations[0].overallScore) }}>
+                                    {student.evaluations[0].overallScore}/10.0
                                 </div>
                             </div>
                         </Col>
                         <Col xs={12} md={6}>
                             <div className="!text-center !p-2 !bg-orange-50 !rounded">
-                                <Text strong style={{ color: '#fa8c16' }}>Giao tiếp</Text>
-                                <div className="!text-lg !font-bold" style={{ color: getScoreColor(student.evaluations[0].communicationScore) }}>
-                                    {student.evaluations[0].communicationScore}/10
+                                <Text strong style={{ color: '#fa8c16' }}>Đánh giá</Text>
+                                <div className="!text-lg !font-bold" style={{ color: getScoreColor(student.evaluations[0].overallScore) }}>
+                                    {student.evaluations[0].overallScore >= 8.5 ? 'Xuất sắc' :
+                                        student.evaluations[0].overallScore >= 7 ? 'Giỏi' :
+                                            student.evaluations[0].overallScore >= 5.5 ? 'Khá' : 'Yếu'}
                                 </div>
                             </div>
                         </Col>
