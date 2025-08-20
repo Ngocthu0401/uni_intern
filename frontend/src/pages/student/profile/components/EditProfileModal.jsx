@@ -5,15 +5,24 @@ const EditProfileModal = ({ open, onCancel, onSubmit, initialValues }) => {
     const [form] = Form.useForm();
 
     useEffect(() => {
-        if (open) {
+        if (open && initialValues) {
+            // Reset form and set initial values
+            form.resetFields();
             form.setFieldsValue({
-                className: initialValues?.className || '',
-                major: initialValues?.major || '',
-                academicYear: initialValues?.academicYear || '',
-                gpa: initialValues?.gpa ?? null,
+                className: initialValues.className || '',
+                major: initialValues.major || '',
+                academicYear: initialValues.academicYear || '',
+                gpa: initialValues.gpa || null,
             });
         }
     }, [open, initialValues, form]);
+
+    // Reset form when modal closes
+    useEffect(() => {
+        if (!open) {
+            form.resetFields();
+        }
+    }, [open, form]);
 
     const handleOk = async () => {
         try {
@@ -25,8 +34,9 @@ const EditProfileModal = ({ open, onCancel, onSubmit, initialValues }) => {
                 academicYear: values.academicYear?.trim() || '',
                 gpa: typeof values.gpa === 'number' ? values.gpa : null,
             });
-        } catch (_) {
+        } catch (error) {
             // validation errors are shown by antd
+            console.log('Form validation error:', error);
         }
     };
 
@@ -40,7 +50,17 @@ const EditProfileModal = ({ open, onCancel, onSubmit, initialValues }) => {
             cancelText="Hủy"
             destroyOnClose
         >
-            <Form layout="vertical" form={form} preserve={false}>
+            <Form
+                layout="vertical"
+                form={form}
+                preserve={false}
+                initialValues={{
+                    className: initialValues?.className || '',
+                    major: initialValues?.major || '',
+                    academicYear: initialValues?.academicYear || '',
+                    gpa: initialValues?.gpa || null,
+                }}
+            >
                 <Form.Item label="Lớp" name="className">
                     <Input placeholder="VD: D20CQCN01" allowClear />
                 </Form.Item>
@@ -51,7 +71,7 @@ const EditProfileModal = ({ open, onCancel, onSubmit, initialValues }) => {
                     <Input placeholder="VD: 2023-2027" allowClear />
                 </Form.Item>
                 <Form.Item label="GPA" name="gpa" rules={[{ type: 'number', min: 0, max: 4, message: 'GPA từ 0 đến 4' }]}>
-                    <InputNumber className="w-full" step={0.01} min={0} max={4} placeholder="VD: 3.2" />
+                    <InputNumber className="!w-full" step={0.01} min={0} max={4} placeholder="VD: 3.2" />
                 </Form.Item>
             </Form>
         </Modal>

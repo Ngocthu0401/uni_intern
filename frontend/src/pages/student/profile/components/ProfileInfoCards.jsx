@@ -5,7 +5,7 @@ const Section = ({ title, items }) => {
     const filtered = items.filter(i => i.value !== undefined && i.value !== null && i.value !== '');
     if (filtered.length === 0) return null;
     return (
-        <Card bordered className="mb-6">
+        <Card bordered className="!mb-6">
             <Descriptions title={title} column={{ xs: 1, sm: 1, md: 2 }} bordered size="small">
                 {filtered.map((item) => (
                     <Descriptions.Item key={item.key} label={item.label} span={item.span || 1}>

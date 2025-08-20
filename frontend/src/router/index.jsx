@@ -17,7 +17,7 @@ import TeacherManagement from '../pages/admin/TeacherManagement';
 import MentorManagement from '../pages/admin/mentor/MentorManagement';
 import BatchManagement from '../pages/admin/batch_management/BatchManagement';
 import InternshipManagement from '../pages/admin/internship';
-import ProfilePage from '../pages/student/ProfilePage';
+import ProfilePage from '../pages/student/profile/ProfilePage';
 import InternshipApplicationPage from '../pages/student/InternshipApplicationPage';
 import ReportsPage from '../pages/student/ReportsPage';
 import ContractsPage from '../pages/student/ContractsPage';

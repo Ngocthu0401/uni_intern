@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
-import { studentService, apiHelpers } from '../../services';
-import { useAuth } from '../../context/AuthContext';
-import ProfileHeaderAnt from './profile/ProfileHeaderAnt';
-import ProfileInfoCards from './profile/ProfileInfoCards';
-import EditProfileModal from './profile/EditProfileModal';
+import { studentService, apiHelpers } from '../../../services';
+import { useAuth } from '../../../context/AuthContext';
+import ProfileHeaderAnt from './components/ProfileHeaderAnt';
+import ProfileInfoCards from './components/ProfileInfoCards';
+import EditProfileModal from './components/EditProfileModal';
 import { message } from 'antd';
 
 const ProfilePage = () => {
@@ -118,8 +118,8 @@ const ProfilePage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="!min-h-screen !bg-gray-50 !py-8">
+      <div className="!max-w-5xl !mx-auto !px-4 !sm:!px-6 !lg:!px-8">
         <ProfileHeaderAnt
           name={studentData.name}
           studentCode={studentData.studentCode}

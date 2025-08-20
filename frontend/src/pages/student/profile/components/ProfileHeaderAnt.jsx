@@ -19,13 +19,13 @@ const statusColor = (status) => {
 
 const ProfileHeaderAnt = ({ name, studentCode, role = 'STUDENT', status, avatarUrl, onEdit }) => {
     return (
-        <Card className="mb-6" bordered>
-            <div className="flex items-center justify-between">
-                <div className="flex items-center gap-4">
+        <Card className="!mb-6" bordered>
+            <div className="!flex !items-center !justify-between">
+                <div className="!flex !items-center !gap-4">
                     <Avatar size={72} src={avatarUrl} icon={<UserOutlined />} />
                     <div>
-                        {name && <div className="text-2xl font-semibold text-gray-900">{name}</div>}
-                        <div className="mt-1 flex items-center gap-2">
+                        {name && <div className="!text-2xl !font-semibold !text-gray-900">{name}</div>}
+                        <div className="!mt-1 !flex !items-center !gap-2">
                             {studentCode && <Tag color="geekblue">{studentCode}</Tag>}
                             {role && <Tag color="gold">{role}</Tag>}
                             {status && <Tag color={statusColor(status)}>{status}</Tag>}
