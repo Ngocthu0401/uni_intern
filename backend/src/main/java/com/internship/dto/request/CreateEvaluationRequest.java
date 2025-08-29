@@ -38,6 +38,9 @@ public class CreateEvaluationRequest {
     // Teacher ID (evaluator)
     private Long teacherId;
 
+    // Mentor ID (evaluator for mentor evaluations)
+    private Long mentorId;
+
     // Additional fields
     private Boolean isFinalEvaluation = false;
 }

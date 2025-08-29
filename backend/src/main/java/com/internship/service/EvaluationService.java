@@ -4,11 +4,13 @@ import com.internship.dto.request.CreateEvaluationRequest;
 import com.internship.dto.request.UpdateEvaluationRequest;
 import com.internship.entity.Evaluation;
 import com.internship.entity.Internship;
+import com.internship.entity.Mentor;
 import com.internship.entity.Teacher;
 import com.internship.entity.User;
 import com.internship.enums.RoleType;
 import com.internship.repository.EvaluationRepository;
 import com.internship.repository.InternshipRepository;
+import com.internship.repository.MentorRepository;
 import com.internship.repository.TeacherRepository;
 import com.internship.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +39,9 @@ public class EvaluationService {
 
     @Autowired
     private TeacherRepository teacherRepository;
+
+    @Autowired
+    private MentorRepository mentorRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -105,6 +110,15 @@ public class EvaluationService {
             }
         }
 
+        // Validate and get mentor (evaluator)
+        Optional<Mentor> mentorOpt = Optional.empty();
+        if (request.getMentorId() != null) {
+            mentorOpt = mentorRepository.findById(request.getMentorId());
+            if (mentorOpt.isEmpty()) {
+                throw new RuntimeException("Mentor not found with id: " + request.getMentorId());
+            }
+        }
+
         // Create evaluation entity
         Evaluation evaluation = new Evaluation();
 
@@ -115,6 +129,9 @@ public class EvaluationService {
         if (teacherOpt.isPresent()) {
             evaluation.setEvaluator(teacherOpt.get().getUser());
             evaluation.setEvaluatorType(RoleType.TEACHER);
+        } else if (mentorOpt.isPresent()) {
+            evaluation.setEvaluator(mentorOpt.get().getUser());
+            evaluation.setEvaluatorType(RoleType.MENTOR);
         }
 
         evaluation.setEvaluationDate(LocalDate.now());
@@ -179,6 +196,15 @@ public class EvaluationService {
             if (teacherOpt.isPresent()) {
                 evaluation.setEvaluator(teacherOpt.get().getUser());
                 evaluation.setEvaluatorType(RoleType.TEACHER);
+            }
+        }
+
+        // Validate and get mentor (evaluator) if changed
+        if (request.getMentorId() != null) {
+            Optional<Mentor> mentorOpt = mentorRepository.findById(request.getMentorId());
+            if (mentorOpt.isPresent()) {
+                evaluation.setEvaluator(mentorOpt.get().getUser());
+                evaluation.setEvaluatorType(RoleType.MENTOR);
             }
         }
 

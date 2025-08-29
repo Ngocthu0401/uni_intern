@@ -15,6 +15,7 @@ const StudentEvaluationPage = () => {
   const [students, setStudents] = useState([]);
   const [internships, setInternships] = useState([]);
   const [selectedStudent, setSelectedStudent] = useState(null);
+  const [mentorId, setMentorId] = useState(null);
 
   // Modal states
   const [showEvaluationModal, setShowEvaluationModal] = useState(false);
@@ -36,6 +37,9 @@ const StudentEvaluationPage = () => {
       // Get mentor information first
       const mentorResponse = await mentorService.getMentorByUserId(user.id);
       const mentorId = mentorResponse.id;
+
+      // Store mentorId in component state for use in evaluation creation
+      setMentorId(mentorId);
 
       // Load internships for this mentor
       const internshipsResponse = await internshipService.getInternshipsByMentor(mentorId);
@@ -106,7 +110,7 @@ const StudentEvaluationPage = () => {
     } finally {
       setLoading(false);
     }
-  }, [user]);
+  }, [user, mentorId]);
 
   // Check if all students have been evaluated
   const checkAllStudentsEvaluated = () => {
@@ -117,6 +121,11 @@ const StudentEvaluationPage = () => {
   const handleCreateEvaluation = async (values) => {
     try {
       setEvaluationLoading(true);
+
+      if (!mentorId) {
+        message.error('Không tìm thấy thông tin mentor. Vui lòng thử lại.');
+        return;
+      }
 
       // Calculate overall score from the form values
       const disciplineFields = [
@@ -134,6 +143,7 @@ const StudentEvaluationPage = () => {
       const evaluationData = {
         internshipId: values.internshipId.toString(),
         teacherId: null, // Mentor evaluation, not teacher
+        mentorId: mentorId, // Set mentor ID for mentor evaluation
         evaluationDate: new Date().toISOString().split('T')[0], // Current date
 
         // Part I: Tinh thần kỷ luật, thái độ (6.0 điểm tối đa)
@@ -214,7 +224,12 @@ const StudentEvaluationPage = () => {
       setEvaluationInitialValues(initialValues);
     } else {
       setEvaluationModalMode('create');
-      setEvaluationInitialValues({});
+      // Set initial values for create mode when student is selected
+      const initialValues = student ? {
+        studentId: student.id,
+        internshipId: student.internshipId
+      } : {};
+      setEvaluationInitialValues(initialValues);
     }
 
     setShowEvaluationModal(true);
@@ -235,7 +250,7 @@ const StudentEvaluationPage = () => {
     if (user?.id) {
       loadStudentsData();
     }
-  }, [user, loadStudentsData]);
+  }, [user, loadStudentsData, mentorId]);
 
   const filteredStudents = students.filter(student => {
     const matchesSearch = student.name.toLowerCase().includes(searchTerm.toLowerCase()) ||

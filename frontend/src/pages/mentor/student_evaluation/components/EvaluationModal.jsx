@@ -51,20 +51,52 @@ const EvaluationModal = ({ open, mode = 'create', onCancel, onSubmit, students =
         };
     }, [form, initialValues]);
 
-    // Auto-select internship when student is selected
+    // Auto-select student and internship when student is selected
     React.useEffect(() => {
-        if (selectedStudent && selectedStudent.internshipId) {
-            form.setFieldsValue({
-                internshipId: selectedStudent.internshipId
-            });
+        if (selectedStudent) {
+            const fieldValues = {};
+
+            // Set student ID if available
+            if (selectedStudent.id) {
+                fieldValues.studentId = selectedStudent.id;
+            }
+
+            // Set internship ID if available
+            if (selectedStudent.internshipId) {
+                fieldValues.internshipId = selectedStudent.internshipId;
+            }
+
+            if (Object.keys(fieldValues).length > 0) {
+                form.setFieldsValue(fieldValues);
+            }
         }
     }, [selectedStudent, form]);
+
+    // Update form when initialValues change
+    React.useEffect(() => {
+        if (initialValues && Object.keys(initialValues).length > 0) {
+            form.setFieldsValue(initialValues);
+        }
+    }, [initialValues, form]);
+
+    // Reset form when modal opens
+    React.useEffect(() => {
+        if (open) {
+            form.resetFields();
+            if (initialValues && Object.keys(initialValues).length > 0) {
+                form.setFieldsValue(initialValues);
+            }
+        }
+    }, [open, initialValues, form]);
 
     return (
         <Modal
             open={open}
             title={mode === 'create' ? 'Tạo đánh giá mới' : mode === 'edit' ? 'Cập nhật đánh giá' : 'Chi tiết đánh giá'}
-            onCancel={onCancel}
+            onCancel={() => {
+                form.resetFields();
+                onCancel();
+            }}
             onOk={() => form.submit()}
             okButtonProps={{ loading, disabled: isView || (mode === 'create' && allStudentsEvaluated && !selectedStudent) }}
             cancelButtonProps={{ disabled: loading }}
