@@ -224,6 +224,34 @@ const InternshipModal = ({ visible, mode, internship, onClose, onSuccess }) => {
         }
     }, [visible, mode, internship, form]);
 
+    // Auto-fill date range and company when batch is selected in create mode
+    useEffect(() => {
+        if (visible && mode === 'create' && activeBatches.length > 0) {
+            const currentBatchId = form.getFieldValue('batchId');
+            if (currentBatchId) {
+                const selectedBatch = activeBatches.find(batch => batch.id === currentBatchId);
+                if (selectedBatch) {
+                    const formValues = {};
+
+                    // Auto-fill date range if available
+                    if (selectedBatch.startDate && selectedBatch.endDate) {
+                        formValues.dateRange = [
+                            dayjs(selectedBatch.startDate),
+                            dayjs(selectedBatch.endDate)
+                        ];
+                    }
+
+                    // Auto-fill company if available
+                    if (selectedBatch.company && selectedBatch.company.id) {
+                        formValues.companyId = selectedBatch.company.id;
+                    }
+
+                    form.setFieldsValue(formValues);
+                }
+            }
+        }
+    }, [visible, mode, activeBatches, form]);
+
     // Render modal content based on mode
     const renderModalContent = () => {
         switch (mode) {
@@ -389,7 +417,7 @@ const CompanySelect = (props) => {
                 const res = await companyService.getActiveCompanies();
                 const list = res.data || res || [];
                 setOptions(list.map(c => ({ label: `${c.companyName} (${c.companyCode})`, value: c.id })));
-            } catch (e) {
+            } catch {
                 // ignore
             }
         })();
@@ -413,7 +441,7 @@ const TeacherSelect = (props) => {
                 const res = await teacherService.getTeachers({ page: 0, size: 1000 });
                 const list = res.data?.content || res.content || res || [];
                 setOptions(list.map(t => ({ label: `${t.user?.fullName} - ${t.department || 'N/A'}`, value: t.id })));
-            } catch (e) {
+            } catch {
                 // ignore
             }
         })();
@@ -430,6 +458,31 @@ const TeacherSelect = (props) => {
 };
 
 const InternshipForm = ({ form, onSubmit, activeBatches = [], mode }) => {
+    // Handle batch selection to auto-fill date range and company
+    const handleBatchChange = (batchId) => {
+        if (batchId && mode === 'create') {
+            const selectedBatch = activeBatches.find(batch => batch.id === batchId);
+            if (selectedBatch) {
+                const formValues = {};
+
+                // Auto-fill date range if available
+                if (selectedBatch.startDate && selectedBatch.endDate) {
+                    formValues.dateRange = [
+                        dayjs(selectedBatch.startDate),
+                        dayjs(selectedBatch.endDate)
+                    ];
+                }
+
+                // Auto-fill company if available
+                if (selectedBatch.company && selectedBatch.company.id) {
+                    formValues.companyId = selectedBatch.company.id;
+                }
+
+                form.setFieldsValue(formValues);
+            }
+        }
+    };
+
     return (
         <div className="p-6">
             <Form
@@ -456,6 +509,7 @@ const InternshipForm = ({ form, onSubmit, activeBatches = [], mode }) => {
                                     disabled={mode === 'edit'}
                                     showSearch
                                     optionFilterProp="children"
+                                    onChange={handleBatchChange}
                                 >
                                     {activeBatches.map(batch => (
                                         <Select.Option key={batch.id} value={batch.id}>
@@ -489,11 +543,21 @@ const InternshipForm = ({ form, onSubmit, activeBatches = [], mode }) => {
                                     <span>
                                         <BankOutlined className="mr-2 text-purple-500" />
                                         Công ty
+                                        {mode === 'create' && (
+                                            <Text type="secondary" className="ml-2 text-sm">
+                                                (Tự động lấy từ đợt thực tập)
+                                            </Text>
+                                        )}
                                     </span>
                                 }
                                 rules={[{ required: true, message: 'Vui lòng chọn công ty' }]}
+                                help={mode === 'create' ? 'Công ty sẽ được tự động lấy từ đợt thực tập đã chọn' : undefined}
                             >
-                                <CompanySelect onChange={() => { }} allowClear />
+                                <CompanySelect
+                                    onChange={() => { }}
+                                    allowClear
+                                    disabled={mode === 'create'}
+                                />
                             </Form.Item>
                         </Col>
                         <Col span={12}>
@@ -521,14 +585,21 @@ const InternshipForm = ({ form, onSubmit, activeBatches = [], mode }) => {
                                     <span>
                                         <CalendarOutlined className="mr-2 text-blue-500" />
                                         Thời gian thực tập
+                                        {mode === 'create' && (
+                                            <Text type="secondary" className="ml-2 text-sm">
+                                                (Tự động lấy từ đợt thực tập)
+                                            </Text>
+                                        )}
                                     </span>
                                 }
                                 rules={[{ required: true, message: 'Vui lòng chọn thời gian' }]}
+                                help={mode === 'create' ? 'Thời gian thực tập sẽ được tự động lấy từ đợt thực tập đã chọn' : undefined}
                             >
                                 <RangePicker
                                     style={{ width: '100%' }}
                                     format="DD/MM/YYYY"
                                     placeholder={['Ngày bắt đầu', 'Ngày kết thúc']}
+                                    disabled={mode === 'create'}
                                 />
                             </Form.Item>
                         </Col>
