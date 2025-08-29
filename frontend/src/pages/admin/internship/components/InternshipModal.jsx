@@ -126,16 +126,18 @@ const InternshipModal = ({ visible, mode, internship, onClose, onSuccess }) => {
 
                 // Create multiple internships if quantity > 1
                 if (quantity > 1) {
-                    const promises = [];
                     for (let i = 0; i < quantity; i++) {
                         const internshipWithSuffix = {
                             ...internshipData,
                             jobTitle: `${internshipData.jobTitle} ${i + 1}`
                         };
-                        promises.push(internshipService.createInternship(internshipWithSuffix));
+                        // Đợi 0.5s trước khi gọi request tiếp theo
+                        // Wait 0.5s before next request
+                        await internshipService.createInternship(internshipWithSuffix);
+                        if (i < quantity - 1) {
+                            await new Promise(resolve => setTimeout(resolve, 500));
+                        }
                     }
-
-                    await Promise.all(promises);
                     message.success(`Đã tạo thành công ${quantity} vị trí thực tập`);
                 } else {
                     await internshipService.createInternship(internshipData);
