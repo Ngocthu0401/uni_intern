@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Aug 29, 2025 at 03:21 AM
+-- Generation Time: Aug 29, 2025 at 12:18 PM
 -- Server version: 8.4.3
 -- PHP Version: 8.3.16
 
@@ -58,8 +58,7 @@ INSERT INTO `companies` (`id`, `created_at`, `updated_at`, `abbreviated_name`, `
 (2, '2025-08-06 11:36:18.000000', '2025-08-06 11:36:18.000000', 'VNG Corp', '182 Lê Đại Hành, Q.11, TP.HCM', 'VNG001', 'Công ty TNHH VNG', '1000-5000', 'TNHH', 'recruit@vng.com.vn', 'Trần Thị Bình', '028-6263-3664', 'Trưởng phòng Tuyển dụng', 'Công ty công nghệ hàng đầu Việt Nam chuyên phát triển game, mạng xã hội và thanh toán điện tử.', 'info@vng.com.vn', 'Game & Internet', b'1', '028-6263-3663', 'https://vng.com.vn'),
 (3, '2025-08-06 11:36:18.000000', '2025-08-06 11:36:18.000000', 'TMA Solutions', '15 Đường D2, Quận Bình Thạnh, TP.HCM', 'TMA001', 'Công ty TNHH TMA Solutions', '5000-10000', 'TNHH', 'hr@tma.com.vn', 'Lê Minh Cường', '028-3512-7980', 'Giám đốc Nhân sự', 'Công ty phát triển phần mềm lớn nhất Việt Nam, chuyên outsourcing cho thị trường quốc tế.', 'contact@tma.com.vn', 'Phần mềm', b'1', '028-3512-7979', 'https://tmasolutions.com'),
 (4, '2025-08-06 11:36:18.000000', '2025-08-06 11:36:18.000000', 'STU', '180 Cao Lỗ, Quận 8, TP.HCM', 'STU001', 'Trường Đại học Công nghệ Sài Gòn', '1000-5000', 'Giáo dục', 'cooperation@stu.edu.vn', 'Phạm Thị Dung', '028-5445-7778', 'Trưởng phòng Hợp tác Doanh nghiệp', 'Trường đại học tư thục chất lượng cao, chuyên đào tạo công nghệ thông tin và kỹ thuật.', 'info@stu.edu.vn', 'Giáo dục', b'1', '028-5445-7777', 'https://saigontech.edu.vn'),
-(5, '2025-08-06 11:36:18.000000', '2025-08-06 11:36:18.000000', 'BKAV', '156 Nguyễn Đức Cảnh, Hoàng Mai, Hà Nội', 'BKAV001', 'Công ty An ninh mạng BKAV', '500-1000', 'Cổ phần', 'hr@bkav.com', 'Nguyễn Thái Sơn', '024-3640-2223', 'Giám đốc Phát triển', 'Công ty chuyên phát triển các sản phẩm an ninh mạng và phần mềm antivirus hàng đầu Việt Nam.', 'info@bkav.com', 'An ninh mạng', b'1', '024-3640-2222', 'https://bkav.com'),
-(6, '2025-08-06 11:36:18.000000', '2025-08-06 11:36:18.000000', 'Timo Bank', 'Tầng 8, Toà nhà Vincom Center, Lê Thánh Tôn, Q.1, TP.HCM', 'TIMO001', 'Ngân hàng Số Timo', '100-500', 'Cổ phần', 'careers@timo.vn', 'Võ Minh Đức', '028-7106-8668', 'Head of Engineering', 'Ngân hàng số đầu tiên tại Việt Nam, cung cấp dịch vụ ngân hàng hoàn toàn trên mobile.', 'hello@timo.vn', 'Fintech', b'1', '1900-555-866', 'https://timo.vn');
+(5, '2025-08-06 11:36:18.000000', '2025-08-06 11:36:18.000000', 'BKAV', '156 Nguyễn Đức Cảnh, Hoàng Mai, Hà Nội', 'BKAV001', 'Công ty An ninh mạng BKAV', '500-1000', 'Cổ phần', 'hr@bkav.com', 'Nguyễn Thái Sơn', '024-3640-2223', 'Giám đốc Phát triển', 'Công ty chuyên phát triển các sản phẩm an ninh mạng và phần mềm antivirus hàng đầu Việt Nam.', 'info@bkav.com', 'An ninh mạng', b'1', '024-3640-2222', 'https://bkav.com');
 
 -- --------------------------------------------------------
 
@@ -96,14 +95,6 @@ CREATE TABLE `contracts` (
   `created_by_teacher_id` bigint DEFAULT NULL,
   `internship_id` bigint DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `contracts`
---
-
-INSERT INTO `contracts` (`id`, `created_at`, `updated_at`, `approval_date`, `approval_status`, `approved_by`, `company_signature`, `content`, `contract_code`, `contract_file_url`, `contract_type`, `department_signature`, `end_date`, `notes`, `payment_date`, `payment_status`, `payment_terms`, `signed_date`, `start_date`, `status`, `student_signature`, `support_amount`, `template_id`, `terms_and_conditions`, `title`, `created_by_teacher_id`, `internship_id`) VALUES
-(1, '2025-08-06 11:36:18.000000', '2025-08-06 11:36:18.000000', '2024-08-20', 'APPROVED', 'TS. Nguyễn Văn A', 'FPT Corporation - 26/08/2024', 'CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nĐộc lập - Tự do - Hạnh phúc\n\nHỢP ĐỒNG HỖ TRỢ THỰC TẬP SINH\n\nBên A: Trường Đại học Công nghệ Thông tin\nBên B: Công ty Cổ phần FPT\nBên C: Sinh viên Nguyễn Minh Khoa - MSSV: 19520001\n\nĐIỀU 1: ĐỐI TƯỢNG HỖ TRỢ\n- Sinh viên đang thực tập tại FPT theo chương trình của trường\n- Có thái độ học tập tích cực và kết quả tốt\n\nĐIỀU 2: MỨC HỖ TRỢ\n- Mức hỗ trợ: 3.000.000 VNĐ/tháng\n- Thời gian hỗ trợ: từ 01/09/2024 đến 15/12/2024\n\nĐIỀU 3: ĐIỀU KIỆN HỖ TRỢ\n- Tham gia đầy đủ các hoạt động thực tập\n- Nộp báo cáo định kỳ theo quy định\n- Có đánh giá tích cực từ doanh nghiệp\n\nĐIỀU 4: THANH TOÁN\n- Thanh toán theo tháng vào ngày 15 hàng tháng\n- Chuyển khoản vào tài khoản sinh viên đăng ký', 'HT_FPT_001_2024', '/contracts/HT_FPT_001_2024.pdf', 'SUPPORT', 'UIT - 27/08/2024', '2024-12-15', 'Hợp đồng đã được ký kết đầy đủ và đang thực hiện', '2024-09-15', 'PAID', 'Thanh toán hàng tháng vào ngày 15. Chuyển khoản qua tài khoản ngân hàng của sinh viên.', '2024-08-25', '2024-09-01', 'SIGNED', 'Nguyễn Minh Khoa - 25/08/2024', 3000000, 'TEMPLATE_SUPPORT_001', '1. Sinh viên cam kết hoàn thành đầy đủ chương trình thực tập\n2. Bảo mật thông tin của công ty\n3. Tuân thủ nội quy và quy định của công ty\n4. Công ty cam kết tạo điều kiện tốt nhất cho sinh viên học tập', 'Hợp đồng hỗ trợ thực tập sinh - Nguyễn Minh Khoa', 1, 1),
-(3, '2025-08-06 11:36:18.000000', '2025-08-06 11:36:18.000000', '2024-08-25', 'APPROVED', 'ThS. Trần Thị B', 'VNG Corporation - 29/08/2024', 'Hợp đồng hỗ trợ thực tập sinh tại VNG Corporation với focus vào frontend development', 'HT_VNG_001_2024', '/contracts/HT_VNG_001_2024.pdf', 'SUPPORT', 'UIT - 30/08/2024', '2024-12-15', 'Hợp đồng thực hiện tốt, payment on schedule', '2024-09-15', 'PAID', 'Monthly payment với game credits bonus', '2024-08-28', '2024-09-01', 'ACTIVE', 'Lê Văn Hùng - 28/08/2024', 3200000, 'TEMPLATE_SUPPORT_001', 'Điều khoản bảo mật đặc biệt về game content và user data', 'Hợp đồng hỗ trợ thực tập sinh - Lê Văn Hùng', 2, 3);
 
 -- --------------------------------------------------------
 
@@ -147,8 +138,8 @@ CREATE TABLE `evaluations` (
 --
 
 INSERT INTO `evaluations` (`id`, `created_at`, `updated_at`, `attitude_score`, `comments`, `communication_score`, `evaluation_date`, `evaluator_type`, `is_final_evaluation`, `overall_score`, `recommendations`, `soft_skill_score`, `strengths`, `technical_score`, `weaknesses`, `evaluator_id`, `internship_id`, `communication_attitude`, `discipline_score`, `following_rules`, `initiative_creativity`, `job_requirements_fulfillment`, `learning_spirit`, `professional_score`, `property_protection`, `understanding_organization`, `work_enthusiasm`, `work_schedule_compliance`) VALUES
-(1, '2025-08-06 11:36:18.000000', '2025-08-20 06:10:07.758980', 9, 'Sinh viên có tiến bộ rõ rệt trong suốt quá trình thực tập', 8.5, '2024-10-15', 'TEACHER', b'0', 8.6, 'Nên tham gia thêm các project complex để nâng cao kinh nghiệm', 8, 'Kỹ năng lập trình Java tốt, hiểu sâu về Spring Boot, có thái độ học hỏi tích cực', 8.5, 'Cần cải thiện kỹ năng debug và performance tuning', 3, 1, 0.7, 5.7, 1, 1, 1, 0.9, 2.9, 1, 1, 1, 1),
-(2, '2025-08-06 11:36:18.000000', '2025-08-20 09:39:51.417401', 9, 'Rất hài lòng với performance của intern', 8, '2024-10-15', 'MENTOR', b'0', 6.1, 'Rất hài lòng với performance của intern', 8.5, 'Rất hài lòng với performance của intern', 8, 'Rất hài lòng với performance của intern', 15, 1, 0.6, 4.3, 0.7, 1, 0.3, 0.5, 1.8, 0.3, 1, 0.7, 1);
+(1, '2025-08-29 05:39:08.959618', '2025-08-29 05:39:08.959618', NULL, 'Toots', NULL, '2025-08-29', 'TEACHER', b'0', 8.4, NULL, NULL, '', NULL, '', 3, 2, 1, 5.7, 0.8, 0.7, 1, 1, 2.7, 1, 0.9, 1, 1),
+(5, '2025-08-29 06:17:47.061360', '2025-08-29 06:18:30.306689', NULL, 'hoàn thành tốt nhiệm vụ được giao.', NULL, '2025-08-29', 'MENTOR', b'0', 8.7, 'hoàn thành tốt nhiệm vụ được giao.', NULL, 'hoàn thành tốt nhiệm vụ được giao.', NULL, 'hoàn thành tốt nhiệm vụ được giao.', 17, 2, 1, 5.7, 1, 1, 1, 1, 3, 0.7, 1, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -188,14 +179,13 @@ CREATE TABLE `internships` (
 --
 
 INSERT INTO `internships` (`id`, `created_at`, `updated_at`, `benefits`, `end_date`, `final_score`, `internship_code`, `job_description`, `job_title`, `mentor_comment`, `mentor_score`, `notes`, `requirements`, `salary`, `start_date`, `status`, `teacher_comment`, `teacher_score`, `working_hours_per_week`, `company_id`, `batch_id`, `mentor_id`, `student_id`, `teacher_id`) VALUES
-(1, '2025-08-06 11:36:18.000000', '2025-08-06 11:36:18.000000', 'Hỗ trợ ăn trưa, xe đưa đón, bảo hiểm y tế', '2024-12-15', 8.5, 'INT_FPT_001', 'Phát triển các API REST sử dụng Spring Boot, tham gia vào dự án thực tế của công ty, học hỏi về kiến trúc microservices và best practices trong phát triển phần mềm.', 'Java Backend Developer Intern', 'Thái độ làm việc tích cực, code clean và có tư duy tốt', 8.3, 'Sinh viên phù hợp với môi trường làm việc chuyên nghiệp', 'Kiến thức cơ bản về Java, OOP, SQL. Có thể làm việc nhóm và ham học hỏi.', 3000000, '2024-09-01', 'IN_PROGRESS', 'Sinh viên có tiến bộ tốt, hiểu biết sâu về Spring Boot', 8.7, 40, 1, 1, 1, 1, 1),
-(3, '2025-08-06 11:36:18.000000', '2025-08-06 11:36:18.000000', 'Lunch allowance, game credits, team building', '2024-12-15', 8.2, 'INT_VNG_001', 'Phát triển giao diện web cho game portal, sử dụng ReactJS và modern frontend technologies. Tham gia vào team phát triển game web.', 'Frontend Developer Intern', 'Code quality tốt, responsive design skills cần trau dồi', 8.4, 'Có tiềm năng phát triển thành full-stack developer', 'Kiến thức HTML, CSS, JavaScript. Có kinh nghiệm với ReactJS hoặc Vue.js là một lợi thế.', 3200000, '2024-09-01', 'IN_PROGRESS', 'Kỹ năng frontend tốt, cần cải thiện về UX/UI', 8, 40, 2, 1, 3, 3, 2),
-(4, '2025-08-06 11:36:18.000000', '2025-08-06 11:36:18.000000', 'Health insurance, English class, certification support', '2024-12-15', 8.6, 'INT_TMA_001', 'Phát triển ứng dụng enterprise sử dụng .NET Core, Entity Framework, và Azure cloud services. Tham gia dự án outsourcing cho khách hàng quốc tế.', '.NET Developer Intern', 'Delivery đúng deadline, quality code cao', 8.7, 'Phù hợp với môi trường outsourcing quốc tế', 'Kiến thức C#, OOP, SQL Server. Tiếng Anh giao tiếp cơ bản.', 3300000, '2024-09-01', 'IN_PROGRESS', 'Kỹ năng .NET vững chắc, giao tiếp tiếng Anh tốt', 8.5, 40, 3, 1, 4, 4, 3),
-(5, '2025-08-06 11:36:18.000000', '2025-08-06 11:36:18.000000', 'Meal allowance, lab access, research publication opportunity', '2024-12-15', 8, 'INT_STU_001', 'Nghiên cứu và phát triển các giải pháp IoT cho smart campus, lập trình embedded systems, phát triển mobile app điều khiển thiết bị IoT.', 'IoT Research Assistant', 'Tính sáng tạo cao, giải quyết vấn đề tốt', 8.2, 'Tiềm năng theo hướng nghiên cứu và phát triển sản phẩm', 'Kiến thức về lập trình C/C++, Arduino/Raspberry Pi. Có kinh nghiệm với mobile development là lợi thế.', 2800000, '2024-09-01', 'IN_PROGRESS', 'Có năng lực research, cần cải thiện kỹ năng thuyết trình', 7.8, 35, 4, 8, 5, 5, 2),
-(6, '2025-08-06 11:36:18.000000', '2025-08-29 03:14:30.021753', 'Security training, certification sponsorship, health insurance', '2024-12-15', 8.7, 'INT_BKAV_001', 'Tham gia team phát triển các công cụ bảo mật, thực hiện penetration testing, nghiên cứu các lỗ hổng bảo mật mới và phát triển giải pháp phòng chống.', 'Cybersecurity Intern', 'Kỹ năng penetration testing xuất sắc', 8.5, 'Có tiềm năng trở thành security expert', 'Kiến thức về network security, ethical hacking. Có certificate về cybersecurity là lợi thế.', 3400000, '2024-09-01', 'COMPLETED', 'Kiến thức security vững, có tư duy phân tích tốt', 8.9, 40, 5, 9, 6, 6, 4),
-(9, '2025-08-06 04:49:52.292077', '2025-08-06 04:50:12.211620', 'sdfsdfsdf', '2025-09-06', NULL, 'INT1754455792289', 'sd sdc', 'dfdsfsdf', NULL, NULL, '', 'sdfsdffs', 3334, '2025-08-17', 'ASSIGNED', NULL, NULL, 40, 2, NULL, 5, 5, 4),
-(10, '2025-08-18 09:02:59.824791', '2025-08-18 13:07:22.855065', 'ádasdas', '2025-09-29', NULL, 'INT1755507779811', 'ưqwdsdsdsd', 'aaaaaa', NULL, NULL, 'ádasd', 'ưqwdsdsdsdqwsdqwdqwdqwe', 22222, '2025-08-18', 'ASSIGNED', NULL, NULL, 60, 1, 9, 2, 2, 3),
-(11, '2025-08-29 02:09:18.869147', '2025-08-29 02:09:18.869147', 'sdfsdfsd', '2025-09-28', NULL, 'INT1756433358813', 'ksaas', 'Học', NULL, NULL, 'sdfsdfsdf', 'sdsdfsd', 20000, '2025-08-07', 'PENDING', NULL, NULL, 24, 2, 8, NULL, NULL, 3);
+(1, '2025-08-29 03:35:13.367683', '2025-08-29 04:09:35.640772', 'Hỗ trợ ăn trưa, xe đưa đón, bảo hiểm y tế', '2025-07-20', NULL, 'INT1756438513343', 'Phát triển các API REST sử dụng Spring Boot, tham gia vào dự án thực tế của công ty, học hỏi về kiến trúc microservices và best practices trong phát triển phần mềm.', 'Java Backend Developer Intern', NULL, NULL, 'Sinh viên phù hợp với môi trường làm việc chuyên nghiệp', 'Kiến thức cơ bản về Java, OOP, SQL. Có thể làm việc nhóm và ham học hỏi.', 2500000, '2025-05-18', 'ASSIGNED', NULL, NULL, 40, 1, 1, 2, 1, 2),
+(2, '2025-08-29 04:15:34.013995', '2025-08-29 05:40:11.447576', 'Lunch allowance, game credits, team building', '2025-07-20', NULL, 'INT1756440934012', 'Phát triển giao diện web cho game portal, sử dụng ReactJS và modern frontend technologies. Tham gia vào team phát triển game web.', 'Frontend Developer Intern', NULL, NULL, 'Có tiềm năng phát triển thành full-stack developer', 'Kiến thức HTML, CSS, JavaScript. Có kinh nghiệm với ReactJS hoặc Vue.js là một lợi thế.', 3000000, '2025-05-18', 'COMPLETED', NULL, NULL, 45, 2, 2, 3, 9, 1),
+(10, '2025-08-29 06:37:08.491843', '2025-08-29 06:37:08.491843', 'Security training, certification sponsorship, health insurance', '2025-11-16', NULL, 'INT1756449428489', 'Tham gia team phát triển các công cụ bảo mật, thực hiện penetration testing, nghiên cứu các lỗ hổng bảo mật mới và phát triển giải pháp phòng chống.', 'Cybersecurity Intern 1', NULL, NULL, 'Có tiềm năng trở thành security expert', 'Kiến thức về network security, ethical hacking. Có certificate về cybersecurity là lợi thế.', 2800000, '2025-09-14', 'PENDING', NULL, NULL, 45, 5, 8, NULL, NULL, 2),
+(11, '2025-08-29 06:37:09.241207', '2025-08-29 06:37:09.241207', 'Security training, certification sponsorship, health insurance', '2025-11-16', NULL, 'INT1756449429241', 'Tham gia team phát triển các công cụ bảo mật, thực hiện penetration testing, nghiên cứu các lỗ hổng bảo mật mới và phát triển giải pháp phòng chống.', 'Cybersecurity Intern 2', NULL, NULL, 'Có tiềm năng trở thành security expert', 'Kiến thức về network security, ethical hacking. Có certificate về cybersecurity là lợi thế.', 2800000, '2025-09-14', 'PENDING', NULL, NULL, 45, 5, 8, NULL, NULL, 2),
+(12, '2025-08-29 06:37:10.203846', '2025-08-29 06:37:10.203846', 'Security training, certification sponsorship, health insurance', '2025-11-16', NULL, 'INT1756449430202', 'Tham gia team phát triển các công cụ bảo mật, thực hiện penetration testing, nghiên cứu các lỗ hổng bảo mật mới và phát triển giải pháp phòng chống.', 'Cybersecurity Intern 3', NULL, NULL, 'Có tiềm năng trở thành security expert', 'Kiến thức về network security, ethical hacking. Có certificate về cybersecurity là lợi thế.', 2800000, '2025-09-14', 'PENDING', NULL, NULL, 45, 5, 8, NULL, NULL, 2),
+(13, '2025-08-29 06:37:10.807208', '2025-08-29 06:37:10.807208', 'Security training, certification sponsorship, health insurance', '2025-11-16', NULL, 'INT1756449430806', 'Tham gia team phát triển các công cụ bảo mật, thực hiện penetration testing, nghiên cứu các lỗ hổng bảo mật mới và phát triển giải pháp phòng chống.', 'Cybersecurity Intern 4', NULL, NULL, 'Có tiềm năng trở thành security expert', 'Kiến thức về network security, ethical hacking. Có certificate về cybersecurity là lợi thế.', 2800000, '2025-09-14', 'PENDING', NULL, NULL, 45, 5, 8, NULL, NULL, 2),
+(14, '2025-08-29 06:37:11.407204', '2025-08-29 06:37:11.407204', 'Security training, certification sponsorship, health insurance', '2025-11-16', NULL, 'INT1756449431407', 'Tham gia team phát triển các công cụ bảo mật, thực hiện penetration testing, nghiên cứu các lỗ hổng bảo mật mới và phát triển giải pháp phòng chống.', 'Cybersecurity Intern 5', NULL, NULL, 'Có tiềm năng trở thành security expert', 'Kiến thức về network security, ethical hacking. Có certificate về cybersecurity là lợi thế.', 2800000, '2025-09-14', 'PENDING', NULL, NULL, 45, 5, 8, NULL, NULL, 2);
 
 -- --------------------------------------------------------
 
@@ -226,11 +216,11 @@ CREATE TABLE `internship_batches` (
 --
 
 INSERT INTO `internship_batches` (`id`, `created_at`, `updated_at`, `academic_year`, `batch_code`, `batch_name`, `description`, `end_date`, `is_active`, `max_students`, `registration_end_date`, `registration_start_date`, `semester`, `start_date`, `company_id`) VALUES
-(1, '2025-08-06 11:36:18.000000', '2025-08-06 11:36:18.000000', '2024-2025', 'TT_HK1_2024', 'Thực tập Học kỳ 1 năm học 2024-2025', 'Đợt thực tập chính thức cho sinh viên năm cuối trong học kỳ 1 năm học 2024-2025', '2024-12-15', b'1', 200, '2024-08-15', '2024-06-01', 'Học kỳ 1', '2024-09-01', NULL),
-(2, '2025-08-06 11:36:18.000000', '2025-08-06 11:36:18.000000', '2024', 'TT_HE_2024', 'Thực tập Hè 2024', 'Đợt thực tập hè cho sinh viên muốn tích lũy kinh nghiệm sớm', '2024-08-30', b'1', 150, '2024-05-31', '2024-04-01', 'Hè', '2024-06-15', NULL),
-(3, '2025-08-06 11:36:18.000000', '2025-08-06 11:36:18.000000', '2023-2024', 'TT_HK2_2023', 'Thực tập Học kỳ 2 năm học 2023-2024', 'Đợt thực tập học kỳ 2 vừa kết thúc', '2024-05-31', b'0', 180, '2024-01-15', '2023-12-01', 'Học kỳ 2', '2024-02-01', NULL),
-(8, '2025-08-18 14:49:40.897205', '2025-08-18 15:17:20.914916', '2024-2025', 'BATCH_1755528580778', 'name_en - Công ty TNHH VNG', 'bbbbbb', '2025-09-28', b'1', 108, '2025-08-07', '2025-07-30', 'SPRING', '2025-08-07', 2),
-(9, '2025-08-18 14:49:41.015838', '2025-08-18 15:16:59.200718', '2024-2025', 'BATCH_1755528580987', 'name_en - Công ty TNHH TMA Solutions', 'aaaaaaa', '2025-09-28', b'1', 25, '2025-08-07', '2025-07-30', 'SPRING', '2025-08-07', 3);
+(1, '2025-08-29 03:27:25.300732', '2025-08-29 03:27:25.300732', '2024-2025', 'BATCH_1756438044906', 'TT_HK1_2025 - Công ty Cổ phần FPT', 'Đợt thực tập chính thức cho sinh viên năm cuối trong học kỳ 1 năm học 2024-2025', '2025-07-20', b'1', 100, '2025-05-16', '2025-04-30', 'SPRING', '2025-05-18', 1),
+(2, '2025-08-29 03:27:25.605106', '2025-08-29 03:27:25.605106', '2024-2025', 'BATCH_1756438045530', 'TT_HK1_2025 - Công ty TNHH VNG', 'Đợt thực tập chính thức cho sinh viên năm cuối trong học kỳ 1 năm học 2024-2025', '2025-07-20', b'1', 50, '2025-05-16', '2025-04-30', 'SPRING', '2025-05-18', 2),
+(6, '2025-08-29 03:31:44.632143', '2025-08-29 03:31:44.632143', '2024-2025', 'BATCH_1756438304496', 'TT_HK2_2025 - Công ty TNHH TMA Solutions', 'Đợt thực tập chính thức cho sinh viên năm cuối trong học kỳ 2 năm học 2024-2025', '2025-11-16', b'1', 30, '2025-09-07', '2025-08-24', 'FALL', '2025-09-14', 3),
+(7, '2025-08-29 03:31:44.830936', '2025-08-29 03:31:44.830936', '2024-2025', 'BATCH_1756438304722', 'TT_HK2_2025 - Trường Đại học Công nghệ Sài Gòn', 'Đợt thực tập chính thức cho sinh viên năm cuối trong học kỳ 2 năm học 2024-2025', '2025-11-16', b'1', 45, '2025-09-07', '2025-08-24', 'FALL', '2025-09-14', 4),
+(8, '2025-08-29 03:31:45.169943', '2025-08-29 03:31:45.169943', '2024-2025', 'BATCH_1756438305135', 'TT_HK2_2025 - Công ty An ninh mạng BKAV', 'Đợt thực tập chính thức cho sinh viên năm cuối trong học kỳ 2 năm học 2024-2025', '2025-11-16', b'1', 40, '2025-09-07', '2025-08-24', 'FALL', '2025-09-14', 5);
 
 -- --------------------------------------------------------
 
@@ -256,17 +246,6 @@ CREATE TABLE `internship_progress` (
   `weekly_goals` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
   `internship_id` bigint NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `internship_progress`
---
-
-INSERT INTO `internship_progress` (`id`, `achievements`, `challenges`, `completed_tasks`, `created_at`, `current_week`, `mentor_feedback`, `overall_progress`, `student_reflection`, `total_tasks`, `total_weeks`, `updated_at`, `week_end_date`, `week_start_date`, `weekly_goals`, `internship_id`) VALUES
-(1, 'Hoàn thành setup environment thành công, hiểu được project structure', 'Gặp khó khăn ban đầu với Spring Boot configuration', 1, '2025-08-06 11:36:18.000000', 1, 'Student shows good technical aptitude, quick learner', 25, 'Môi trường FPT rất chuyên nghiệp, mentor support tốt', 4, 16, '2025-08-06 11:36:18.000000', '2024-09-07', '2024-09-01', 'Setup development environment và làm quen với codebase hiện tại', 1),
-(2, 'Successfully implemented registration endpoint với proper validation', 'Password encryption và email verification integration', 2, '2025-08-06 11:36:18.000000', 2, 'Good progress, code quality improving', 50, 'Hiểu rõ hơn về REST API design patterns', 4, 16, '2025-08-06 11:36:18.000000', '2024-09-14', '2024-09-08', 'Hoàn thành User Registration API với validation', 1),
-(3, 'Setup JWT library và understand token-based auth flow', 'Token refresh mechanism và security best practices', 2, '2025-08-06 11:36:18.000000', 3, 'On track with timeline, good problem-solving skills', 62.5, 'JWT concept khá phức tạp nhưng thú vị', 4, 16, '2025-08-06 11:36:18.000000', '2024-09-21', '2024-09-15', 'Bắt đầu implement JWT authentication system', 1),
-(6, 'Homepage component hoàn thành với responsive design', 'CSS styling và component architecture decisions', 1, '2025-08-06 11:36:18.000000', 1, 'Good React knowledge, clean component structure', 33.3, 'VNG culture rất dynamic, team work tốt', 3, 16, '2025-08-06 11:36:18.000000', '2024-09-07', '2024-09-01', 'Setup React environment và implement homepage', 3),
-(7, 'Game carousel working smoothly, user dashboard implemented', 'State management complexity và API integration', 2, '2025-08-06 11:36:18.000000', 2, 'UI skills improving rapidly, good attention to detail', 66.7, 'Học được nhiều về modern React patterns', 3, 16, '2025-08-06 11:36:18.000000', '2024-09-14', '2024-09-08', 'Hoàn thiện homepage và bắt đầu authentication', 3);
 
 -- --------------------------------------------------------
 
@@ -342,8 +321,7 @@ CREATE TABLE `reports` (
 --
 
 INSERT INTO `reports` (`id`, `created_at`, `updated_at`, `achievements`, `approved_at`, `challenges`, `content`, `feedback`, `grade`, `is_approved_by_mentor`, `is_approved_by_teacher`, `mentor_comment`, `mentor_score`, `next_week_plan`, `notes`, `report_date`, `report_period`, `reviewed_at`, `status`, `submitted_at`, `teacher_comment`, `teacher_score`, `title`, `type`, `week_number`, `internship_id`, `reviewer_id`, `student_id`) VALUES
-(1, '2025-08-06 11:36:18.000000', '2025-08-06 11:36:18.000000', NULL, NULL, NULL, 'Tuần đầu tiên tại FPT, em đã được orientation về quy trình làm việc, coding standards và tools sử dụng. Em đã setup development environment và làm quen với codebase hiện tại. Mentor hướng dẫn em về Spring Boot architecture và database design patterns.', NULL, 8.5, NULL, NULL, NULL, NULL, NULL, NULL, '2024-09-07', 'Tuần 1 (01/09 - 07/09/2024)', '2024-09-08 09:15:00.000000', 'APPROVED', '2024-09-07 17:30:00.000000', NULL, NULL, 'Báo cáo tuần 1 - Làm quen môi trường làm việc', 'WEEKLY', 1, 1, 1, 1),
-(2, '2025-08-06 11:36:18.000000', '2025-08-06 11:36:18.000000', NULL, NULL, NULL, 'Tuần này em đã bắt đầu phát triển module User Management API. Em học được cách implement authentication với JWT, validation với Bean Validation và error handling. Gặp khó khăn trong việc hiểu về dependency injection nhưng đã được mentor giải đáp.', NULL, 8.7, NULL, NULL, NULL, NULL, NULL, NULL, '2024-09-14', 'Tuần 2 (08/09 - 14/09/2024)', '2024-09-15 08:30:00.000000', 'APPROVED', '2024-09-14 17:00:00.000000', NULL, NULL, 'Báo cáo tuần 2 - Phát triển REST API đầu tiên', 'WEEKLY', 2, 1, 1, 1);
+(1, '2025-08-29 05:36:56.207003', '2025-08-29 05:37:33.468929', NULL, NULL, NULL, 'Tuần đầu tiên tại FPT, em đã được orientation về quy trình làm việc, coding standards và tools sử dụng. Em đã setup development environment và làm quen với codebase hiện tại. Mentor hướng dẫn em về Spring Boot architecture và database design patterns.', NULL, NULL, b'0', b'1', NULL, NULL, NULL, NULL, '2025-08-29', '21/05/2025 - 28/05/2025', '2025-08-28 22:37:33.226000', 'APPROVED', '2025-08-29 05:36:55.773711', '', 8, 'Báo cáo tuần 1 - làm quen môi trường', 'WEEKLY', 1, 2, NULL, 9);
 
 -- --------------------------------------------------------
 
@@ -389,7 +367,8 @@ INSERT INTO `students` (`id`, `created_at`, `updated_at`, `academic_year`, `addr
 (3, '2025-08-06 11:36:18.000000', '2025-08-06 11:36:18.000000', '2019-2023', '789 Nguyễn Huệ, Q.1, TP.HCM', 'KTPM-K19', '2001-12-08', 3.65, 'Kỹ thuật Phần mềm', 'Lê Thị Nga', '0908123458', 'ACTIVE', '19520003', 9),
 (4, '2025-08-06 11:36:18.000000', '2025-08-06 11:36:18.000000', '2019-2023', '321 Võ Văn Tần, Q.3, TP.HCM', 'KTPM-K19', '2001-05-10', 3.9, 'Kỹ thuật Phần mềm', 'Phạm Văn Bình', '0908123459', 'ACTIVE', '19520004', 10),
 (5, '2025-08-06 11:36:18.000000', '2025-08-06 11:36:18.000000', '2019-2023', '654 Trần Hưng Đạo, Q.1, TP.HCM', 'CNTT-K19', '2001-09-18', 3.55, 'Công nghệ Thông tin', 'Hoàng Thị Lan', '0908123460', 'ACTIVE', '19520005', 11),
-(6, '2025-08-06 11:36:18.000000', '2025-08-29 03:14:22.463396', '2019-2023', NULL, 'ATTT-K19', NULL, 3.7, 'An toàn Thông tin', NULL, NULL, 'ACTIVE', '19520006', 12);
+(6, '2025-08-06 11:36:18.000000', '2025-08-29 03:14:22.463396', '2019-2023', NULL, 'ATTT-K19', NULL, 3.7, 'An toàn Thông tin', NULL, NULL, 'ACTIVE', '19520006', 12),
+(9, '2025-08-29 04:11:40.231300', '2025-08-29 05:40:11.294205', '2024-2025', NULL, 'ATTT-K19', NULL, 3.09, 'An toàn Thông tin', NULL, NULL, 'ACTIVE', 'sv_19520007', 13);
 
 -- --------------------------------------------------------
 
@@ -419,13 +398,7 @@ CREATE TABLE `tasks` (
 --
 
 INSERT INTO `tasks` (`id`, `actual_hours`, `created_at`, `description`, `due_date`, `estimated_hours`, `notes`, `priority`, `status`, `title`, `updated_at`, `internship_id`, `mentor_id`, `student_id`) VALUES
-(1, 6, '2025-08-06 11:36:18.000000', 'Cài đặt và cấu hình môi trường phát triển: JDK 17, IntelliJ IDEA, MySQL, Postman, Git. Clone và setup project từ company repository.', '2024-09-03', 8, 'Completed ahead of schedule, good technical setup skills', 'HIGH', 'COMPLETED', 'Setup Development Environment', '2025-08-06 11:36:18.000000', 1, 1, 1),
-(2, 18, '2025-08-06 11:36:18.000000', 'Phát triển REST API cho đăng ký người dùng với validation, password encryption, và email verification.', '2024-09-10', 16, 'Good implementation, minor feedback on validation messages', 'HIGH', 'COMPLETED', 'Implement User Registration API', '2025-08-06 11:36:18.000000', 1, 1, 1),
-(3, 15, '2025-08-06 11:36:18.000000', 'Implement JWT-based authentication system với login/logout functionality và middleware protection.', '2024-09-20', 20, 'Currently working on token refresh mechanism', 'HIGH', 'IN_PROGRESS', 'Add JWT Authentication', '2025-08-06 11:36:18.000000', 1, 1, 1),
-(4, NULL, '2025-08-06 11:36:18.000000', 'Viết unit tests cho User service với coverage >= 80% sử dụng JUnit và Mockito.', '2024-09-25', 12, 'Waiting for JWT implementation completion', 'MEDIUM', 'PENDING', 'Write Unit Tests', '2025-08-06 11:36:18.000000', 1, 1, 1),
-(8, 4, '2025-08-06 11:36:18.000000', 'Cài đặt Node.js, npm, create-react-app, và các development tools. Setup ESLint và Prettier.', '2024-09-03', 6, 'Quick setup, familiar with React ecosystem', 'HIGH', 'COMPLETED', 'Setup React Development Environment', '2025-08-06 11:36:18.000000', 3, 3, 3),
-(9, 26, '2025-08-06 11:36:18.000000', 'Phát triển trang chủ game portal với responsive design, game carousel, và user dashboard.', '2024-09-15', 24, 'Good UI implementation, minor responsiveness issues fixed', 'HIGH', 'COMPLETED', 'Implement Game Portal Homepage', '2025-08-06 11:36:18.000000', 3, 3, 3),
-(10, 12, '2025-08-06 11:36:18.000000', 'Implement login/register pages với form validation và state management.', '2024-09-22', 16, 'Working on social login integration', 'HIGH', 'IN_PROGRESS', 'Add User Authentication Flow', '2025-08-06 11:36:18.000000', 3, 3, 3);
+(1, NULL, '2025-08-29 05:05:31.472598', 'Tìm hiểu văn hóa làm việc của công ty và giờ giấc hoạt động trong ngày và trong tuần', '2025-05-26', 40, NULL, 'HIGH', 'COMPLETED', 'Tìm hiểu văn hóa công ty', '2025-08-29 05:06:07.046986', 2, 3, 9);
 
 -- --------------------------------------------------------
 
@@ -627,31 +600,31 @@ ALTER TABLE `companies`
 -- AUTO_INCREMENT for table `contracts`
 --
 ALTER TABLE `contracts`
-  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `evaluations`
 --
 ALTER TABLE `evaluations`
-  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `internships`
 --
 ALTER TABLE `internships`
-  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `internship_batches`
 --
 ALTER TABLE `internship_batches`
-  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `internship_progress`
 --
 ALTER TABLE `internship_progress`
-  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` bigint NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `mentors`
@@ -663,19 +636,19 @@ ALTER TABLE `mentors`
 -- AUTO_INCREMENT for table `reports`
 --
 ALTER TABLE `reports`
-  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `students`
 --
 ALTER TABLE `students`
-  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `tasks`
 --
 ALTER TABLE `tasks`
-  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `teachers`
