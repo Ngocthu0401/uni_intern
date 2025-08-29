@@ -4,7 +4,7 @@ import { Card, Row, Col, Select, Typography, Alert } from 'antd';
 const { Text } = Typography;
 const { Option } = Select;
 
-const BatchSelection = ({ batches, selectedBatch, onBatchChange, loading = false }) => {
+const BatchSelection = ({ batches, selectedBatch, onBatchChange, loading = false, unitPrice }) => {
     return (
         <Card className="!mb-6">
             <Row gutter={16} align="middle">
@@ -20,7 +20,7 @@ const BatchSelection = ({ batches, selectedBatch, onBatchChange, loading = false
                         loading={loading}
                     >
                         {batches.map((batch) => (
-                            <Option key={batch.id} value={batch.id}>
+                            <Option key={batch.batchName} value={batch.batchName}>
                                 {batch.batchName} - {batch.academicYear} (Học kỳ {batch.semester})
                             </Option>
                         ))}
@@ -29,7 +29,7 @@ const BatchSelection = ({ batches, selectedBatch, onBatchChange, loading = false
                 <Col span={8}>
                     <div className="!flex !items-center">
                         <Text strong className="!mr-2">Đơn giá:</Text>
-                        <Alert message="280,000 VNĐ" type="success" />
+                        <Alert message={`${unitPrice.toLocaleString()} VNĐ`} type="success" />
 
                         {/* <Select
                             value={unitPrice}

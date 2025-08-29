@@ -18,6 +18,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.Map;
 
 @Service
 @Transactional
@@ -391,6 +392,45 @@ public class InternshipBatchService {
 
     public long getActiveBatchCount() {
         return batchRepository.findByIsActive(true).size();
+    }
+
+    // Method để lấy các đợt thực tập đã được nhóm theo tên đợt cho quản lý thanh
+    // toán
+    public List<InternshipBatchWithStudentCountDto> getActiveBatchesGroupedForPayment() {
+        List<InternshipBatch> batches = batchRepository.findByIsActive(true);
+
+        // Nhóm các batch theo tên đợt (phần trước dấu gạch nối)
+        Map<String, List<InternshipBatch>> groupedBatches = batches.stream()
+                .collect(Collectors.groupingBy(batch -> {
+                    String batchName = batch.getBatchName();
+                    if (batchName != null && batchName.contains(" - ")) {
+                        return batchName.split(" - ")[0].trim();
+                    }
+                    return batchName; // Nếu không có dấu gạch nối, trả về toàn bộ tên
+                }));
+
+        // Chuyển đổi thành DTO với thông tin tổng hợp
+        return groupedBatches.entrySet().stream()
+                .map(entry -> {
+                    String batchName = entry.getKey();
+                    List<InternshipBatch> batchList = entry.getValue();
+
+                    // Lấy thông tin từ batch đầu tiên trong nhóm
+                    InternshipBatch firstBatch = batchList.get(0);
+
+                    // Tính tổng số sinh viên từ tất cả các batch trong nhóm
+                    Long totalStudents = batchList.stream()
+                            .mapToLong(batch -> batchRepository.countStudentsByBatchId(batch.getId()))
+                            .sum();
+
+                    // Tạo DTO với thông tin tổng hợp
+                    InternshipBatchWithStudentCountDto dto = InternshipBatchWithStudentCountDto.fromEntity(firstBatch,
+                            totalStudents);
+                    dto.setBatchName(batchName); // Sử dụng tên đã được nhóm
+
+                    return dto;
+                })
+                .collect(Collectors.toList());
     }
 
     // Methods for company-based operations

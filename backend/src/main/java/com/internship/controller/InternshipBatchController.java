@@ -51,6 +51,13 @@ public class InternshipBatchController {
         return ResponseEntity.ok(batches);
     }
 
+    @GetMapping("/active/grouped-for-payment")
+    @PreAuthorize("hasRole('DEPARTMENT') or hasRole('TEACHER')")
+    public ResponseEntity<List<InternshipBatchWithStudentCountDto>> getActiveBatchesGroupedForPayment() {
+        List<InternshipBatchWithStudentCountDto> batches = batchService.getActiveBatchesGroupedForPayment();
+        return ResponseEntity.ok(batches);
+    }
+
     @GetMapping("/registration-active")
     @PreAuthorize("hasRole('DEPARTMENT') or hasRole('TEACHER') or hasRole('STUDENT')")
     public ResponseEntity<List<InternshipBatchWithStudentCountDto>> getActiveRegistrationBatches() {

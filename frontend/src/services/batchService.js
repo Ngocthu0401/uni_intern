@@ -126,6 +126,12 @@ const batchService = {
     return response.data;
   },
 
+  // Get active batches grouped for payment management
+  getActiveBatchesGroupedForPayment: async () => {
+    const response = await axiosClient.get('/batches/active/grouped-for-payment');
+    return response.data;
+  },
+
   // Get registration active batches
   getRegistrationActiveBatches: async () => {
     const response = await axiosClient.get('/batches/registration-active');

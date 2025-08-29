@@ -10,7 +10,7 @@ const PaymentManagement = () => {
   const [paymentData, setPaymentData] = useState([]);
   const [showStudentModal, setShowStudentModal] = useState(false);
   const [selectedInternship, setSelectedInternship] = useState(null);
-  const unitPrice = 280000;
+  const unitPrice = 420000;
 
   useEffect(() => {
     loadBatches();
@@ -25,7 +25,7 @@ const PaymentManagement = () => {
   const loadBatches = async () => {
     try {
       setLoading(true);
-      const response = await batchService.getActiveBatches();
+      const response = await batchService.getActiveBatchesGroupedForPayment();
       setBatches(response.content || response.data || response || []);
     } catch (error) {
       console.error('Error loading batches:', error);
@@ -35,13 +35,25 @@ const PaymentManagement = () => {
     }
   };
 
-  const loadInternshipsByBatch = async (batchId) => {
+  const loadInternshipsByBatch = async (batchName) => {
     try {
       setLoading(true);
-      const response = await internshipService.getInternshipsByBatch(batchId);
-      const internshipsData = response.content || response.data || response || [];
+      // Lấy tất cả các batch có cùng tên đợt (phần trước dấu gạch nối)
+      const allBatches = await batchService.getActiveBatches();
+      const relatedBatches = allBatches.filter(batch => {
+        const batchDisplayName = batch.batchName.split(' - ')[0].trim();
+        return batchDisplayName === batchName;
+      });
 
-      const paymentData = processInternshipsForPayment(internshipsData);
+      // Lấy tất cả internships từ các batch liên quan
+      const allInternships = [];
+      for (const batch of relatedBatches) {
+        const response = await internshipService.getInternshipsByBatch(batch.id);
+        const internshipsData = response.content || response.data || response || [];
+        allInternships.push(...internshipsData);
+      }
+
+      const paymentData = processInternshipsForPayment(allInternships);
       setPaymentData(paymentData);
     } catch (error) {
       console.error('Error loading internships:', error);
@@ -81,8 +93,8 @@ const PaymentManagement = () => {
     return Object.values(groupedByCompany);
   };
 
-  const handleBatchChange = (batchId) => {
-    setSelectedBatch(batchId);
+  const handleBatchChange = (batchName) => {
+    setSelectedBatch(batchName);
   };
 
   const handleViewStudents = (internship) => {
@@ -124,6 +136,7 @@ const PaymentManagement = () => {
           selectedBatch={selectedBatch}
           onBatchChange={handleBatchChange}
           loading={loading}
+          unitPrice={unitPrice}
         />
 
         {selectedBatch && paymentData.length > 0 && (
