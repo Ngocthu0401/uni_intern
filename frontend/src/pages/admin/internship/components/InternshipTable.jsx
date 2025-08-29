@@ -246,6 +246,7 @@ const InternshipTable = ({ dataSource, loading, pagination, onChange, onAction }
         {
             title: 'Trạng thái',
             dataIndex: 'status',
+            fixed: 'right',
             key: 'status',
             width: 120,
             render: (status) => (

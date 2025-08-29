@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Aug 20, 2025 at 10:05 AM
+-- Generation Time: Aug 29, 2025 at 03:21 AM
 -- Server version: 8.4.3
 -- PHP Version: 8.3.16
 
@@ -191,10 +191,11 @@ INSERT INTO `internships` (`id`, `created_at`, `updated_at`, `benefits`, `end_da
 (1, '2025-08-06 11:36:18.000000', '2025-08-06 11:36:18.000000', 'Hỗ trợ ăn trưa, xe đưa đón, bảo hiểm y tế', '2024-12-15', 8.5, 'INT_FPT_001', 'Phát triển các API REST sử dụng Spring Boot, tham gia vào dự án thực tế của công ty, học hỏi về kiến trúc microservices và best practices trong phát triển phần mềm.', 'Java Backend Developer Intern', 'Thái độ làm việc tích cực, code clean và có tư duy tốt', 8.3, 'Sinh viên phù hợp với môi trường làm việc chuyên nghiệp', 'Kiến thức cơ bản về Java, OOP, SQL. Có thể làm việc nhóm và ham học hỏi.', 3000000, '2024-09-01', 'IN_PROGRESS', 'Sinh viên có tiến bộ tốt, hiểu biết sâu về Spring Boot', 8.7, 40, 1, 1, 1, 1, 1),
 (3, '2025-08-06 11:36:18.000000', '2025-08-06 11:36:18.000000', 'Lunch allowance, game credits, team building', '2024-12-15', 8.2, 'INT_VNG_001', 'Phát triển giao diện web cho game portal, sử dụng ReactJS và modern frontend technologies. Tham gia vào team phát triển game web.', 'Frontend Developer Intern', 'Code quality tốt, responsive design skills cần trau dồi', 8.4, 'Có tiềm năng phát triển thành full-stack developer', 'Kiến thức HTML, CSS, JavaScript. Có kinh nghiệm với ReactJS hoặc Vue.js là một lợi thế.', 3200000, '2024-09-01', 'IN_PROGRESS', 'Kỹ năng frontend tốt, cần cải thiện về UX/UI', 8, 40, 2, 1, 3, 3, 2),
 (4, '2025-08-06 11:36:18.000000', '2025-08-06 11:36:18.000000', 'Health insurance, English class, certification support', '2024-12-15', 8.6, 'INT_TMA_001', 'Phát triển ứng dụng enterprise sử dụng .NET Core, Entity Framework, và Azure cloud services. Tham gia dự án outsourcing cho khách hàng quốc tế.', '.NET Developer Intern', 'Delivery đúng deadline, quality code cao', 8.7, 'Phù hợp với môi trường outsourcing quốc tế', 'Kiến thức C#, OOP, SQL Server. Tiếng Anh giao tiếp cơ bản.', 3300000, '2024-09-01', 'IN_PROGRESS', 'Kỹ năng .NET vững chắc, giao tiếp tiếng Anh tốt', 8.5, 40, 3, 1, 4, 4, 3),
-(5, '2025-08-06 11:36:18.000000', '2025-08-06 11:36:18.000000', 'Meal allowance, lab access, research publication opportunity', '2024-12-15', 8, 'INT_STU_001', 'Nghiên cứu và phát triển các giải pháp IoT cho smart campus, lập trình embedded systems, phát triển mobile app điều khiển thiết bị IoT.', 'IoT Research Assistant', 'Tính sáng tạo cao, giải quyết vấn đề tốt', 8.2, 'Tiềm năng theo hướng nghiên cứu và phát triển sản phẩm', 'Kiến thức về lập trình C/C++, Arduino/Raspberry Pi. Có kinh nghiệm với mobile development là lợi thế.', 2800000, '2024-09-01', 'IN_PROGRESS', 'Có năng lực research, cần cải thiện kỹ năng thuyết trình', 7.8, 35, 4, 1, 5, 5, 2),
-(6, '2025-08-06 11:36:18.000000', '2025-08-06 11:36:18.000000', 'Security training, certification sponsorship, health insurance', '2024-12-15', 8.7, 'INT_BKAV_001', 'Tham gia team phát triển các công cụ bảo mật, thực hiện penetration testing, nghiên cứu các lỗ hổng bảo mật mới và phát triển giải pháp phòng chống.', 'Cybersecurity Intern', 'Kỹ năng penetration testing xuất sắc', 8.5, 'Có tiềm năng trở thành security expert', 'Kiến thức về network security, ethical hacking. Có certificate về cybersecurity là lợi thế.', 3400000, '2024-09-01', 'IN_PROGRESS', 'Kiến thức security vững, có tư duy phân tích tốt', 8.9, 40, 5, 1, 6, 6, 4),
+(5, '2025-08-06 11:36:18.000000', '2025-08-06 11:36:18.000000', 'Meal allowance, lab access, research publication opportunity', '2024-12-15', 8, 'INT_STU_001', 'Nghiên cứu và phát triển các giải pháp IoT cho smart campus, lập trình embedded systems, phát triển mobile app điều khiển thiết bị IoT.', 'IoT Research Assistant', 'Tính sáng tạo cao, giải quyết vấn đề tốt', 8.2, 'Tiềm năng theo hướng nghiên cứu và phát triển sản phẩm', 'Kiến thức về lập trình C/C++, Arduino/Raspberry Pi. Có kinh nghiệm với mobile development là lợi thế.', 2800000, '2024-09-01', 'IN_PROGRESS', 'Có năng lực research, cần cải thiện kỹ năng thuyết trình', 7.8, 35, 4, 8, 5, 5, 2),
+(6, '2025-08-06 11:36:18.000000', '2025-08-29 03:14:30.021753', 'Security training, certification sponsorship, health insurance', '2024-12-15', 8.7, 'INT_BKAV_001', 'Tham gia team phát triển các công cụ bảo mật, thực hiện penetration testing, nghiên cứu các lỗ hổng bảo mật mới và phát triển giải pháp phòng chống.', 'Cybersecurity Intern', 'Kỹ năng penetration testing xuất sắc', 8.5, 'Có tiềm năng trở thành security expert', 'Kiến thức về network security, ethical hacking. Có certificate về cybersecurity là lợi thế.', 3400000, '2024-09-01', 'COMPLETED', 'Kiến thức security vững, có tư duy phân tích tốt', 8.9, 40, 5, 9, 6, 6, 4),
 (9, '2025-08-06 04:49:52.292077', '2025-08-06 04:50:12.211620', 'sdfsdfsdf', '2025-09-06', NULL, 'INT1754455792289', 'sd sdc', 'dfdsfsdf', NULL, NULL, '', 'sdfsdffs', 3334, '2025-08-17', 'ASSIGNED', NULL, NULL, 40, 2, NULL, 5, 5, 4),
-(10, '2025-08-18 09:02:59.824791', '2025-08-18 13:07:22.855065', 'ádasdas', '2025-09-29', NULL, 'INT1755507779811', 'ưqwdsdsdsd', 'aaaaaa', NULL, NULL, 'ádasd', 'ưqwdsdsdsdqwsdqwdqwdqwe', 22222, '2025-08-18', 'ASSIGNED', NULL, NULL, 60, 1, 1, 2, 2, 3);
+(10, '2025-08-18 09:02:59.824791', '2025-08-18 13:07:22.855065', 'ádasdas', '2025-09-29', NULL, 'INT1755507779811', 'ưqwdsdsdsd', 'aaaaaa', NULL, NULL, 'ádasd', 'ưqwdsdsdsdqwsdqwdqwdqwe', 22222, '2025-08-18', 'ASSIGNED', NULL, NULL, 60, 1, 9, 2, 2, 3),
+(11, '2025-08-29 02:09:18.869147', '2025-08-29 02:09:18.869147', 'sdfsdfsd', '2025-09-28', NULL, 'INT1756433358813', 'ksaas', 'Học', NULL, NULL, 'sdfsdfsdf', 'sdsdfsd', 20000, '2025-08-07', 'PENDING', NULL, NULL, 24, 2, 8, NULL, NULL, 3);
 
 -- --------------------------------------------------------
 
@@ -388,7 +389,7 @@ INSERT INTO `students` (`id`, `created_at`, `updated_at`, `academic_year`, `addr
 (3, '2025-08-06 11:36:18.000000', '2025-08-06 11:36:18.000000', '2019-2023', '789 Nguyễn Huệ, Q.1, TP.HCM', 'KTPM-K19', '2001-12-08', 3.65, 'Kỹ thuật Phần mềm', 'Lê Thị Nga', '0908123458', 'ACTIVE', '19520003', 9),
 (4, '2025-08-06 11:36:18.000000', '2025-08-06 11:36:18.000000', '2019-2023', '321 Võ Văn Tần, Q.3, TP.HCM', 'KTPM-K19', '2001-05-10', 3.9, 'Kỹ thuật Phần mềm', 'Phạm Văn Bình', '0908123459', 'ACTIVE', '19520004', 10),
 (5, '2025-08-06 11:36:18.000000', '2025-08-06 11:36:18.000000', '2019-2023', '654 Trần Hưng Đạo, Q.1, TP.HCM', 'CNTT-K19', '2001-09-18', 3.55, 'Công nghệ Thông tin', 'Hoàng Thị Lan', '0908123460', 'ACTIVE', '19520005', 11),
-(6, '2025-08-06 11:36:18.000000', '2025-08-06 11:36:18.000000', '2019-2023', '987 Nguyễn Thị Minh Khai, Q.3, TP.HCM', 'ATTT-K19', '2001-11-25', 3.7, 'An toàn Thông tin', 'Đỗ Văn Cường', '0908123461', 'ACTIVE', '19520006', 12);
+(6, '2025-08-06 11:36:18.000000', '2025-08-29 03:14:22.463396', '2019-2023', NULL, 'ATTT-K19', NULL, 3.7, 'An toàn Thông tin', NULL, NULL, 'ACTIVE', '19520006', 12);
 
 -- --------------------------------------------------------
 
@@ -638,7 +639,7 @@ ALTER TABLE `evaluations`
 -- AUTO_INCREMENT for table `internships`
 --
 ALTER TABLE `internships`
-  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `internship_batches`

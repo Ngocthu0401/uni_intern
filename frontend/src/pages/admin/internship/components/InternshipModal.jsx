@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Form, Input, Select, DatePicker, InputNumber, Button, Space, Tabs, Descriptions, Tag, Avatar, Divider, message, Spin, Row, Col, Card, Typography, Alert } from 'antd';
-import { SaveOutlined, CloseOutlined, CheckCircleOutlined, CloseCircleOutlined, UserOutlined, BookOutlined, DollarOutlined, CalendarOutlined, FileTextOutlined, TeamOutlined, BankOutlined, ClockCircleOutlined, TagOutlined, InfoCircleOutlined, EditOutlined, GiftOutlined } from '@ant-design/icons';
+import { SaveOutlined, CloseOutlined, CheckCircleOutlined, CloseCircleOutlined, UserOutlined, BookOutlined, DollarOutlined, CalendarOutlined, FileTextOutlined, TeamOutlined, BankOutlined, ClockCircleOutlined, TagOutlined, InfoCircleOutlined, EditOutlined, GiftOutlined, CopyOutlined } from '@ant-design/icons';
 import { internshipService, companyService, studentService, teacherService, mentorService, batchService } from '../../../../services';
 import dayjs from 'dayjs';
 import './InternshipModal.css';
@@ -21,7 +21,8 @@ const InternshipModal = ({ visible, mode, internship, onClose, onSuccess }) => {
     const [students, setStudents] = useState([]);
     const [availableMentors, setAvailableMentors] = useState([]);
     const [activeBatches, setActiveBatches] = useState([]);
-
+    const [openBatches, setOpenBatches] = useState([]);
+    const [selectedBatch, setSelectedBatch] = useState(null);
 
     // Load data for assignment
     const loadAssignmentData = async () => {
@@ -51,11 +52,22 @@ const InternshipModal = ({ visible, mode, internship, onClose, onSuccess }) => {
         }
     };
 
-    // Load active batches
+    // Load active batches and filter open ones
     const loadActiveBatches = async () => {
         try {
             const batchesResponse = await batchService.getActiveBatches();
-            setActiveBatches(batchesResponse?.data || batchesResponse || []);
+            const allBatches = batchesResponse?.data || batchesResponse || [];
+
+            // Filter batches that are still open for registration
+            const now = new Date();
+            const openBatches = allBatches.filter(batch => {
+                if (!batch.registrationEndDate) return false;
+                const regEndDate = new Date(batch.registrationEndDate);
+                return regEndDate > now;
+            });
+
+            setActiveBatches(allBatches);
+            setOpenBatches(openBatches);
         } catch (error) {
             console.error('Error loading active batches:', error);
             message.error('Không thể tải danh sách đợt thực tập');
@@ -110,8 +122,25 @@ const InternshipModal = ({ visible, mode, internship, onClose, onSuccess }) => {
             }
 
             if (mode === 'create') {
-                await internshipService.createInternship(internshipData);
-                message.success('Tạo thực tập thành công');
+                const quantity = values.quantity || 1;
+
+                // Create multiple internships if quantity > 1
+                if (quantity > 1) {
+                    const promises = [];
+                    for (let i = 0; i < quantity; i++) {
+                        const internshipWithSuffix = {
+                            ...internshipData,
+                            jobTitle: `${internshipData.jobTitle} ${i + 1}`
+                        };
+                        promises.push(internshipService.createInternship(internshipWithSuffix));
+                    }
+
+                    await Promise.all(promises);
+                    message.success(`Đã tạo thành công ${quantity} vị trí thực tập`);
+                } else {
+                    await internshipService.createInternship(internshipData);
+                    message.success('Tạo thực tập thành công');
+                }
             } else if (mode === 'edit') {
                 await internshipService.updateInternship(internship.id, internshipData);
                 message.success('Cập nhật thực tập thành công');
@@ -169,7 +198,7 @@ const InternshipModal = ({ visible, mode, internship, onClose, onSuccess }) => {
             setLoading(true);
 
             const cleanAssignmentData = {
-                studentId: assignmentData.studentId
+                studentId: assignmentData.studentId || internship?.student?.id
             };
 
             if (assignmentData.mentorId) {
@@ -206,6 +235,7 @@ const InternshipModal = ({ visible, mode, internship, onClose, onSuccess }) => {
     useEffect(() => {
         if (visible && mode === 'create') {
             form.resetFields();
+            setSelectedBatch(null);
         } else if (visible && mode === 'edit' && internship) {
             form.setFieldsValue({
                 title: internship.jobTitle || '',
@@ -231,6 +261,7 @@ const InternshipModal = ({ visible, mode, internship, onClose, onSuccess }) => {
             if (currentBatchId) {
                 const selectedBatch = activeBatches.find(batch => batch.id === currentBatchId);
                 if (selectedBatch) {
+                    setSelectedBatch(selectedBatch);
                     const formValues = {};
 
                     // Auto-fill date range if available
@@ -307,12 +338,20 @@ const InternshipModal = ({ visible, mode, internship, onClose, onSuccess }) => {
                 />;
 
             default:
-                return <InternshipForm form={form} onSubmit={handleSubmit} activeBatches={activeBatches} mode={mode} />;
+                return <InternshipForm
+                    form={form}
+                    onSubmit={handleSubmit}
+                    activeBatches={activeBatches}
+                    openBatches={openBatches}
+                    mode={mode}
+                    selectedBatch={selectedBatch}
+                    setSelectedBatch={setSelectedBatch}
+                />;
         }
     };
 
     // Render modal footer based on mode
-    const renderModalFooter = () => {
+    const renderModalFooter = (openBatches = []) => {
         switch (mode) {
             case 'view':
                 return [
@@ -364,7 +403,7 @@ const InternshipModal = ({ visible, mode, internship, onClose, onSuccess }) => {
                         key="assign"
                         type="primary"
                         loading={loading}
-                        disabled={!assignmentData.studentId}
+                        disabled={!(assignmentData.studentId || internship?.student?.id)}
                         onClick={handleAssignment}
                         className="!text-white"
                         icon={<TeamOutlined />}
@@ -382,6 +421,7 @@ const InternshipModal = ({ visible, mode, internship, onClose, onSuccess }) => {
                         key="submit"
                         type="primary"
                         loading={loading}
+                        disabled={mode === 'create' && openBatches.length === 0}
                         onClick={() => form.submit()}
                         icon={<SaveOutlined />}
                     >
@@ -396,7 +436,7 @@ const InternshipModal = ({ visible, mode, internship, onClose, onSuccess }) => {
             title={getModalTitle()}
             open={visible}
             onCancel={onClose}
-            footer={renderModalFooter()}
+            footer={renderModalFooter(openBatches)}
             width={1000}
             destroyOnHidden
             className="internship-modal"
@@ -457,12 +497,15 @@ const TeacherSelect = (props) => {
     );
 };
 
-const InternshipForm = ({ form, onSubmit, activeBatches = [], mode }) => {
+const InternshipForm = ({ form, onSubmit, activeBatches = [], openBatches = [], mode, selectedBatch, setSelectedBatch }) => {
     // Handle batch selection to auto-fill date range and company
     const handleBatchChange = (batchId) => {
         if (batchId && mode === 'create') {
             const selectedBatch = activeBatches.find(batch => batch.id === batchId);
             if (selectedBatch) {
+                // Update the selected batch state
+                setSelectedBatch(selectedBatch);
+
                 const formValues = {};
 
                 // Auto-fill date range if available
@@ -492,6 +535,15 @@ const InternshipForm = ({ form, onSubmit, activeBatches = [], mode }) => {
                 className="space-y-6"
             >
                 <Card title="Thông tin cơ bản" className="mb-6">
+                    {openBatches.length === 0 && (
+                        <Alert
+                            message="Không có đợt thực tập nào còn mở đăng ký"
+                            description="Tất cả các đợt thực tập đã hết hạn đăng ký. Vui lòng tạo đợt thực tập mới hoặc chờ đợt thực tập tiếp theo."
+                            type="warning"
+                            showIcon
+                            className="mb-4"
+                        />
+                    )}
                     <Row gutter={16}>
                         <Col span={12}>
                             <Form.Item
@@ -505,15 +557,15 @@ const InternshipForm = ({ form, onSubmit, activeBatches = [], mode }) => {
                                 rules={[{ required: true, message: 'Vui lòng chọn đợt thực tập' }]}
                             >
                                 <Select
-                                    placeholder="-- Chọn đợt thực tập --"
-                                    disabled={mode === 'edit'}
+                                    placeholder={openBatches.length === 0 ? "Không có đợt thực tập nào còn mở đăng ký" : "-- Chọn đợt thực tập --"}
+                                    disabled={mode === 'edit' || openBatches.length === 0}
                                     showSearch
                                     optionFilterProp="children"
                                     onChange={handleBatchChange}
                                 >
-                                    {activeBatches.map(batch => (
+                                    {openBatches.map(batch => (
                                         <Select.Option key={batch.id} value={batch.id}>
-                                            {batch.batchName} - {batch.academicYear} ({batch.semester})
+                                            {batch.batchName} - {batch.academicYear} ({batch.semester}) - Còn {batch.maxStudents - (batch.currentStudents || 0)} slot
                                         </Select.Option>
                                     ))}
                                 </Select>
@@ -531,6 +583,37 @@ const InternshipForm = ({ form, onSubmit, activeBatches = [], mode }) => {
                                 rules={[{ required: true, message: 'Vui lòng nhập tiêu đề' }]}
                             >
                                 <Input placeholder="Thực tập sinh Phát triển phần mềm" />
+                            </Form.Item>
+                        </Col>
+                        <Col span={12}>
+                            <Form.Item
+                                name="quantity"
+                                label={
+                                    <span>
+                                        <CopyOutlined className="mr-2 text-purple-500" />
+                                        Số lượng vị trí tương tự
+                                    </span>
+                                }
+                                rules={[
+                                    { required: true, message: 'Vui lòng nhập số lượng' },
+                                    { type: 'number', min: 1, message: 'Số lượng tối thiểu là 1' },
+                                    {
+                                        validator: (_, value) => {
+                                            if (selectedBatch && value > selectedBatch.maxStudents - (selectedBatch.currentStudents || 0)) {
+                                                return Promise.reject(new Error(`Số lượng tối đa là ${selectedBatch.maxStudents - (selectedBatch.currentStudents || 0)}`));
+                                            }
+                                            return Promise.resolve();
+                                        }
+                                    }
+                                ]}
+                                help={selectedBatch ? `Tối đa: ${selectedBatch.maxStudents - (selectedBatch.currentStudents || 0)} vị trí` : undefined}
+                            >
+                                <InputNumber
+                                    style={{ width: '100%' }}
+                                    placeholder="1"
+                                    min={1}
+                                    max={selectedBatch ? selectedBatch.maxStudents - (selectedBatch.currentStudents || 0) : undefined}
+                                />
                             </Form.Item>
                         </Col>
                     </Row>
@@ -821,38 +904,68 @@ const AssignmentForm = ({ assignmentData, setAssignmentData, students, available
                 />
 
                 <Row gutter={[24, 24]}>
-                    <Col span={12}>
-                        <Form.Item
-                            label={
-                                <span>
-                                    <UserOutlined className="!mr-2 !text-blue-500" />
-                                    Chọn Sinh viên <span className="!text-red-500">*</span>
-                                </span>
-                            }
-                            required
-                        >
-                            <Select
-                                value={assignmentData?.studentId}
-                                onChange={(value) => setAssignmentData(prev => ({ ...prev, studentId: value }))}
-                                placeholder="-- Chọn sinh viên --"
-                                style={{ width: '100%' }}
-                                showSearch
-                                optionFilterProp="children"
-                                filterOption={(input, option) =>
-                                    option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                    {/* Chỉ hiển thị phần chọn sinh viên nếu chưa có studentId */}
+                    {!assignmentData?.studentId && (
+                        <Col span={12}>
+                            <Form.Item
+                                label={
+                                    <span>
+                                        <UserOutlined className="!mr-2 !text-blue-500" />
+                                        Chọn Sinh viên <span className="!text-red-500">*</span>
+                                    </span>
+                                }
+                                required
+                            >
+                                <Select
+                                    value={assignmentData?.studentId}
+                                    onChange={(value) => setAssignmentData(prev => ({ ...prev, studentId: value }))}
+                                    placeholder="-- Chọn sinh viên --"
+                                    style={{ width: '100%' }}
+                                    showSearch
+                                    optionFilterProp="label"
+                                    filterOption={(input, option) =>
+                                        option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                    }
+                                    options={students?.map(student => ({
+                                        value: student.id,
+                                        label: `${student?.user?.fullName} - ${student?.studentCode}`,
+                                        children: (
+                                            <div className="!flex !items-center !space-x-2">
+                                                <Avatar size="small" icon={<UserOutlined />} />
+                                                <span>{student?.user?.fullName} - {student?.studentCode}</span>
+                                            </div>
+                                        )
+                                    })) || []}
+                                />
+                            </Form.Item>
+                        </Col>
+                    )}
+
+                    {/* Hiển thị thông tin sinh viên đã được chọn */}
+                    {assignmentData?.studentId && (
+                        <Col span={12}>
+                            <Form.Item
+                                label={
+                                    <span>
+                                        <UserOutlined className="!mr-2 !text-green-500" />
+                                        Sinh viên đã chọn
+                                    </span>
                                 }
                             >
-                                {students && students?.length > 0 && students?.map(student => (
-                                    <Select.Option key={student?.id} value={student?.id}>
-                                        <div className="!flex !items-center !space-x-2">
-                                            <Avatar size="small" icon={<UserOutlined />} />
-                                            <span>{student?.user?.fullName} - {student?.studentCode}</span>
+                                <div className="!flex !items-center !space-x-2 !p-3 !bg-green-50 !border !border-green-200 !rounded-lg">
+                                    <Avatar size="small" icon={<UserOutlined />} />
+                                    <div>
+                                        <div className="!font-medium">
+                                            {internship?.student?.user?.fullName || 'Sinh viên đã apply'}
                                         </div>
-                                    </Select.Option>
-                                ))}
-                            </Select>
-                        </Form.Item>
-                    </Col>
+                                        <div className="!text-sm !text-gray-500">
+                                            Mã SV: {internship?.student?.studentCode || 'N/A'}
+                                        </div>
+                                    </div>
+                                </div>
+                            </Form.Item>
+                        </Col>
+                    )}
 
                     <Col span={12}>
                         <Form.Item
@@ -869,21 +982,22 @@ const AssignmentForm = ({ assignmentData, setAssignmentData, students, available
                                 placeholder="-- Chọn mentor --"
                                 style={{ width: '100%' }}
                                 showSearch
-                                optionFilterProp="children"
+                                optionFilterProp="label"
                                 filterOption={(input, option) =>
-                                    option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                    option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
                                 }
                                 disabled={!availableMentors || availableMentors.length === 0}
-                            >
-                                {availableMentors && availableMentors?.length > 0 && availableMentors?.map(mentor => (
-                                    <Select.Option key={mentor?.id} value={mentor?.id}>
+                                options={availableMentors?.map(mentor => ({
+                                    value: mentor.id,
+                                    label: `${mentor?.user?.fullName} - ${mentor?.company?.companyName}`,
+                                    children: (
                                         <div className="!flex !items-center !space-x-2">
                                             <Avatar size="small" icon={<UserOutlined />} />
                                             <span>{mentor?.user?.fullName} - {mentor?.company?.companyName}</span>
                                         </div>
-                                    </Select.Option>
-                                ))}
-                            </Select>
+                                    )
+                                })) || []}
+                            />
                             {(!availableMentors || availableMentors.length === 0) && (
                                 <Text type="secondary" className="!text-xs">
                                     Không có mentor nào cho công ty này
@@ -893,7 +1007,7 @@ const AssignmentForm = ({ assignmentData, setAssignmentData, students, available
                     </Col>
                 </Row>
 
-                {assignmentData.studentId && (
+                {(assignmentData.studentId || internship?.student?.id) && (
                     <Alert
                         message="Thông tin phân công"
                         description={
@@ -901,7 +1015,11 @@ const AssignmentForm = ({ assignmentData, setAssignmentData, students, available
                                 <div className="!flex !items-center !space-x-2 !mb-1">
                                     <UserOutlined className="!text-blue-500" />
                                     <Text strong>Sinh viên:</Text>
-                                    <Text>{students.find(s => s.id === assignmentData.studentId)?.user?.fullName}</Text>
+                                    <Text>
+                                        {students.find(s => s.id === assignmentData.studentId)?.user?.fullName ||
+                                            internship?.student?.user?.fullName ||
+                                            'Sinh viên đã apply'}
+                                    </Text>
                                 </div>
                                 {assignmentData.mentorId && (
                                     <div className="!flex !items-center !space-x-2">
