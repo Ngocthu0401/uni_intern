@@ -32,7 +32,7 @@ const QuickScoreModal = ({ open, onCancel, onSubmit, selectedStudent = null, ini
             cancelButtonProps={{ disabled: loading }}
             okText="Lưu điểm"
             width={600}
-            destroyOnClose
+            destroyOnHidden
         >
             {selectedStudent && (
                 <div className="!mb-4 !p-3 !bg-blue-50 !rounded-lg">

@@ -398,7 +398,7 @@ const InternshipModal = ({ visible, mode, internship, onClose, onSuccess }) => {
             onCancel={onClose}
             footer={renderModalFooter()}
             width={1000}
-            destroyOnClose
+            destroyOnHidden
             className="internship-modal"
         >
             <Spin spinning={loading}>

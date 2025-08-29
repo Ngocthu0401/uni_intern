@@ -1,8 +1,21 @@
 import { useEffect } from 'react';
-import { Modal, Form, Input, InputNumber, Button, Row, Col, Card, Typography, Divider, Alert, Space } from 'antd';
+import { Modal, Form, Input, InputNumber, Button, Row, Col, Card, Typography, Divider, Alert, Space, Select } from 'antd';
 import { UserOutlined, MailOutlined, PhoneOutlined, IdcardOutlined, BookOutlined, CalendarOutlined, TrophyOutlined, SaveOutlined, CloseOutlined } from '@ant-design/icons';
+import { Briefcase } from 'lucide-react';
 
 const { Title, Text } = Typography;
+const { Option } = Select;
+
+// Internship status options with Vietnamese labels
+const INTERNSHIP_STATUS_OPTIONS = [
+    { value: 'PENDING', label: 'Chờ duyệt' },
+    { value: 'APPROVED', label: 'Đã duyệt' },
+    { value: 'REJECTED', label: 'Bị từ chối' },
+    { value: 'ASSIGNED', label: 'Đã phân công' },
+    { value: 'IN_PROGRESS', label: 'Đang thực tập' },
+    { value: 'COMPLETED', label: 'Hoàn thành' },
+    { value: 'CANCELLED', label: 'Đã hủy' }
+];
 
 const StudentFormModal = ({
     isOpen,
@@ -20,6 +33,11 @@ const StudentFormModal = ({
             if (mode === 'create') {
                 form.resetFields();
             } else if (mode === 'edit' && student) {
+                // Get current internship status for the student
+                const currentInternship = student.internships?.find(i =>
+                    ['PENDING', 'APPROVED', 'ASSIGNED', 'IN_PROGRESS', 'COMPLETED'].includes(i.status)
+                );
+
                 form.setFieldsValue({
                     username: student.user?.username || '',
                     email: student.user?.email || '',
@@ -29,7 +47,8 @@ const StudentFormModal = ({
                     className: student.className || '',
                     major: student.major || '',
                     academicYear: student.academicYear || '',
-                    gpa: student.gpa || 0
+                    gpa: student.gpa || 0,
+                    internshipStatus: currentInternship?.status || null
                 });
             }
         }
@@ -64,9 +83,9 @@ const StudentFormModal = ({
             onCancel={onClose}
             width={800}
             footer={null}
-            destroyOnClose
+            destroyOnHidden
             className="ant-modal-student-form"
-            maskStyle={{ backdropFilter: 'blur(4px)' }}
+            styles={{ backdropFilter: 'blur(4px)' }}
         >
             {/* Error Display */}
             {errors.general && (
@@ -282,6 +301,57 @@ const StudentFormModal = ({
                         </Col>
                     </Row>
                 </Card>
+
+                {/* Internship Status Section - Only show in edit mode */}
+                {mode === 'edit' && (
+                    <Card
+                        title={
+                            <div className="!flex !items-center">
+                                <Briefcase className="!text-purple-500 !mr-2" />
+                                <span>Trạng thái thực tập</span>
+                            </div>
+                        }
+                        className="!mb-6"
+                        size="small"
+                    >
+                        <Row gutter={[16, 0]}>
+                            <Col xs={24}>
+                                {student?.internships?.length > 0 ? (
+                                    <Form.Item
+                                        label="Trạng thái thực tập hiện tại"
+                                        name="internshipStatus"
+                                        validateStatus={errors.internshipStatus ? 'error' : ''}
+                                        help={errors.internshipStatus}
+                                    >
+                                        <Select
+                                            placeholder="Chọn trạng thái thực tập"
+                                            size="large"
+                                            allowClear
+                                            showSearch
+                                            filterOption={(input, option) =>
+                                                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                            }
+                                        >
+                                            {INTERNSHIP_STATUS_OPTIONS.map(option => (
+                                                <Option key={option.value} value={option.value}>
+                                                    {option.label}
+                                                </Option>
+                                            ))}
+                                        </Select>
+                                    </Form.Item>
+                                ) : (
+                                    <Alert
+                                        message="Không có thực tập"
+                                        description="Sinh viên này chưa có thực tập nào. Vui lòng tạo thực tập trước khi cập nhật trạng thái."
+                                        type="info"
+                                        showIcon
+                                        className="mb-4"
+                                    />
+                                )}
+                            </Col>
+                        </Row>
+                    </Card>
+                )}
 
                 <Divider />
 

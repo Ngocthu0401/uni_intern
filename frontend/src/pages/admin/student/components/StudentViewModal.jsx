@@ -59,7 +59,7 @@ const StudentViewModal = ({ isOpen, onClose, student }) => {
             onCancel={onClose}
             width={1100}
             footer={null}
-            destroyOnClose
+            destroyOnHidden
             maskStyle={{ backdropFilter: 'blur(4px)' }}
         >
             <div className="!space-y-6">

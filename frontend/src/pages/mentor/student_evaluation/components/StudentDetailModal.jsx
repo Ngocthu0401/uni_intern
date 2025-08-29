@@ -96,7 +96,7 @@ const StudentDetailModal = ({
                 </Button>
             ]}
             width={800}
-            destroyOnClose
+            destroyOnHidden
         >
             <div className="!space-y-6">
                 {/* Student Basic Information */}

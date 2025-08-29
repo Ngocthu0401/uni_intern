@@ -40,7 +40,7 @@ const StudentDeleteModal = ({
             onCancel={onClose}
             width={600}
             footer={null}
-            destroyOnClose
+            destroyOnHidden
             maskStyle={{ backdropFilter: 'blur(4px)' }}
             className="ant-modal-confirm"
         >

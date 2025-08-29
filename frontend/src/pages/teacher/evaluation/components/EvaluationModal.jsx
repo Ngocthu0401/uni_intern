@@ -89,7 +89,7 @@ const EvaluationModal = ({ open, mode = 'create', onCancel, onSubmit, students =
             cancelButtonProps={{ disabled: loading }}
             okText={mode === 'create' ? 'Tạo đánh giá' : 'Cập nhật'}
             width={1000}
-            destroyOnClose
+            destroyOnHidden
         >
             <Form
                 layout="vertical"

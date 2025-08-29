@@ -188,7 +188,7 @@ const BatchFormModal = ({
             footer={null}
             width={800}
             className="batch-form-modal"
-            destroyOnClose
+            destroyOnHidden
         >
             <Form
                 form={form}

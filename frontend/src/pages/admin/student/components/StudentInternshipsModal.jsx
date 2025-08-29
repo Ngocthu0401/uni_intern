@@ -1,44 +1,11 @@
 import { useState } from 'react';
-import {
-    Modal,
-    Card,
-    Row,
-    Col,
-    Typography,
-    Tag,
-    Timeline,
-    Descriptions,
-    Avatar,
-    Empty,
-    Collapse,
-    Statistic,
-    Progress,
-    Space,
-    Divider
-} from 'antd';
-import {
-    UserOutlined,
-    BankOutlined,
-    CalendarOutlined,
-    DollarOutlined,
-    TrophyOutlined,
-    FileTextOutlined,
-    TeamOutlined,
-    BookOutlined,
-    ClockCircleOutlined,
-    EnvironmentOutlined,
-    StarOutlined
-} from '@ant-design/icons';
+import { Modal, Card, Row, Col, Typography, Tag, Timeline, Descriptions, Avatar, Empty, Collapse, Statistic, Progress, Space, Divider } from 'antd';
+import { UserOutlined, BankOutlined, CalendarOutlined, DollarOutlined, TrophyOutlined, FileTextOutlined, TeamOutlined, BookOutlined, ClockCircleOutlined, EnvironmentOutlined, StarOutlined } from '@ant-design/icons';
 
 const { Title, Text, Paragraph } = Typography;
 const { Panel } = Collapse;
 
-const StudentInternshipsModal = ({
-    isOpen,
-    onClose,
-    student,
-    internships = []
-}) => {
+const StudentInternshipsModal = ({ isOpen, onClose, student, internships = [] }) => {
     const [activeKey, setActiveKey] = useState([]);
 
     if (!student) return null;
@@ -503,8 +470,8 @@ const StudentInternshipsModal = ({
             onCancel={onClose}
             width={1200}
             footer={null}
-            destroyOnClose
-            maskStyle={{ backdropFilter: 'blur(4px)' }}
+            destroyOnHidden
+            styles={{ backdropFilter: 'blur(4px)' }}
         >
             <div className="space-y-6">
                 {/* Student Summary */}

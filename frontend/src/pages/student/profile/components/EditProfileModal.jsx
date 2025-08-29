@@ -48,7 +48,7 @@ const EditProfileModal = ({ open, onCancel, onSubmit, initialValues }) => {
             onCancel={onCancel}
             okText="Lưu"
             cancelText="Hủy"
-            destroyOnClose
+            destroyOnHidden
         >
             <Form
                 layout="vertical"

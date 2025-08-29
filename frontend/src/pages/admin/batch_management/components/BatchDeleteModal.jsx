@@ -32,7 +32,7 @@ const BatchDeleteModal = ({ batch, visible, onClose, onConfirm }) => {
             ]}
             width={500}
             className="batch-delete-modal"
-            destroyOnClose
+            destroyOnHidden
         >
             <div className="space-y-4">
                 <Alert

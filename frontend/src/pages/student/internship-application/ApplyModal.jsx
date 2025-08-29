@@ -24,7 +24,7 @@ const ApplyModal = ({ open, onCancel, onSubmit, internship }) => {
             onCancel={onCancel}
             okText="Xác nhận ứng tuyển"
             cancelText="Hủy"
-            destroyOnClose
+            destroyOnHidden
         >
             <Descriptions column={1} bordered size="small" items={items} />
 

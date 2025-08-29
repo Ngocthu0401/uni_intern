@@ -149,7 +149,7 @@ const BatchDetailModal = ({ batch, visible, onClose }) => {
                 ]}
                 width={1000}
                 className="!batch-detail-modal"
-                destroyOnClose
+                destroyOnHidden
             >
                 <div className="!space-y-6">
                     {/* Basic Information */}

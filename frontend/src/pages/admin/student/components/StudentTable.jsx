@@ -165,7 +165,7 @@ const StudentTable = ({ students = [], loading = false, studentInternships = {},
                 return (
                     <Card
                         size="small"
-                        bodyStyle={{ padding: '8px 12px' }}
+                        styles={{ body: { padding: '8px 12px' } }}
                         className="border-l-4 border-l-blue-500"
                     >
                         <div className="space-y-1">

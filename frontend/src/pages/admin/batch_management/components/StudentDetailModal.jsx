@@ -105,7 +105,7 @@ const StudentDetailModal = ({ student, visible, onClose }) => {
             ]}
             width={800}
             className="student-detail-modal"
-            destroyOnClose
+            destroyOnHidden
         >
             <div className="!space-y-6">
                 {/* Student Header */}

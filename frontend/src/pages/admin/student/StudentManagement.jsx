@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Card, Row, Col, Button, Typography, Space, message, notification } from 'antd';
-import { PlusOutlined, UserOutlined, ReloadOutlined, FileExcelOutlined, SettingOutlined, TrophyOutlined } from '@ant-design/icons';
+import { PlusOutlined, UserOutlined, ReloadOutlined, SettingOutlined, TrophyOutlined } from '@ant-design/icons';
 import { studentService } from '../../../services';
 import { Student, StudentSearchCriteria, PaginationOptions } from '../../../models';
 import { StudentTable, StudentFilters, StudentFormModal, StudentViewModal, StudentDeleteModal, StudentInternshipsModal, StudentScoresModal } from './components';
@@ -168,6 +168,39 @@ const StudentManagement = () => {
 
                 await studentService.updateStudent(selectedStudent.id, studentData);
 
+                // Update internship status if provided
+                if (formData.internshipStatus) {
+                    try {
+                        // Get current internship for the student
+                        const currentInternship = selectedStudent.internships?.find(i =>
+                            ['PENDING', 'APPROVED', 'ASSIGNED', 'IN_PROGRESS', 'COMPLETED'].includes(i.status)
+                        );
+
+                        if (currentInternship) {
+                            // Import internshipService dynamically to avoid circular imports
+                            const { default: internshipService } = await import('../../../services/internshipService');
+                            await internshipService.patchInternship(currentInternship.id, {
+                                status: formData.internshipStatus
+                            });
+                        } else {
+                            // Show warning if no internship found but status was selected
+                            notification.warning({
+                                message: 'Cảnh báo',
+                                description: 'Sinh viên này chưa có thực tập nào để cập nhật trạng thái.',
+                                placement: 'topRight'
+                            });
+                        }
+                    } catch (internshipError) {
+                        console.error('Error updating internship status:', internshipError);
+                        notification.warning({
+                            message: 'Cảnh báo',
+                            description: 'Cập nhật thông tin sinh viên thành công nhưng không thể cập nhật trạng thái thực tập.',
+                            placement: 'topRight'
+                        });
+                        return;
+                    }
+                }
+
                 notification.success({
                     message: 'Thành công',
                     description: 'Cập nhật thông tin sinh viên thành công!',
@@ -239,10 +272,7 @@ const StudentManagement = () => {
         openModal('internships', null, student);
     };
 
-    const handleExportExcel = () => {
-        // TODO: Implement Excel export
-        message.info('Tính năng xuất Excel đang được phát triển');
-    };
+
 
     const antPagination = {
         page: pagination.page,
