@@ -248,7 +248,7 @@ const MentorManagement = () => {
                     email: formData.email,
                     fullName: formData.fullName,
                     phoneNumber: formData.phone,
-                    password: 'defaultPassword123',
+                    password: formData.email.split('@')[0],
                     role: 'MENTOR',
                     companyId: formData.company ? parseInt(formData.company) : null,
                     position: formData.position,
