@@ -1,24 +1,24 @@
 import { useState, useEffect } from 'react';
-import { 
-  AcademicCapIcon, 
-  MagnifyingGlassIcon, 
-  PlusIcon, 
-  PencilIcon, 
+import {
+  AcademicCapIcon,
+  MagnifyingGlassIcon,
+  PlusIcon,
+  PencilIcon,
   TrashIcon,
   EyeIcon,
   FunnelIcon,
-  XMarkIcon 
+  XMarkIcon
 } from '@heroicons/react/24/outline';
 import { teacherService } from '../../services';
 import userService from '../../services/userService';
-import { 
-  Teacher, 
-  CreateTeacherRequest, 
+import {
+  Teacher,
+  CreateTeacherRequest,
   UpdateTeacherRequest,
   TeacherSearchCriteria,
   PaginationOptions,
   AcademicTitle,
-  TeacherDegree 
+  TeacherDegree
 } from '../../models';
 
 const TeacherManagement = () => {
@@ -83,7 +83,7 @@ const TeacherManagement = () => {
   const openModal = (mode, teacher = null) => {
     setModalMode(mode);
     setSelectedTeacher(teacher);
-    
+
     if (mode === 'create') {
       setFormData(new CreateTeacherRequest());
     } else if (mode === 'edit' && teacher) {
@@ -94,7 +94,7 @@ const TeacherManagement = () => {
         email: teacher.user?.email || '',
         fullName: teacher.user?.fullName || '',
         phone: teacher.user?.phoneNumber || '',
-        
+
         // Teacher data (editable)
         teacherCode: teacher.teacherCode || '',
         department: teacher.department || '',
@@ -104,7 +104,7 @@ const TeacherManagement = () => {
         officeLocation: teacher.officeLocation || ''
       });
     }
-    
+
     setFormErrors({});
     setShowModal(true);
   };
@@ -119,7 +119,7 @@ const TeacherManagement = () => {
   const handleFormChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
-    
+
     // Clear error when user starts typing
     if (formErrors[name]) {
       setFormErrors(prev => ({ ...prev, [name]: '' }));
@@ -128,50 +128,50 @@ const TeacherManagement = () => {
 
   const validateForm = () => {
     const errors = {};
-    
+
     if (!formData.username?.trim()) {
       errors.username = 'Tên đăng nhập không được để trống';
     }
-    
+
     if (!formData.email?.trim()) {
       errors.email = 'Email không được để trống';
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       errors.email = 'Email không hợp lệ';
     }
-    
+
     if (!formData.fullName?.trim()) {
       errors.fullName = 'Họ và tên không được để trống';
     }
-    
+
     if (!formData.phone?.trim()) {
       errors.phone = 'Số điện thoại không được để trống';
     }
-    
+
     if (!formData.teacherCode?.trim()) {
       errors.teacherCode = 'Mã giảng viên không được để trống';
     }
-    
+
     if (!formData.title) {
       errors.title = 'Vui lòng chọn chức danh';
     }
-    
+
     if (!formData.degree) {
       errors.degree = 'Vui lòng chọn học vị';
     }
-    
+
     if (!formData.department?.trim()) {
       errors.department = 'Khoa/Bộ môn không được để trống';
     }
-    
+
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) return;
-    
+
     try {
       if (modalMode === 'create') {
         // Create teacher with all information in one request
@@ -181,9 +181,9 @@ const TeacherManagement = () => {
           email: formData.email,
           fullName: formData.fullName,
           phoneNumber: formData.phone,
-          password: 'defaultPassword123', // Default password
+          password: formData.email.split('@')[0], // Default password
           role: 'TEACHER',
-          
+
           // Teacher specific information
           teacherCode: formData.teacherCode,
           department: formData.department,
@@ -207,13 +207,13 @@ const TeacherManagement = () => {
 
         await teacherService.updateTeacher(selectedTeacher.id, teacherData);
       }
-      
+
       closeModal();
       loadTeachers();
-      
+
       // Show success message
-      const successMessage = modalMode === 'create' 
-        ? 'Thêm giảng viên thành công!' 
+      const successMessage = modalMode === 'create'
+        ? 'Thêm giảng viên thành công!'
         : 'Cập nhật thông tin giảng viên thành công!';
       setSuccess(successMessage);
       setTimeout(() => setSuccess(''), 3000);
@@ -226,12 +226,12 @@ const TeacherManagement = () => {
 
   const handleDelete = async () => {
     if (!selectedTeacher) return;
-    
+
     try {
       await teacherService.deleteTeacher(selectedTeacher.id);
       closeModal();
       loadTeachers();
-      
+
       // Show success message
       setSuccess('Xóa giảng viên thành công!');
       setTimeout(() => setSuccess(''), 3000);
@@ -287,7 +287,7 @@ const TeacherManagement = () => {
               />
             </div>
           </div>
-          
+
           {/* Filter Toggle */}
           <button
             onClick={() => setShowFilters(!showFilters)}
@@ -559,11 +559,10 @@ const TeacherManagement = () => {
                     <button
                       key={page}
                       onClick={() => handlePageChange(page)}
-                      className={`px-3 py-1 text-sm border rounded-lg ${
-                        page === pagination.page
+                      className={`px-3 py-1 text-sm border rounded-lg ${page === pagination.page
                           ? 'bg-blue-600 text-white border-blue-600'
                           : 'border-gray-300 hover:bg-gray-100'
-                      }`}
+                        }`}
                     >
                       {page}
                     </button>
@@ -704,9 +703,8 @@ const TeacherManagement = () => {
                       value={formData.username || ''}
                       onChange={handleFormChange}
                       disabled={modalMode === 'edit'}
-                      className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-                        formErrors.username ? 'border-red-300' : 'border-gray-300'
-                      } ${modalMode === 'edit' ? 'bg-gray-100 cursor-not-allowed' : ''}`}
+                      className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${formErrors.username ? 'border-red-300' : 'border-gray-300'
+                        } ${modalMode === 'edit' ? 'bg-gray-100 cursor-not-allowed' : ''}`}
                       placeholder="teacher123"
                     />
                     {formErrors.username && (
@@ -723,9 +721,8 @@ const TeacherManagement = () => {
                       name="teacherCode"
                       value={formData.teacherCode || ''}
                       onChange={handleFormChange}
-                      className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-                        formErrors.teacherCode ? 'border-red-300' : 'border-gray-300'
-                      }`}
+                      className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${formErrors.teacherCode ? 'border-red-300' : 'border-gray-300'
+                        }`}
                       placeholder="GV001"
                     />
                     {formErrors.teacherCode && (
@@ -743,9 +740,8 @@ const TeacherManagement = () => {
                       value={formData.email || ''}
                       onChange={handleFormChange}
                       disabled={modalMode === 'edit'}
-                      className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-                        formErrors.email ? 'border-red-300' : 'border-gray-300'
-                      } ${modalMode === 'edit' ? 'bg-gray-100 cursor-not-allowed' : ''}`}
+                      className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${formErrors.email ? 'border-red-300' : 'border-gray-300'
+                        } ${modalMode === 'edit' ? 'bg-gray-100 cursor-not-allowed' : ''}`}
                       placeholder="teacher@university.edu.vn"
                     />
                     {formErrors.email && (
@@ -763,9 +759,8 @@ const TeacherManagement = () => {
                       value={formData.fullName || ''}
                       onChange={handleFormChange}
                       disabled={modalMode === 'edit'}
-                      className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-                        formErrors.fullName ? 'border-red-300' : 'border-gray-300'
-                      } ${modalMode === 'edit' ? 'bg-gray-100 cursor-not-allowed' : ''}`}
+                      className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${formErrors.fullName ? 'border-red-300' : 'border-gray-300'
+                        } ${modalMode === 'edit' ? 'bg-gray-100 cursor-not-allowed' : ''}`}
                       placeholder="Nguyễn Văn A"
                     />
                     {formErrors.fullName && (
@@ -783,9 +778,8 @@ const TeacherManagement = () => {
                       value={formData.phone || ''}
                       onChange={handleFormChange}
                       disabled={modalMode === 'edit'}
-                      className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-                        formErrors.phone ? 'border-red-300' : 'border-gray-300'
-                      } ${modalMode === 'edit' ? 'bg-gray-100 cursor-not-allowed' : ''}`}
+                      className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${formErrors.phone ? 'border-red-300' : 'border-gray-300'
+                        } ${modalMode === 'edit' ? 'bg-gray-100 cursor-not-allowed' : ''}`}
                       placeholder="0123456789"
                     />
                     {formErrors.phone && (
@@ -801,9 +795,8 @@ const TeacherManagement = () => {
                       name="title"
                       value={formData.title || ''}
                       onChange={handleFormChange}
-                      className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-                        formErrors.title ? 'border-red-300' : 'border-gray-300'
-                      }`}
+                      className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${formErrors.title ? 'border-red-300' : 'border-gray-300'
+                        }`}
                     >
                       <option value="">Chọn chức danh</option>
                       {titleOptions.map(option => (
@@ -825,9 +818,8 @@ const TeacherManagement = () => {
                       name="degree"
                       value={formData.degree || ''}
                       onChange={handleFormChange}
-                      className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-                        formErrors.degree ? 'border-red-300' : 'border-gray-300'
-                      }`}
+                      className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${formErrors.degree ? 'border-red-300' : 'border-gray-300'
+                        }`}
                     >
                       <option value="">Chọn học vị</option>
                       {degreeOptions.map(option => (
@@ -850,9 +842,8 @@ const TeacherManagement = () => {
                       name="department"
                       value={formData.department || ''}
                       onChange={handleFormChange}
-                      className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-                        formErrors.department ? 'border-red-300' : 'border-gray-300'
-                      }`}
+                      className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${formErrors.department ? 'border-red-300' : 'border-gray-300'
+                        }`}
                       placeholder="Khoa Công nghệ Thông tin"
                     />
                     {formErrors.department && (
@@ -911,7 +902,7 @@ const TeacherManagement = () => {
             {modalMode === 'edit' && (
               <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
                 <p className="text-blue-800 text-sm">
-                  <strong>Lưu ý:</strong> Thông tin tài khoản (tên đăng nhập, email, họ tên, số điện thoại) không thể chỉnh sửa. 
+                  <strong>Lưu ý:</strong> Thông tin tài khoản (tên đăng nhập, email, họ tên, số điện thoại) không thể chỉnh sửa.
                   Chỉ có thể chỉnh sửa thông tin giảng viên.
                 </p>
               </div>
