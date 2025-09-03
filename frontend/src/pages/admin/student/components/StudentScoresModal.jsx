@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Modal, Table, Card, Typography, Space, Input, Select, Button, Tag, Avatar, Tooltip, Progress, Statistic, Row, Col, Spin, Empty, message, Badge, Descriptions } from 'antd';
 import { SearchOutlined, FilterOutlined, ClearOutlined, UserOutlined, TrophyOutlined, StarOutlined, BankOutlined, CalendarOutlined, BookOutlined, CloseOutlined, DownloadOutlined, ReloadOutlined } from '@ant-design/icons';
 import internshipService from '../../../../services/internshipService';
+import evaluationService from '../../../../services/evaluationService';
 import './StudentScoresModal.css';
 
 const { Title, Text } = Typography;
@@ -42,8 +43,52 @@ const StudentScoresModal = ({ isOpen, onClose }) => {
             };
 
             const result = await internshipService.searchInternships({ studentValid: true }, params);
+            const internshipsData = result.data || [];
 
-            setInternships(result.data || []);
+            // Fetch evaluation data for each internship
+            const internshipsWithEvaluations = await Promise.all(
+                internshipsData.map(async (internship) => {
+                    try {
+                        // Get evaluations for this internship
+                        const evaluationsResponse = await evaluationService.getEvaluationsByInternship(internship.id);
+                        const evaluations = evaluationsResponse || [];
+
+                        // Sort evaluations by date (newest first)
+                        const sortedEvaluations = evaluations.sort((a, b) =>
+                            new Date(b.evaluationDate) - new Date(a.evaluationDate)
+                        );
+
+                        // Find teacher and mentor evaluations
+                        const teacherEvaluation = evaluations.find(e => e.evaluatorType === 'TEACHER');
+                        const mentorEvaluation = evaluations.find(e => e.evaluatorType === 'MENTOR');
+
+                        // Update internship with evaluation scores
+                        const updatedInternship = {
+                            ...internship,
+                            evaluations: sortedEvaluations,
+                            teacherScore: teacherEvaluation?.overallScore || null,
+                            mentorScore: mentorEvaluation?.overallScore || null,
+                            // Calculate final score as average of teacher and mentor scores
+                            finalScore: teacherEvaluation?.overallScore && mentorEvaluation?.overallScore
+                                ? ((teacherEvaluation.overallScore + mentorEvaluation.overallScore) / 2).toFixed(1)
+                                : teacherEvaluation?.overallScore || mentorEvaluation?.overallScore || null
+                        };
+
+                        return updatedInternship;
+                    } catch (error) {
+                        console.error(`Error fetching evaluations for internship ${internship.id}:`, error);
+                        return {
+                            ...internship,
+                            evaluations: [],
+                            teacherScore: null,
+                            mentorScore: null,
+                            finalScore: null
+                        };
+                    }
+                })
+            );
+
+            setInternships(internshipsWithEvaluations);
             setPagination({
                 current: page,
                 pageSize: pageSize,
@@ -51,7 +96,7 @@ const StudentScoresModal = ({ isOpen, onClose }) => {
             });
 
             // Calculate statistics
-            calculateStatistics(result.data || []);
+            calculateStatistics(internshipsWithEvaluations);
         } catch (error) {
             console.error('Error loading internships:', error);
             message.error('Không thể tải dữ liệu thực tập');
